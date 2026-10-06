@@ -210,13 +210,39 @@ Practical consequences:
 - A held-out set used for selection is no longer a clean estimate of
   generalisation for the selected model.
 
-### E5 — planned
+### E5 — ensemble of the three fine-tuned runs
 
-| ID | Configuration | Compared against | Rationale |
+Averaging the validation predictions of E2, E3 and E4:
+
+| Configuration | Val MSE | Val R² | Kaggle MSE | vs E3 on test |
+|---|---|---|---|---|
+| E3 alone (best single) | 99,051.2 | 0.359 | 101,594.15 | — |
+| **E2+E3+E4 mean** | **95,850.6** | **0.379** | **96,958.98** | **−4.56%** |
+
+Reproduce: `python -m src.ensemble` (writes `outputs/predictions/submission_ensemble.csv`)
+
+Observations:
+
+- **The ensemble is worth 3.2% on validation and 4.6% on test.** The three
+  runs make different errors -- different input resolutions, and one trained
+  with augmentation -- so averaging cancels part of the variance.
+- **This is the first change whose test result beat its validation
+  estimate.** Every fine-tuned configuration so far has come in 0.4-2.6%
+  *worse* on test than on validation, because the epoch was selected on the
+  validation set. Averaging reduces variance, and variance is exactly what
+  a single 1000-image validation split is bad at measuring. So the ensemble
+  is understated by validation, not overstated.
+- Not every subset helps: E2+E4 is 0.66% *worse* than E3 alone, because E4
+  is the weakest of the three and its errors are not different enough to
+  compensate. Adding E2 to E3+E4 still helps, so all three are used.
+
+### Phase 3 final state
+
+| Configuration | Val MSE | Kaggle MSE | vs B1 on test |
 |---|---|---|---|
-| E5 | Fine-tuned + augmentation, longer schedule | E2 and E4 | Gives augmentation the epochs it needs, so the E2/E4 comparison is not decided by the budget |
-
-_To be filled in._
+| B1 frozen ResNet-50 + Ridge | 114,853.7 | 114,147.16 | — |
+| E3 fine-tuned 320px | 99,051.0 | 101,594.15 | −11.0% |
+| **E2+E3+E4 ensemble** | 95,850.6 | **96,958.98** | **−15.1%** |
 
 ## Phase 5 — error analysis
 
