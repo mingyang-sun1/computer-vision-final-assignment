@@ -123,18 +123,20 @@ E2 with the resolution changed and nothing else.
 | Configuration | Val MSE | Val MAE | Val R² | Kaggle MSE | vs B1 | Best epoch |
 |---|---|---|---|---|---|---|
 | E2 fine-tune 224px | 102,745.7 | 235.7 | 0.335 | 103,129 | −10.5% | 12 of 15 |
-| **E3 fine-tune 320px** | **99,051.0** | **229.8** | **0.359** | _pending_ | **−13.8%** | 10 of 15 |
+| **E3 fine-tune 320px** | **99,051.0** | **229.8** | **0.359** | **101,594.15** | **−13.8%** | 10 of 15 |
 
 Reproduce: `python -m src.exp_finetune --img-size 320 --tag E3_320px`
 
 Observations:
 
 - **Resolution and fine-tuning do compose**, adding a further 3.6% on top of
-  E2. This is the opposite of what the interim per-epoch readings suggested
-  (at epoch 4 E3 was still behind E2), which is a reminder not to read a
-  training curve mid-run.
-- E3 is the best configuration so far: 13.8% below the frozen-feature
-  baseline.
+  E2 *on validation*. This is the opposite of what the interim per-epoch
+  readings suggested (at epoch 4 E3 was still behind E2), which is a
+  reminder not to read a training curve mid-run.
+- **On the test set the gain is smaller than validation claimed.** E3 scores
+  101,594.15 against a validation estimate of 99,051.0 — the validation
+  number is optimistic by 2.6%, and the real improvement over E2 is 1.5%,
+  not 3.6%. See the note below on why.
 
 ### E4 — fine-tuning with augmentation
 
@@ -168,13 +170,45 @@ Observations:
 
 ### Phase 3 summary
 
-| ID | Configuration | Val MSE | Val R² | Kaggle MSE | vs B1 |
-|---|---|---|---|---|---|
-| B1 | Frozen features + Ridge, 224px | 114,853.7 | 0.256 | 114,147.16 | — |
-| E1 | Frozen features + Ridge, 320px | 111,822.5 | 0.276 | — | −2.6% |
-| E2 | Fine-tuned, 224px | 102,745.7 | 0.335 | 103,129 | −10.5% |
-| **E3** | **Fine-tuned, 320px** | **99,051.0** | **0.359** | _pending_ | **−13.8%** |
-| E4 | Fine-tuned, 224px + augmentation | 108,784.5 | 0.296 | — | −5.3% |
+| ID | Configuration | Val MSE | Val R² | Kaggle MSE | vs B1 (val) | vs B1 (test) |
+|---|---|---|---|---|---|---|
+| B1 | Frozen features + Ridge, 224px | 114,853.7 | 0.256 | 114,147.16 | — | — |
+| E1 | Frozen features + Ridge, 320px | 111,822.5 | 0.276 | — | −2.6% | — |
+| E2 | Fine-tuned, 224px | 102,745.7 | 0.335 | 103,129 | −10.5% | −9.7% |
+| **E3** | **Fine-tuned, 320px** | **99,051.0** | **0.359** | **101,594.15** | **−13.8%** | **−11.0%** |
+| E4 | Fine-tuned, 224px + augmentation | 108,784.5 | 0.296 | — | −5.3% | — |
+
+### Note: how far the validation score can be trusted
+
+Three configurations have now been submitted to Kaggle, which lets the
+validation split be checked against reality:
+
+| Configuration | Val MSE | Kaggle MSE | Validation is off by |
+|---|---|---|---|
+| B1 frozen + Ridge | 114,853.7 | 114,147.16 | −0.6% (pessimistic) |
+| E2 fine-tuned 224px | 102,745.7 | 103,129 | +0.4% (optimistic) |
+| E3 fine-tuned 320px | 99,051.0 | 101,594.15 | **+2.6% (optimistic)** |
+
+The first two agreed to within 1%, which was initially read as the 1000-image
+validation split being a reliable estimator. **E3 breaks that pattern**, and
+the cause is worth stating because it affects how the remaining experiments
+should be read.
+
+The bias is a consequence of selecting the best epoch on the validation set.
+E3's per-epoch validation loss oscillated between roughly 0.63 and 0.77, and
+the selected epoch 10 (0.6309) is partly a lucky draw from that noise. E2's
+curve was flatter, so its best epoch was less lucky and its bias is smaller.
+The more the validation curve fluctuates, the more optimistic the selected
+minimum becomes.
+
+Practical consequences:
+
+- Validation MSE is an **optimistic** estimate whenever the epoch is chosen
+  on it, and the optimism grows with the noise of the curve.
+- Small differences between configurations (a few percent) should not be
+  trusted on validation alone. E3's 3.6% advantage over E2 was really 1.5%.
+- A held-out set used for selection is no longer a clean estimate of
+  generalisation for the selected model.
 
 ### E5 — planned
 
