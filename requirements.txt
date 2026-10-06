@@ -1,0 +1,8 @@
+# COMP90086 Final Project -- Python dependencies
+# Installed and tested with the environment listed in the README.
+tensorflow>=2.16
+numpy
+pandas
+scikit-learn
+pillow
+matplotlib

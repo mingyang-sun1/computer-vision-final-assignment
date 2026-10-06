@@ -1,0 +1,23 @@
+# Course-provided dataset -- must never be committed (assignment rule).
+# Keep it outside the repo, or under data/raw/ locally.
+data/raw/
+comp-90086-2026/
+house_dataset/
+*.jpg
+*.jpeg
+*.png
+
+# Generated artefacts
+outputs/
+*.npy
+*.npz
+*.h5
+*.keras
+*.ckpt
+
+# Python
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.venv/
+venv/

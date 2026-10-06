@@ -1,0 +1,24 @@
+{
+  "created_utc": "2026-10-06T12:23:03+00:00",
+  "seed": 42,
+  "val_fraction": 0.125,
+  "n_price_bins": 10,
+  "stratified_by": "price decile",
+  "n_train": 7000,
+  "n_val": 1000,
+  "train_price_stats": {
+    "mean": 720.98,
+    "std": 396.27,
+    "min": 195.0,
+    "median": 639.9,
+    "max": 2000.0
+  },
+  "val_price_stats": {
+    "mean": 718.32,
+    "std": 393.17,
+    "min": 195.0,
+    "median": 639.45,
+    "max": 1999.9
+  },
+  "source_csv": "D:\\Unimelb\\26S2\\90086\\Project\\comp-90086-2026\\house_dataset\\train.csv"
+}
