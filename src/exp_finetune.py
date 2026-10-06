@@ -154,6 +154,8 @@ def main() -> None:
     parser.add_argument("--img-size", type=int, default=224)
     parser.add_argument("--augment", action="store_true")
     parser.add_argument("--tag", default=None, help="experiment id (default derived from flags)")
+    parser.add_argument("--epochs", type=int, default=EPOCHS)
+    parser.add_argument("--patience", type=int, default=PATIENCE)
     args = parser.parse_args()
 
     tag = args.tag or ("E4_augment" if args.augment else ("E3_320px" if args.img_size != 224 else "E2_finetune"))
@@ -173,7 +175,7 @@ def main() -> None:
     trainable, total = count_trainable(model)
 
     print(f"[{tag}] resolution {args.img_size}px, augmentation {bool(augmenter)}")
-    print(f"[{tag}] split 7000/1000, seed {SEED}, epochs {EPOCHS}, patience {PATIENCE}")
+    print(f"[{tag}] split 7000/1000, seed {SEED}, epochs {args.epochs}, patience {args.patience}")
     print(f"[{tag}] trainable parameters: {trainable:,} / {total:,} ({100*trainable/total:.1f}%)")
     print()
 
@@ -185,10 +187,10 @@ def main() -> None:
     history = model.fit(
         train_ds,
         validation_data=val_ds,
-        epochs=EPOCHS,
+        epochs=args.epochs,
         callbacks=[
             keras.callbacks.EarlyStopping(
-                monitor="val_loss", patience=PATIENCE,
+                monitor="val_loss", patience=args.patience,
                 restore_best_weights=True, verbose=1,
             )
         ],
@@ -220,7 +222,8 @@ def main() -> None:
                 "unfrozen": "layer4 (conv5) + regression head",
                 "learning_rate": LEARNING_RATE,
                 "batch_size": BATCH_SIZE,
-                "epochs_cap": EPOCHS,
+                "epochs_cap": args.epochs,
+                "patience": args.patience,
                 "epochs_run": epochs_run,
                 "best_epoch": best_epoch,
                 "trainable_params": trainable,

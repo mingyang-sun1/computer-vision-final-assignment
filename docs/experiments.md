@@ -218,6 +218,86 @@ Practical consequences:
 
 _To be filled in._
 
+## Phase 5 — error analysis
+
+Run on E3, the best configuration. Reproduce with
+`python -m src.error_analysis --tag E3_320px`. Raw output in
+`outputs/logs/error_analysis_E3_320px.json`; the per-image predictions are in
+`outputs/predictions/val_predictions_E3_320px.csv`, sorted by absolute error.
+
+### The model regresses to the mean
+
+Predictions bucketed by the true price, 1000 validation images:
+
+| True price | n | true mean | pred mean | MSE | **bias** |
+|---|---|---|---|---|---|
+| < 299 | 93 | 249.4 | 476.1 | 75,091 | **+226.8** |
+| 299–397 | 107 | 344.9 | 559.8 | 66,758 | **+214.9** |
+| 397–480 | 100 | 435.2 | 621.7 | 68,268 | +186.5 |
+| 480–560 | 100 | 520.7 | 640.4 | 44,212 | +119.7 |
+| 560–640 | 100 | 597.1 | 722.6 | 46,838 | +125.6 |
+| 640–719 | 100 | 679.3 | 702.2 | 33,630 | +22.8 |
+| 719–799 | 92 | 756.0 | 781.5 | 34,230 | +25.5 |
+| 799–941 | 108 | 861.7 | 839.8 | 43,585 | −21.9 |
+| 941–1300 | 100 | 1089.7 | 927.1 | 89,477 | **−162.6** |
+| 1300+ | 100 | 1634.1 | 1015.7 | **488,256** | **−618.4** |
+
+The cheapest houses are over-predicted by 200-odd and the most expensive are
+under-predicted by 600-odd, while the middle of the distribution is nearly
+unbiased. Predictions are pulled towards the centre — the model has learned
+a safe middle value rather than the concept of "expensive". The worst single
+prediction is a house that sold for 1995 predicted at 542.
+
+This is what MSE on a right-skewed target does: the loss punishes large
+deviations quadratically, so the optimal response to uncertainty is to stay
+near the mean. The price distribution has skew 1.26, so the effect is
+strong.
+
+### Almost half the error comes from the top decile of prices
+
+| True price | share of total squared error |
+|---|---|
+| bottom 3 deciles (< 480) | 21.2% |
+| middle 4 deciles (480–941) | 20.5% |
+| top decile (1300+) | **49.3%** |
+| top 2 deciles (941+) | **58.3%** |
+
+The most expensive tenth of houses accounts for **just under half** of the
+total squared error, and the top fifth for well over half. The model's
+performance in the middle of the distribution is almost irrelevant to the
+score. Any improvement has to come from the expensive tail, which is
+precisely where the model has nothing to say.
+
+### Overfitting
+
+From the recorded training history of E3 (best epoch 10 of 14):
+
+| | |
+|---|---|
+| train loss at best epoch | 0.0684 |
+| validation loss at best epoch | 0.6309 |
+| ratio (train / validation) | **0.108** |
+
+Training error is about one ninth of validation error — the model is
+memorising the training set. The validation curve also oscillated between
+0.6309 and 0.7666 across epochs, which is the noise that makes best-epoch
+selection optimistic (see the note above).
+
+Residuals overall: mean +11.4, standard deviation 314.5, range −1452.9 to
++768.6. Just under 40% of predictions are below the true price.
+
+### What this implies for the report's future-work section
+
+The error analysis points at the objective, not the architecture, as the
+main thing to change:
+
+- predict the logarithm of the price, which compresses the right tail the
+  squared loss is so sensitive to;
+- use quantile or ordinal regression instead of plain MSE, so the model is
+  not rewarded for retreating to the mean;
+- weight expensive samples more heavily in the loss;
+- two-stage prediction: classify a price band first, then regress within it.
+
 ## Phase 4 — final model selection
 
 _To be filled in after 16 Oct. Record which configuration was chosen and the
