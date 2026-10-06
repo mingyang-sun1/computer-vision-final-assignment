@@ -47,6 +47,15 @@ N_PRICE_BINS = 10  # stratification granularity (price deciles)
 PRICE_COL = "price"
 IMAGE_COL = "imageid"
 
+# --- Phase 2 baseline --------------------------------------------------------
+# Frozen ImageNet-pretrained backbone + a small regression head. Features are
+# extracted once and cached, because extraction is the only expensive step
+# without a GPU; everything downstream then trains in seconds.
+BACKBONE = "resnet50"
+IMG_SIZE = 224
+BATCH_SIZE = 32
+FEATURE_DIR = OUTPUT_DIR / "features"
+
 
 def describe() -> str:
     """Human-readable summary, useful in logs and the reproducibility check."""

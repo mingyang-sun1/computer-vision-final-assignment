@@ -7,8 +7,14 @@ house_dataset/
 *.jpeg
 *.png
 
-# Generated artefacts
-outputs/
+# Generated artefacts.
+# Models and cached features are large and regenerable, so they stay out.
+# The Kaggle-format prediction csvs are NOT ignored -- the assignment
+# requires the test predictions to be part of the code submission.
+outputs/*
+!outputs/predictions/
+outputs/predictions/*
+!outputs/predictions/*.csv
 *.npy
 *.npz
 *.h5
