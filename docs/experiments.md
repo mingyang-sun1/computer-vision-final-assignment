@@ -93,10 +93,10 @@ adapts. Layer4 (14.9M of the backbone's 23.5M parameters) plus a new
 regression head are unfrozen; Adam at 1e-4; early stopping on validation
 loss.
 
-| Configuration | Val MSE | Val MAE | Val R² | vs B1 | Best epoch |
-|---|---|---|---|---|---|
-| B1frozen + Ridge | 114,853.7 | 249.0 | 0.256 | — | — |
-| **E2 layer4 fine-tuned** | **102,745.7** | **235.7** | **0.335** | **−10.5%** | 12 of 15 |
+| Configuration | Val MSE | Val MAE | Val R² | Kaggle MSE | vs B1 | Best epoch |
+|---|---|---|---|---|---|---|
+| B1 frozen + Ridge | 114,853.7 | 249.0 | 0.256 | 114,147.16 | — | — |
+| **E2 layer4 fine-tuned** | **102,745.7** | **235.7** | **0.335** | **103,129** | **−10.5%** | 12 of 15 |
 
 Reproduce: `python -m src.exp_finetune`
 Raw log: `outputs/logs/phase3_finetune.json` (includes the full per-epoch history)
