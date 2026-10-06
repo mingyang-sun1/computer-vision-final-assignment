@@ -116,12 +116,71 @@ Observations:
   more of the backbone is the other obvious lever, and the two trade off
   against each other.
 
-### E3 — planned
+### E3 — fine-tuning at 320px
+
+E2 with the resolution changed and nothing else.
+
+| Configuration | Val MSE | Val MAE | Val R² | Kaggle MSE | vs B1 | Best epoch |
+|---|---|---|---|---|---|---|
+| E2 fine-tune 224px | 102,745.7 | 235.7 | 0.335 | 103,129 | −10.5% | 12 of 15 |
+| **E3 fine-tune 320px** | **99,051.0** | **229.8** | **0.359** | _pending_ | **−13.8%** | 10 of 15 |
+
+Reproduce: `python -m src.exp_finetune --img-size 320 --tag E3_320px`
+
+Observations:
+
+- **Resolution and fine-tuning do compose**, adding a further 3.6% on top of
+  E2. This is the opposite of what the interim per-epoch readings suggested
+  (at epoch 4 E3 was still behind E2), which is a reminder not to read a
+  training curve mid-run.
+- E3 is the best configuration so far: 13.8% below the frozen-feature
+  baseline.
+
+### E4 — fine-tuning with augmentation
+
+E2 with augmentation added and nothing else. Augmentation is mild and
+targets the two directions the assignment says the data varies in --
+translation and zoom for pose, brightness and contrast for lighting. The
+horizontal flip is safe because house facades carry no meaningful left-right
+orientation here. It is applied to the training partition only.
+
+| Configuration | Val MSE | Val MAE | Val R² | vs B1 | Best epoch | Train loss @ epoch 10 |
+|---|---|---|---|---|---|---|
+| E2 fine-tune 224px, no augment | 102,745.7 | 235.7 | 0.335 | −10.5% | 12 of 15 | 0.080 |
+| E4 fine-tune 224px, augmented | 108,784.5 | 246.3 | 0.296 | −5.3% | 14 of 15 | 0.197 |
+
+Reproduce: `python -m src.exp_finetune --augment --tag E4_augment`
+
+Observations:
+
+- **At a fixed 15-epoch budget, augmentation hurts** — E4 lands 5.9% worse
+  than E2. The mechanism is visible in the training loss: augmentation
+  makes each epoch a harder task, so at epoch 10 E4 is at 0.197 against
+  E2's 0.080. The model is learning more slowly, not learning less.
+- **The comparison is confounded by the epoch budget**, and this should be
+  stated rather than hidden. E4's best epoch was 14 of 15, so it was still
+  improving when the budget ran out, while E2 had already peaked at epoch
+  12. E4 has not been given a fair chance to converge.
+- The honest conclusion is therefore limited: *augmentation slows
+  convergence faster than 15 epochs can absorb*. Whether it helps at
+  convergence is not yet tested, and testing it needs a longer run — see
+  the pending experiment below.
+
+### Phase 3 summary
+
+| ID | Configuration | Val MSE | Val R² | Kaggle MSE | vs B1 |
+|---|---|---|---|---|---|
+| B1 | Frozen features + Ridge, 224px | 114,853.7 | 0.256 | 114,147.16 | — |
+| E1 | Frozen features + Ridge, 320px | 111,822.5 | 0.276 | — | −2.6% |
+| E2 | Fine-tuned, 224px | 102,745.7 | 0.335 | 103,129 | −10.5% |
+| **E3** | **Fine-tuned, 320px** | **99,051.0** | **0.359** | _pending_ | **−13.8%** |
+| E4 | Fine-tuned, 224px + augmentation | 108,784.5 | 0.296 | — | −5.3% |
+
+### E5 — planned
 
 | ID | Configuration | Compared against | Rationale |
 |---|---|---|---|
-| E3 | Fine-tune at 320px | E2 | E1 and E2 both helped; this tests whether they compose |
-| E4 | Fine-tuning + augmentation | E2 | Directly targets the overfitting E2 exposed |
+| E5 | Fine-tuned + augmentation, longer schedule | E2 and E4 | Gives augmentation the epochs it needs, so the E2/E4 comparison is not decided by the budget |
 
 _To be filled in._
 

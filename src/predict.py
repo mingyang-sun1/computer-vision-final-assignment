@@ -1,8 +1,9 @@
 """Generate the Kaggle submission CSV from a trained model.
 
-    python -m src.predict                      # head selected in Phase 2
-    python -m src.predict --model finetuned    # the Phase 3 fine-tuned model
-    python -m src.predict --model ridge        # force a specific head
+    python -m src.predict                              # head selected in Phase 2
+    python -m src.predict --model finetuned            # best Phase 3 run (E3_320px)
+    python -m src.predict --model finetuned --tag E2_finetune
+    python -m src.predict --model ridge                # force a specific head
 
 Output format follows sample_solution.csv: two columns, `imageid` and
 `price`, with price in units of $1000 USD, one row per test image in the
@@ -32,13 +33,25 @@ from config import IMAGE_COL, IMG_SIZE, PRED_DIR, PRICE_COL, SEED, TEST_CSV, TES
 from src.baseline import MLP_PATH, RESULTS_PATH, RIDGE_PATH, TARGET_STATS_PATH, X_SCALER_PATH
 from src.features import build_extractor, cached_features, make_dataset, set_seeds
 
-FINETUNED_PATH = None  # resolved lazily to avoid a circular import at module load
+def _finetuned_path(tag: str):
+    """Model file and the resolution it expects, read from its result log.
 
+    The resolution has to come from the run itself: a model fine-tuned at
+    320px must be fed 320px images, and guessing would silently degrade it.
+    """
+    from config import LOG_DIR, MODEL_DIR
 
-def _finetuned_path():
-    from config import MODEL_DIR
-
-    return MODEL_DIR / "finetuned_layer4.keras"
+    results_path = LOG_DIR / f"phase3_{tag}.json"
+    if not results_path.exists():
+        raise FileNotFoundError(
+            f"{results_path} not found. Available tags: "
+            + ", ".join(sorted(p.stem.replace('phase3_', '') for p in LOG_DIR.glob("phase3_*.json")))
+        )
+    results = json.loads(results_path.read_text(encoding="utf-8"))
+    model_path = MODEL_DIR / f"finetuned_{tag}.keras"
+    if not model_path.exists():
+        raise FileNotFoundError(f"{model_path} not found. Run `python -m src.exp_finetune` first.")
+    return model_path, int(results["img_size"])
 
 
 def load_head_model(name: str):
@@ -93,18 +106,15 @@ def predict_head(test_ids, kind: str) -> np.ndarray:
     return clip_and_report(raw * stats["std"] + stats["mean"], stats)
 
 
-def predict_finetuned(test_ids) -> np.ndarray:
+def predict_finetuned(test_ids, tag: str) -> np.ndarray:
     """Phase 3 path: the model consumes images, not cached features."""
     from tensorflow import keras
 
-    path = _finetuned_path()
-    if not path.exists():
-        raise FileNotFoundError(f"{path} not found. Run `python -m src.exp_finetune` first.")
-
+    path, img_size = _finetuned_path(tag)
     model = keras.models.load_model(path)
-    print("predicting with: fine-tuned ResNet-50 (layer4 + head)")
+    print(f"predicting with: fine-tuned ResNet-50 [{tag}] at {img_size}px")
 
-    ds = make_dataset(test_ids, TEST_IMG_DIR, IMG_SIZE)
+    ds = make_dataset(test_ids, TEST_IMG_DIR, img_size)
     raw = model.predict(ds, verbose=0).ravel()
 
     stats = _target_stats()
@@ -120,6 +130,10 @@ def main() -> None:
         help="which model to use (default: the Phase 2 selection)",
     )
     parser.add_argument("--out", default=None, help="output csv path")
+    parser.add_argument(
+        "--tag", default="E3_320px",
+        help="which fine-tuned run to use, e.g. E2_finetune, E3_320px, E4_augment",
+    )
     args = parser.parse_args()
 
     set_seeds(SEED)
@@ -130,8 +144,8 @@ def main() -> None:
     print(f"test images: {len(test_ids)}")
 
     if args.model == "finetuned":
-        prices = predict_finetuned(test_ids)
-        default_name = "submission_phase3_finetuned.csv"
+        prices = predict_finetuned(test_ids, args.tag)
+        default_name = f"submission_phase3_{args.tag}.csv"
     else:
         prices = predict_head(test_ids, args.model)
         default_name = f"submission_phase2_{args.model}.csv"

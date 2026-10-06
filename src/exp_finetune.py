@@ -1,17 +1,18 @@
-"""Phase 3, experiment 2: partial fine-tuning.
+"""Phase 3, experiments E2/E3/E4: partial fine-tuning.
 
-    python -m src.exp_finetune
+    python -m src.exp_finetune                        # E2: 224px, no augment
+    python -m src.exp_finetune --img-size 320         # E3: resolution
+    python -m src.exp_finetune --augment              # E4: augmentation
 
-Compared against Phase 2's B1 (frozen ResNet-50 + Ridge). The resolution is
-held at 224px and the split and seed are unchanged, so the only factor
-differing is whether the backbone adapts to the data.
+All three run the same code with different settings, so each differs from
+E2 in exactly one factor:
 
-Motivation: E1 showed that raising the input resolution buys only 2.6%, but
-that at 400px the non-linear head suddenly trains three times longer and
-improves 4.9%. That points at the *representation* being the limit, not the
-input: the frozen ImageNet features are not adapted to photographs of house
-exteriors, which differ from ImageNet's object-centric images in lighting,
-framing, and what actually matters in the scene.
+    E2  baseline for this family -- fine-tune at 224px, no augmentation
+    E3  + input resolution 320px
+    E4  + augmentation
+
+Compared against Phase 2's B1 (frozen ResNet-50 + Ridge, val MSE 114,853.7).
+The split and seed are unchanged throughout, so results are comparable.
 
 Design choices:
 
@@ -20,20 +21,25 @@ Design choices:
   well; the later layers encode task-specific structure that does not.
   Layer4 is 14.9M of the backbone's 23.5M parameters, so this still leaves
   most of the network trainable and overfitting is a real risk -- which is
-  what the early stopping and the low learning rate are there to contain.
-  Freezing more would train faster but adapt less; this is the middle
-  setting, and it is the one worth reporting.
+  what the early stopping, the low learning rate, and E4's augmentation are
+  there to contain.
 - **Low learning rate (1e-4).** The pretrained weights are a good starting
   point; a large step would destroy them before the randomly-initialised
   head has settled.
 - **MSE on the standardised target**, matching the competition metric.
 - Early stopping on validation loss, restoring the best weights.
 
+Augmentation (E4) targets the two directions the assignment says the data
+actually varies in -- "pose, lighting, quality" -- and deliberately stays
+mild, because the task is to read appearance and aggressive colour or crop
+augmentation could destroy the very signal being predicted.
+
 The test set is not touched by this module.
 """
 
 from __future__ import annotations
 
+import argparse
 import json
 from datetime import datetime, timezone
 from pathlib import Path
@@ -45,7 +51,6 @@ from tensorflow import keras
 from config import (
     BATCH_SIZE,
     IMAGE_COL,
-    IMG_SIZE,
     LOG_DIR,
     MODEL_DIR,
     PRICE_COL,
@@ -53,11 +58,10 @@ from config import (
     TRAIN_IMG_DIR,
 )
 from src.data import load_split
-from src.features import _preprocess, set_seeds
+from src.features import set_seeds
 from src.metrics import format_summary, summary
 
-RESULTS_PATH = LOG_DIR / "phase3_finetune.json"
-MODEL_PATH = MODEL_DIR / "finetuned_layer4.keras"
+B1_REFERENCE = {"mse": 114853.7, "mae": 249.0, "r2": 0.256}
 
 LEARNING_RATE = 1e-4
 EPOCHS = 15
@@ -66,7 +70,37 @@ HEAD_UNITS = 256
 HEAD_DROPOUT = 0.2
 
 
-def build_model() -> keras.Model:
+def build_augmenter() -> keras.Sequential:
+    """Mild, geometry-and-lighting augmentation on 0-255 images.
+
+    Translation and zoom stand in for the pose and framing variation in the
+    dataset; brightness and contrast stand in for the lighting variation.
+    Horizontal flip is safe here because house facades have no meaningful
+    left-right orientation in this task.
+    """
+    return keras.Sequential(
+        [
+            keras.layers.RandomFlip("horizontal"),
+            keras.layers.RandomTranslation(0.1, 0.1),
+            keras.layers.RandomZoom(0.1),
+            keras.layers.RandomBrightness(0.15, value_range=(0.0, 255.0)),
+            keras.layers.RandomContrast(0.15, value_range=(0.0, 255.0)),
+        ],
+        name="augment",
+    )
+
+
+def _preprocess(path: tf.Tensor, img_size: int, augmenter=None) -> tf.Tensor:
+    """Decode, resize, optionally augment, then apply the backbone's norm."""
+    raw = tf.io.read_file(path)
+    image = tf.image.decode_jpeg(raw, channels=3)
+    image = tf.image.resize(image, (img_size, img_size))
+    if augmenter is not None:
+        image = augmenter(image, training=True)
+    return keras.applications.resnet50.preprocess_input(image)
+
+
+def build_model(img_size: int) -> keras.Model:
     """ResNet-50 with only the last stage trainable, plus a regression head."""
     base = keras.applications.ResNet50(
         weights="imagenet", include_top=False, pooling="avg"
@@ -76,7 +110,7 @@ def build_model() -> keras.Model:
         if layer.name.startswith("conv5"):  # ResNet-50's last stage is conv5/layer4
             layer.trainable = True
 
-    inputs = keras.Input(shape=(IMG_SIZE, IMG_SIZE, 3))
+    inputs = keras.Input(shape=(img_size, img_size, 3))
     x = base(inputs, training=False)
     x = keras.layers.Dropout(HEAD_DROPOUT)(x)
     x = keras.layers.Dense(HEAD_UNITS, activation="relu")(x)
@@ -87,8 +121,15 @@ def build_model() -> keras.Model:
     return model
 
 
-def make_dataset(df, img_dir, y_mean, y_std, batch_size=BATCH_SIZE, shuffle=False):
-    """(image, standardised price) pipeline. No augmentation in this experiment."""
+def make_dataset(
+    df, img_dir, y_mean, y_std, img_size, augmenter=None, batch_size=BATCH_SIZE, shuffle=False
+) -> tf.data.Dataset:
+    """(image, standardised price) pipeline.
+
+    Augmentation is applied here and this function is only ever called with
+    augmenter=None for validation, so the training partition is the only one
+    that sees augmented images.
+    """
     paths = [str(Path(img_dir) / str(i)) for i in df[IMAGE_COL]]
     labels = ((df[PRICE_COL].to_numpy(np.float32) - y_mean) / y_std).astype(np.float32)
 
@@ -96,7 +137,7 @@ def make_dataset(df, img_dir, y_mean, y_std, batch_size=BATCH_SIZE, shuffle=Fals
     if shuffle:
         ds = ds.shuffle(len(paths), seed=SEED, reshuffle_each_iteration=True)
     ds = ds.map(
-        lambda p, y: (_preprocess(p, IMG_SIZE), y),
+        lambda p, y: (_preprocess(p, img_size, augmenter), y),
         num_parallel_calls=tf.data.AUTOTUNE,
     )
     return ds.batch(batch_size).prefetch(tf.data.AUTOTUNE)
@@ -109,6 +150,14 @@ def count_trainable(model: keras.Model) -> tuple[int, int]:
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--img-size", type=int, default=224)
+    parser.add_argument("--augment", action="store_true")
+    parser.add_argument("--tag", default=None, help="experiment id (default derived from flags)")
+    args = parser.parse_args()
+
+    tag = args.tag or ("E4_augment" if args.augment else ("E3_320px" if args.img_size != 224 else "E2_finetune"))
+
     set_seeds(SEED)
     MODEL_DIR.mkdir(parents=True, exist_ok=True)
     LOG_DIR.mkdir(parents=True, exist_ok=True)
@@ -119,15 +168,19 @@ def main() -> None:
     y_mean, y_std = float(y_tr_raw.mean()), float(y_tr_raw.std())
     y_min, y_max = float(y_tr_raw.min()), float(y_tr_raw.max())
 
-    model = build_model()
+    augmenter = build_augmenter() if args.augment else None
+    model = build_model(args.img_size)
     trainable, total = count_trainable(model)
-    print(f"Fixed: split 7000/1000, seed {SEED}, resolution {IMG_SIZE}px")
-    print(f"Varying: backbone frozen vs layer4+head fine-tuned")
-    print(f"Trainable parameters: {trainable:,} / {total:,} ({100*trainable/total:.1f}%)")
+
+    print(f"[{tag}] resolution {args.img_size}px, augmentation {bool(augmenter)}")
+    print(f"[{tag}] split 7000/1000, seed {SEED}, epochs {EPOCHS}, patience {PATIENCE}")
+    print(f"[{tag}] trainable parameters: {trainable:,} / {total:,} ({100*trainable/total:.1f}%)")
     print()
 
-    train_ds = make_dataset(train_df, TRAIN_IMG_DIR, y_mean, y_std, shuffle=True)
-    val_ds = make_dataset(val_df, TRAIN_IMG_DIR, y_mean, y_std)
+    train_ds = make_dataset(
+        train_df, TRAIN_IMG_DIR, y_mean, y_std, args.img_size, augmenter, shuffle=True
+    )
+    val_ds = make_dataset(val_df, TRAIN_IMG_DIR, y_mean, y_std, args.img_size)
 
     history = model.fit(
         train_ds,
@@ -142,30 +195,34 @@ def main() -> None:
         verbose=2,
     )
 
-    pred = model.predict(val_ds, verbose=0).ravel() * y_std + y_mean
-    pred = np.clip(pred, y_min, y_max)
+    pred = np.clip(model.predict(val_ds, verbose=0).ravel() * y_std + y_mean, y_min, y_max)
     res = summary(y_va_raw, pred)
     epochs_run = len(history.history["loss"])
+    best_epoch = int(np.argmin(history.history["val_loss"])) + 1
 
     print()
-    print(format_summary("E2  layer4 fine-tuned", res))
-    print(f"    {epochs_run} epochs, best val loss {min(history.history['val_loss']):.4f}")
-    print()
-    print(format_summary("B1  frozen + ridge (ref)", {"mse": 114853.7, "mae": 249.0, "r2": 0.256}))
-    print(f"    change vs B1: {100*(1 - res['mse']/114853.7):+.1f}%")
+    print(format_summary(f"{tag}  {args.img_size}px aug={bool(augmenter)}", res))
+    print(f"    {epochs_run} epochs run, best at epoch {best_epoch}")
+    print(format_summary("B1  frozen + ridge (ref)", B1_REFERENCE))
+    print(f"    change vs B1: {100*(1 - res['mse']/B1_REFERENCE['mse']):+.1f}%")
 
-    model.save(MODEL_PATH)
-    RESULTS_PATH.write_text(
+    model_path = MODEL_DIR / f"finetuned_{tag}.keras"
+    results_path = LOG_DIR / f"phase3_{tag}.json"
+    model.save(model_path)
+    results_path.write_text(
         json.dumps(
             {
-                "experiment": "E2_partial_finetuning",
+                "experiment": tag,
                 "created_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
                 "seed": SEED,
-                "img_size": IMG_SIZE,
+                "img_size": args.img_size,
+                "augmentation": bool(augmenter),
                 "unfrozen": "layer4 (conv5) + regression head",
                 "learning_rate": LEARNING_RATE,
                 "batch_size": BATCH_SIZE,
+                "epochs_cap": EPOCHS,
                 "epochs_run": epochs_run,
+                "best_epoch": best_epoch,
                 "trainable_params": trainable,
                 "total_params": total,
                 "val": res,
@@ -175,7 +232,7 @@ def main() -> None:
         ),
         encoding="utf-8",
     )
-    print(f"\nwrote {MODEL_PATH.name} and {RESULTS_PATH.name}")
+    print(f"\nwrote {model_path.name} and {results_path.name}")
 
 
 if __name__ == "__main__":
