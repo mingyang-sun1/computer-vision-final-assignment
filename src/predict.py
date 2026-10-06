@@ -1,11 +1,19 @@
-"""Generate the Kaggle submission CSV from a trained Phase 2 model.
+"""Generate the Kaggle submission CSV from a trained model.
 
-    python -m src.predict                 # the head selected on validation
-    python -m src.predict --model ridge   # force a specific head
+    python -m src.predict                      # head selected in Phase 2
+    python -m src.predict --model finetuned    # the Phase 3 fine-tuned model
+    python -m src.predict --model ridge        # force a specific head
 
 Output format follows sample_solution.csv: two columns, `imageid` and
 `price`, with price in units of $1000 USD, one row per test image in the
 order given by the course test.csv.
+
+Two kinds of model are supported and they consume the test set differently:
+
+- The Phase 2 heads (ridge, mlp) run on features that were extracted once
+  and cached, so prediction is a matrix multiply.
+- The Phase 3 fine-tuned model takes images directly, because its backbone
+  is trainable and therefore has no fixed feature representation to cache.
 
 This is the only module that reads the test set, and it uses it purely to
 produce predictions -- never for training, tuning, or model selection.
@@ -20,20 +28,21 @@ import joblib
 import numpy as np
 import pandas as pd
 
-from config import (
-    IMAGE_COL,
-    PRED_DIR,
-    PRICE_COL,
-    SEED,
-    TEST_CSV,
-    TEST_IMG_DIR,
-)
+from config import IMAGE_COL, IMG_SIZE, PRED_DIR, PRICE_COL, SEED, TEST_CSV, TEST_IMG_DIR
 from src.baseline import MLP_PATH, RESULTS_PATH, RIDGE_PATH, TARGET_STATS_PATH, X_SCALER_PATH
-from src.features import build_extractor, cached_features, set_seeds
+from src.features import build_extractor, cached_features, make_dataset, set_seeds
+
+FINETUNED_PATH = None  # resolved lazily to avoid a circular import at module load
 
 
-def load_model(name: str):
-    """Return (model, kind) for a head name, or the Phase 2 selection."""
+def _finetuned_path():
+    from config import MODEL_DIR
+
+    return MODEL_DIR / "finetuned_layer4.keras"
+
+
+def load_head_model(name: str):
+    """Return (model, kind) for a Phase 2 head name, or the Phase 2 selection."""
     if name == "selected":
         results = json.loads(RESULTS_PATH.read_text(encoding="utf-8"))
         name = "mlp" if results["selected"] == "B2_mlp" else "ridge"
@@ -44,42 +53,71 @@ def load_model(name: str):
     return joblib.load(RIDGE_PATH), "ridge"
 
 
-def predict(model, kind: str, X) -> np.ndarray:
-    """Predict in the original price units, clipped to the training range.
-
-    Both heads were trained against a standardised target, so the inverse
-    transform is applied here to get back to $1000 USD. The result is then
-    clipped to the price range seen during training: a linear head
-    extrapolates freely, but a price outside the range the data contains is
-    known to be wrong, so there is nothing to lose by bounding it.
-
-    The bounds are read from the training partition, never from test.
-    """
+def _target_stats() -> dict:
     stats = json.loads(TARGET_STATS_PATH.read_text(encoding="utf-8"))
     if "min" not in stats or "max" not in stats:
         raise KeyError(
             f"{TARGET_STATS_PATH.name} has no clipping bounds. "
             "Re-run `python -m src.baseline` to regenerate it."
         )
+    return stats
 
-    if kind == "mlp":
-        raw = model.predict(X, verbose=0).ravel()
-    else:
-        raw = model.predict(X)
 
-    prices = raw * stats["std"] + stats["mean"]
+def clip_and_report(prices: np.ndarray, stats: dict) -> np.ndarray:
+    """Bound predictions to the training price range and say how many moved.
+
+    A regression head extrapolates freely, but a price outside the range the
+    training data contains is known to be wrong, so there is nothing to lose
+    by bounding it. The bounds come from the training partition, never test.
+    """
     lo, hi = stats["min"], stats["max"]
-    n_clipped = int(((prices < lo) | (prices > hi)).sum())
-    if n_clipped:
-        print(f"  clipped {n_clipped} predictions into the training range [{lo:.0f}, {hi:.0f}]")
+    n = int(((prices < lo) | (prices > hi)).sum())
+    if n:
+        print(f"  clipped {n} predictions into the training range [{lo:.0f}, {hi:.0f}]")
     return np.clip(prices, lo, hi)
+
+
+def predict_head(test_ids, kind: str) -> np.ndarray:
+    """Phase 2 path: cached features -> standardise -> head."""
+    extractor = build_extractor()
+    X_raw = cached_features("test", test_ids, TEST_IMG_DIR, extractor, IMG_SIZE)
+
+    x_scaler = joblib.load(X_SCALER_PATH)
+    X = x_scaler.transform(X_raw).astype(np.float32)
+
+    model, kind = load_head_model(kind)
+    print(f"predicting with: {kind}")
+    raw = model.predict(X, verbose=0).ravel() if kind == "mlp" else model.predict(X)
+
+    stats = _target_stats()
+    return clip_and_report(raw * stats["std"] + stats["mean"], stats)
+
+
+def predict_finetuned(test_ids) -> np.ndarray:
+    """Phase 3 path: the model consumes images, not cached features."""
+    from tensorflow import keras
+
+    path = _finetuned_path()
+    if not path.exists():
+        raise FileNotFoundError(f"{path} not found. Run `python -m src.exp_finetune` first.")
+
+    model = keras.models.load_model(path)
+    print("predicting with: fine-tuned ResNet-50 (layer4 + head)")
+
+    ds = make_dataset(test_ids, TEST_IMG_DIR, IMG_SIZE)
+    raw = model.predict(ds, verbose=0).ravel()
+
+    stats = _target_stats()
+    return clip_and_report(raw * stats["std"] + stats["mean"], stats)
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
-        "--model", default="selected", choices=["selected", "ridge", "mlp"],
-        help="which head to use (default: the one selected in Phase 2)",
+        "--model",
+        default="selected",
+        choices=["selected", "ridge", "mlp", "finetuned"],
+        help="which model to use (default: the Phase 2 selection)",
     )
     parser.add_argument("--out", default=None, help="output csv path")
     args = parser.parse_args()
@@ -91,26 +129,22 @@ def main() -> None:
     test_ids = test_df[IMAGE_COL].astype(str).tolist()
     print(f"test images: {len(test_ids)}")
 
-    print("\nFeatures")
-    extractor = build_extractor()
-    X_test_raw = cached_features("test", test_ids, TEST_IMG_DIR, extractor)
+    if args.model == "finetuned":
+        prices = predict_finetuned(test_ids)
+        default_name = "submission_phase3_finetuned.csv"
+    else:
+        prices = predict_head(test_ids, args.model)
+        default_name = f"submission_phase2_{args.model}.csv"
 
-    x_scaler = joblib.load(X_SCALER_PATH)
-    X_test = x_scaler.transform(X_test_raw).astype(np.float32)
-
-    model, kind = load_model(args.model)
-    print(f"\nPredicting with: {kind}")
-    prices = predict(model, kind, X_test)
-
-    out_path = PRED_DIR / (args.out or f"submission_phase2_{kind}.csv")
+    out_path = PRED_DIR / (args.out or default_name)
     submission = pd.DataFrame({IMAGE_COL: test_ids, PRICE_COL: np.round(prices, 1)})
     submission.to_csv(out_path, index=False)
 
-    # Sanity checks -- a malformed csv scores zero on Kaggle regardless of
-    # how good the model is, so this is worth failing loudly on.
+    # A malformed csv scores zero regardless of model quality, so fail loudly.
     assert len(submission) == len(test_ids), "row count does not match the test set"
     assert submission[PRICE_COL].notna().all(), "predictions contain NaN"
     assert list(submission.columns) == [IMAGE_COL, PRICE_COL], "unexpected columns"
+    assert list(submission[IMAGE_COL]) == test_ids, "image id order changed"
 
     print(f"\nwrote {out_path}")
     print(f"  rows          {len(submission)}")
