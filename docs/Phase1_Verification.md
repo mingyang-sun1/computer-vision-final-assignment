@@ -27,7 +27,7 @@ train_split.csv Git blob:
 val_split.csv Git blob:
 54c0018bb7fbb08c59dd26c511928836e5ea46ba
 ```
-Full input SHA-256 hashes, row counts, statistics, all individual checks and the acquisition method are retained in docs/evidence/phase1_metadata_audit_2026-10-08.json. The helper verifies the actual existing split files on a member's machine; it does not reconstruct them.
+Full input SHA-256 hashes, row counts, statistics, all individual checks and the acquisition method are retained in docs/phase1_metadata_audit_2026-10-08.json. The helper verifies the actual existing split files on a member's machine; it does not reconstruct them.
 
 ## 3. Safe local verification
 Run from the project root after setting CV_DATA_ROOT to the actual dataset folder:
