@@ -1,0 +1,269 @@
+{
+  "audit_date": "2026-10-08",
+  "scope": "CSV metadata and existing split files only; no images opened, no model run, no source files modified",
+  "repository": "mingyang-sun1/computer-vision-final-assignment",
+  "reference_commit": "9a7ed84f3681d9e13d4d48a43ebdddbd5e94d591",
+  "all_executed_checks_passed": true,
+  "executed_checks": 32,
+  "checks": [
+    {
+      "check": "train.csv: row count",
+      "status": "PASS",
+      "details": "8000 rows"
+    },
+    {
+      "check": "train.csv: image ID format",
+      "status": "PASS",
+      "details": "IDs must be non-blank numeric .jpg filenames; images are not opened"
+    },
+    {
+      "check": "train.csv: unique image IDs",
+      "status": "PASS",
+      "details": "0 duplicate IDs"
+    },
+    {
+      "check": "train.csv: valid prices",
+      "status": "PASS",
+      "details": "All prices are finite, numeric and positive"
+    },
+    {
+      "check": "test.csv: row count",
+      "status": "PASS",
+      "details": "3000 rows"
+    },
+    {
+      "check": "test.csv: image ID format",
+      "status": "PASS",
+      "details": "IDs must be non-blank numeric .jpg filenames; images are not opened"
+    },
+    {
+      "check": "test.csv: unique image IDs",
+      "status": "PASS",
+      "details": "0 duplicate IDs"
+    },
+    {
+      "check": "sample_solution.csv: row count",
+      "status": "PASS",
+      "details": "3000 rows"
+    },
+    {
+      "check": "sample_solution.csv: image ID format",
+      "status": "PASS",
+      "details": "IDs must be non-blank numeric .jpg filenames; images are not opened"
+    },
+    {
+      "check": "sample_solution.csv: unique image IDs",
+      "status": "PASS",
+      "details": "0 duplicate IDs"
+    },
+    {
+      "check": "sample_solution.csv: valid prices",
+      "status": "PASS",
+      "details": "All prices are finite, numeric and positive"
+    },
+    {
+      "check": "data/splits/train_split.csv: row count",
+      "status": "PASS",
+      "details": "7000 rows"
+    },
+    {
+      "check": "data/splits/train_split.csv: image ID format",
+      "status": "PASS",
+      "details": "IDs must be non-blank numeric .jpg filenames; images are not opened"
+    },
+    {
+      "check": "data/splits/train_split.csv: unique image IDs",
+      "status": "PASS",
+      "details": "0 duplicate IDs"
+    },
+    {
+      "check": "data/splits/train_split.csv: valid prices",
+      "status": "PASS",
+      "details": "All prices are finite, numeric and positive"
+    },
+    {
+      "check": "data/splits/val_split.csv: row count",
+      "status": "PASS",
+      "details": "1000 rows"
+    },
+    {
+      "check": "data/splits/val_split.csv: image ID format",
+      "status": "PASS",
+      "details": "IDs must be non-blank numeric .jpg filenames; images are not opened"
+    },
+    {
+      "check": "data/splits/val_split.csv: unique image IDs",
+      "status": "PASS",
+      "details": "0 duplicate IDs"
+    },
+    {
+      "check": "data/splits/val_split.csv: valid prices",
+      "status": "PASS",
+      "details": "All prices are finite, numeric and positive"
+    },
+    {
+      "check": "Training-source vs test IDs",
+      "status": "PASS",
+      "details": "0 shared IDs"
+    },
+    {
+      "check": "Train-partition vs validation IDs",
+      "status": "PASS",
+      "details": "0 shared IDs"
+    },
+    {
+      "check": "Partition coverage",
+      "status": "PASS",
+      "details": "8000 unique IDs in union; 8000 source IDs"
+    },
+    {
+      "check": "Sample vs test ID set",
+      "status": "PASS",
+      "details": "Exact ID-set comparison"
+    },
+    {
+      "check": "Sample vs test row order",
+      "status": "PASS",
+      "details": "Exact ordered-list comparison"
+    },
+    {
+      "check": "data/splits/train_split.csv: label agreement",
+      "status": "PASS",
+      "details": "0 labels differ from uploaded train.csv (Decimal comparison)"
+    },
+    {
+      "check": "data/splits/train_split.csv: repository snapshot identity",
+      "status": "PASS",
+      "details": "LF-normalized Git blob SHA-1 05851b5173130d45b78f1057ec7f0e78cf827a06; reference commit 9a7ed84f3681d9e13d4d48a43ebdddbd5e94d591; source-byte hashes are also retained"
+    },
+    {
+      "check": "data/splits/val_split.csv: label agreement",
+      "status": "PASS",
+      "details": "0 labels differ from uploaded train.csv (Decimal comparison)"
+    },
+    {
+      "check": "data/splits/val_split.csv: repository snapshot identity",
+      "status": "PASS",
+      "details": "LF-normalized Git blob SHA-1 54c0018bb7fbb08c59dd26c511928836e5ea46ba; reference commit 9a7ed84f3681d9e13d4d48a43ebdddbd5e94d591; source-byte hashes are also retained"
+    },
+    {
+      "check": "Sample placeholder values",
+      "status": "PASS",
+      "details": "1 unique value(s); this reference sample uses 500, NOT test labels"
+    },
+    {
+      "check": "Split metadata settings",
+      "status": "PASS",
+      "details": "seed 42; validation fraction 0.125; 10 price bins; 7000/1000"
+    },
+    {
+      "check": "train: metadata statistics",
+      "status": "PASS",
+      "details": "Mean, sample std, min, median and max agree at 2 decimal places"
+    },
+    {
+      "check": "val: metadata statistics",
+      "status": "PASS",
+      "details": "Mean, sample std, min, median and max agree at 2 decimal places"
+    }
+  ],
+  "files": {
+    "train.csv": {
+      "columns": [
+        "imageid",
+        "price"
+      ],
+      "bytes": 118058,
+      "sha256": "6a37aec7c596d98a2342aae32b0cf2eb660e56c92292fd1c324961ca5d8653d5",
+      "git_blob_sha1": "c7410ccb27ded9940202097a4419a2f31711f13d",
+      "lf_git_blob_sha1": "718a2e9b8874b588a52b3d917f392baab5e61e4e",
+      "row_count": 8000
+    },
+    "test.csv": {
+      "columns": [
+        "imageid"
+      ],
+      "bytes": 31010,
+      "sha256": "3b204c0887200c43fc7ff7e5e0f897b7b82ea16cf2387d55b3bf31759db57de9",
+      "git_blob_sha1": "2965b9a75461f6567b1abb18bb55524a166ec6d5",
+      "lf_git_blob_sha1": "362ff8d00265986e234085d1bf166472af9b7e89",
+      "row_count": 3000
+    },
+    "sample_solution.csv": {
+      "columns": [
+        "imageid",
+        "price"
+      ],
+      "bytes": 43016,
+      "sha256": "4172ca1e22147f8409908e1cf2c8f35603106acb563b4f914311d1ced6b8b3fe",
+      "git_blob_sha1": "ef153bee37e9d8fafa058d2a6f0dd6d5385ed684",
+      "lf_git_blob_sha1": "2147520f281d6d3113b076311a3f96ccc5be5186",
+      "row_count": 3000
+    },
+    "data/splits/train_split.csv": {
+      "columns": [
+        "imageid",
+        "price"
+      ],
+      "bytes": 106253,
+      "sha256": "821c4be4f30087f70aa16b2c7b5735908da31c3d0745230315b9e4d5f0a59774",
+      "git_blob_sha1": "05851b5173130d45b78f1057ec7f0e78cf827a06",
+      "lf_git_blob_sha1": "05851b5173130d45b78f1057ec7f0e78cf827a06",
+      "row_count": 7000
+    },
+    "data/splits/val_split.csv": {
+      "columns": [
+        "imageid",
+        "price"
+      ],
+      "bytes": 15192,
+      "sha256": "3a8236908586bdf8ceedd002130883425a8cf8295e3dc6d43c9b9db9e8ac3402",
+      "git_blob_sha1": "54c0018bb7fbb08c59dd26c511928836e5ea46ba",
+      "lf_git_blob_sha1": "54c0018bb7fbb08c59dd26c511928836e5ea46ba",
+      "row_count": 1000
+    }
+  },
+  "price_stats_usd_1000": {
+    "full_training_source": {
+      "n": 8000,
+      "min": 195.0,
+      "mean": 720.64832875,
+      "median": 639.9,
+      "max": 2000.0,
+      "sample_std_ddof1": 395.8599443673147,
+      "population_std_ddof0": 395.83520234757947
+    },
+    "training_partition": {
+      "n": 7000,
+      "min": 195.0,
+      "mean": 720.9804862857143,
+      "median": 639.9,
+      "max": 2000.0,
+      "sample_std_ddof1": 396.2701604601321,
+      "population_std_ddof0": 396.2418544377052
+    },
+    "validation_partition": {
+      "n": 1000,
+      "min": 195.0,
+      "mean": 718.323226,
+      "median": 639.45,
+      "max": 1999.9,
+      "sample_std_ddof1": 393.1656262814238,
+      "population_std_ddof0": 392.96899429799157
+    }
+  },
+  "sample_solution_note": "3000 constant placeholder predictions of 500; not ground-truth labels and not the team's model predictions",
+  "not_verified": [
+    "Image-file presence, decoding, resolution and image-content duplicates",
+    "Local machine paths and training environment",
+    "Checkpoint availability, original training logs and Kaggle submission status",
+    "Team reviewer sign-off"
+  ],
+  "evidence_provenance": {
+    "source_csv": "Exact, unchanged copies of the three user uploads received on 2026-10-08.",
+    "repository_head": "GitHub connector verified main at the reference commit on 2026-10-08.",
+    "split_bytes": "Audit-only reconstruction from uploaded train.csv using the documented price-decile split, followed by matching BOTH complete Git blob SHA-1 values against the GitHub connector. The matches identify byte-for-byte identical contents; no production split was regenerated or replaced.",
+    "split_metadata": "Settings and summary statistics read from the pinned GitHub split_meta.json; its contents were transcribed for comparison. No byte-identity claim is made for the metadata JSON.",
+    "helper_line_endings": "Local verifier accepts CRLF working-tree line endings for split identity by comparing LF-normalized Git blob hashes; exact source-byte SHA-256 and Git blob hashes are also retained. In this audit both split files already matched the reference raw bytes."
+  }
+}
