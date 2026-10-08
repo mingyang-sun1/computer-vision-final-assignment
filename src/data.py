@@ -16,11 +16,20 @@ Design notes
   stay comparable.
 * Only the course-provided *training* labels are read here. The test set ships
   without labels in this repository, and this module never loads it.
+
+Usage
+-----
+    python -m src.data              # verify the existing split (read-only)
+    python -m src.data --rebuild    # regenerate and overwrite it
+
+Verifying is the default and writes nothing.
 """
 
 from __future__ import annotations
 
+import argparse
 import json
+import sys
 from datetime import datetime, timezone
 
 import numpy as np
@@ -143,7 +152,7 @@ def load_split():
     """Load the frozen split. Every experiment must go through this."""
     if not TRAIN_SPLIT_CSV.exists() or not VAL_SPLIT_CSV.exists():
         raise FileNotFoundError(
-            "Split files not found. Run `python -m src.data` to create them."
+            "Split files not found. Run `python -m src.data --rebuild` to create them."
         )
     return pd.read_csv(TRAIN_SPLIT_CSV), pd.read_csv(VAL_SPLIT_CSV)
 
@@ -188,12 +197,39 @@ def verify(df: pd.DataFrame) -> bool:
 
 
 def main() -> None:
+    """Verify the frozen split, or rebuild it with --rebuild.
+
+    Verifying is the default and does not write anything. This matters
+    because the split is a shared commitment: every experiment in the
+    project, and both team members' results, are only comparable while the
+    same file is in use. A command that silently rewrote it whenever someone
+    asked it to "check" the data would be a trap.
+    """
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--rebuild",
+        action="store_true",
+        help="regenerate and overwrite the committed split (default: verify only)",
+    )
+    args = parser.parse_args()
+
     df = load_train_labels()
     print(f"loaded {len(df)} training labels from {TRAIN_CSV}")
 
-    train_df, val_df = build_split(df)
-    save_split(train_df, val_df)
-    verify(df)
+    if args.rebuild:
+        print("--rebuild given: regenerating the split")
+        train_df, val_df = build_split(df)
+        save_split(train_df, val_df)
+    elif not (TRAIN_SPLIT_CSV.exists() and VAL_SPLIT_CSV.exists()):
+        sys.exit(
+            "No split found. Run `python -m src.data --rebuild` to create it.\n"
+            "(Note this is a different decision from a new teammate's first "
+            "checkout: the split is committed, so a plain clone already has it.)"
+        )
+    else:
+        print("verifying the existing split; pass --rebuild to regenerate it")
+
+    sys.exit(0 if verify(df) else 1)
 
 
 if __name__ == "__main__":

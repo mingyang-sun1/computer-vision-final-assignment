@@ -75,7 +75,8 @@ house_dataset/
 
 ```bash
 python config.py                                          # check resolved paths
-python -m src.data                                        # rebuild/verify the split
+python -m src.data                                        # verify the split (read-only)
+python -m src.data --rebuild                              # only if you mean to replace it
 
 python -m src.baseline                                    # B0/B1/B2: frozen features
 

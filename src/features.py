@@ -28,6 +28,7 @@ Both costs are what the Phase 3 experiments probe.
 
 from __future__ import annotations
 
+import hashlib
 from pathlib import Path
 
 import numpy as np
@@ -101,6 +102,28 @@ def feature_path(name: str, img_size: int = IMG_SIZE) -> Path:
     return FEATURE_DIR / f"{name}_{BACKBONE}_{img_size}.npy"
 
 
+def _ids_fingerprint(image_ids) -> str:
+    """SHA-1 over the image ids in order, identifying the exact row set."""
+    h = hashlib.sha1()
+    for image_id in image_ids:
+        h.update(str(image_id).encode("utf-8"))
+        h.update(b"\n")
+    return h.hexdigest()
+
+
+def _fingerprint_path(path: Path) -> Path:
+    return path.with_suffix(path.suffix + ".ids")
+
+
+def _read_fingerprint(path: Path) -> str | None:
+    sidecar = _fingerprint_path(path)
+    return sidecar.read_text(encoding="utf-8").strip() if sidecar.exists() else None
+
+
+def _write_fingerprint(path: Path, fingerprint: str) -> None:
+    _fingerprint_path(path).write_text(fingerprint + "\n", encoding="utf-8")
+
+
 def cached_features(
     name: str,
     image_ids,
@@ -110,24 +133,33 @@ def cached_features(
 ) -> np.ndarray:
     """Return features for a split, extracting them only if not already cached.
 
-    ``name`` is one of "train", "val", "test". The cache is invalidated
-    automatically when its row count no longer matches the split, which is
-    what happens if the split is ever rebuilt.
+    ``name`` is one of "train", "val", "test". A cached file is reused only if
+    it was built from *the same images in the same order*: row count alone is
+    not sufficient, because a reordered or swapped split of the same length
+    would silently produce features that no longer line up with the labels.
+    The fingerprint is stored in a sidecar file next to the cache.
     """
     FEATURE_DIR.mkdir(parents=True, exist_ok=True)
     path = feature_path(name, img_size)
+    fingerprint = _ids_fingerprint(image_ids)
 
     if path.exists():
         feats = np.load(path)
-        if len(feats) == len(image_ids):
+        if len(feats) == len(image_ids) and _read_fingerprint(path) == fingerprint:
             print(f"  {name:<5} @{img_size}px  cached  {path.name} {feats.shape}")
             return feats
-        print(f"  {name:<5} @{img_size}px  cache stale ({len(feats)} rows vs {len(image_ids)}), re-extracting")
+        reason = (
+            f"{len(feats)} rows vs {len(image_ids)}"
+            if len(feats) != len(image_ids)
+            else "same row count but different image ids"
+        )
+        print(f"  {name:<5} @{img_size}px  cache stale ({reason}), re-extracting")
 
     extractor = extractor or build_extractor()
     print(f"  {name:<5} @{img_size}px  extracting {len(image_ids)} images ...")
     feats = extract(image_ids, img_dir, extractor, img_size)
     np.save(path, feats)
+    _write_fingerprint(path, fingerprint)
     print(f"  {name:<5} @{img_size}px  saved   {path.name} {feats.shape}")
     return feats
 
