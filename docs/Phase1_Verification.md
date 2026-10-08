@@ -1,6 +1,6 @@
 # Phase 1 - Verification Record
 **Member A:** Mingyang Sun (1657392) | **Prepared:** 8 October 2026  
-**Repository inspected:** main @ 9a7ed84 | **Review by Member B:** pending
+**Repository inspected:** main @ 9a7ed84 | **Reviewed by Member B:** Yikai Qian, 8 October 2026
 
 ## 1. Checks actually completed
 The supplied train.csv, test.csv and sample_solution.csv were read in full. Their originals were not edited. The audit compared identifiers and numeric labels against the existing repository split and checked the recorded summary statistics. All 32 executed checks passed; this is a metadata result, not an image or training-pipeline acceptance result. [E1]
@@ -54,13 +54,40 @@ This supports Phase 1; it is not the submitted plan or final IEEE report. The su
 | Item | Owner / status |
 |---|---|
 | Local dataset path and training environment | Member B, with A reviewing; not executed on either member's computer here. |
-| Protect existing splits from accidental overwrite | Member B; current src.data main() rebuilds and saves. The verifier supplied here is read-only. No source-code fix applied. |
-| Feature-cache identity | Member B; current cache check uses row count, so same-length reordered or changed splits require invalidation. No evidence that current cached results are wrong. |
+| Protect existing splits from accidental overwrite | **Resolved** (Member B, commit 8f94c04). `python -m src.data` now verifies read-only; regenerating requires an explicit `--rebuild`. Verified the file is byte-identical after a verify run. |
+| Feature-cache identity | **Resolved** (Member B, commit 8f94c04). Caches now carry a SHA-1 fingerprint of the image ids in order and are reused only on a match. Existing caches have no sidecar and are re-extracted once, by design. |
 | Essential run-log and model backup | Both members; current Git exclusions do not establish the presence of a shared backup. |
 | Image existence, decoding and duplicate-image checks | Not inspected; explicitly excluded at the user's request. No pass/fail claim. |
-| Final teammate review | Yikai Qian; pending. Approval date and review commit should be recorded after actual review. |
+| Final teammate review | **Complete.** See section 6. |
 
-Member A's supplement, requirements review and metadata evidence are prepared. Record environment checks and teammate approval when completed; do not backdate them to 7 October.
+Member A's supplement, requirements review and metadata evidence are prepared, and Member B's review is recorded in section 6. The Phase 1 deadline of 7 October was not met; this work is dated 8 October and is not backdated.
+
+## 6. Member B review
+
+Reviewed by Yikai Qian on 8 October 2026, against main @ 8f94c04.
+
+**Outcome: approved.** The audit tool was run against this repository rather
+than read: `python tools/verify_phase1_metadata.py --repo-root .` reports 32
+executed checks and 32 passes, and the split blob hashes it records match the
+committed `data/splits/` files exactly. The document's scope is stated
+accurately throughout — it claims CSV and static-code evidence only, and does
+not claim to have inspected images, run models, or verified backups. The
+distinction between "no evidence of a problem" and "verified correct" is
+maintained where it matters.
+
+One correction was made during review: the path to the audit JSON in section 2
+read `docs/evidence/...`, but the file sits directly in `docs/`. Fixed in
+commit a32b8b7.
+
+Both code risks raised in section 5 were confirmed as real and have been
+fixed; see commits 8f94c04 and the entries in the table above. Neither had
+produced a wrong result — they were latent misuse risks, and the wording in
+section 5 said so rather than overstating them.
+
+One note for the record: `python -m src.data --rebuild` regenerates
+`split_meta.json` with a fresh `created_utc`, so that one file is not
+byte-stable across rebuilds. The split CSVs themselves are, and their blob
+hashes are unchanged. Any check of the split's identity should use the CSVs.
 
 ## Evidence and source register
 **[U1-U3]** User-supplied train.csv, test.csv and sample_solution.csv, received 8 October 2026. Exact byte hashes are in [E1].

@@ -3,11 +3,11 @@
 
 **Member A / document owner:** Mingyang Sun (1657392)
 
-**Member B / reviewer:** Yikai Qian (1722421); review pending
+**Member B / reviewer:** Yikai Qian (1722421); **reviewed and approved 8 October 2026** — see section 6 of Phase1_Verification.md
 
-**Revision date:** 8 October 2026 | **Repository baseline:** main @ 9a7ed84
+**Revision date:** 8 October 2026 | **Repository baseline:** main @ 8f94c04
 
-**Status:** The data-management prose and CSV-level audit are complete. All 32 executed metadata checks passed. Images, local training execution and teammate approval are outside the completed verification. The original internal Phase 1 target was 7 October; this supplement is dated 8 October and does not claim earlier completion.
+**Status:** The data-management prose and CSV-level audit are complete, and the two-person review required by the plan is done. All 32 executed metadata checks passed. Images and local training execution remain outside the verification. The original internal Phase 1 target was 7 October; this supplement is dated 8 October and does not claim earlier completion. Both code risks raised in the verification record have since been fixed (commit 8f94c04).
 
 ## 1. Dataset source
 The project predicts a house sale price from an exterior photograph. The target is recorded in units of USD 1,000. The team uses the course-provided subset and permitted general-purpose pretrained features, as agreed in the project plan. The assignment prohibits additional images or metadata from the original House Prices and Images - SoCal dataset, models pretrained on this task or dataset, and pretrained MLLMs. Test ground-truth labels must not be sought or used. [S1, S2]
