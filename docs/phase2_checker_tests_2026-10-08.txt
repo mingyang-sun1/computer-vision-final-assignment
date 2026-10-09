@@ -1,0 +1,172 @@
+{
+  "schema_version": 1,
+  "created_utc": "2026-10-08T11:58:43+00:00",
+  "reference_repository_commit": "8cb91dc12b29035eee70d3c3caf7690c7540399d",
+  "scope": "CSV arithmetic, supplied log consistency and artifact inventory only",
+  "training_executed": false,
+  "images_read": false,
+  "kaggle_score_verified": false,
+  "checks": [
+    {
+      "name": "csv_train_split.csv",
+      "status": "PASS",
+      "detail": "7000 rows; exact schema, unique nonblank IDs, finite prices where present"
+    },
+    {
+      "name": "csv_val_split.csv",
+      "status": "PASS",
+      "detail": "1000 rows; exact schema, unique nonblank IDs, finite prices where present"
+    },
+    {
+      "name": "identity_train_split.csv",
+      "status": "PASS",
+      "detail": "LF-normalised blob 05851b5173130d45b78f1057ec7f0e78cf827a06; compare with inspected split, never regenerate it"
+    },
+    {
+      "name": "identity_val_split.csv",
+      "status": "PASS",
+      "detail": "LF-normalised blob 54c0018bb7fbb08c59dd26c511928836e5ea46ba; compare with inspected split, never regenerate it"
+    },
+    {
+      "name": "split_counts",
+      "status": "PASS",
+      "detail": "train=7000, validation=1000"
+    },
+    {
+      "name": "split_disjoint",
+      "status": "PASS",
+      "detail": "Training and validation IDs do not overlap"
+    },
+    {
+      "name": "positive_labels",
+      "status": "PASS",
+      "detail": "Only supplied labelled partitions checked"
+    },
+    {
+      "name": "b0_agrees_with_documented_rounding",
+      "status": "PASS",
+      "detail": "Compare with rounded historical MSE; this does not verify B1/B2"
+    },
+    {
+      "name": "csv_train.csv",
+      "status": "PASS",
+      "detail": "8000 rows; exact schema, unique nonblank IDs, finite prices where present"
+    },
+    {
+      "name": "source_coverage",
+      "status": "PASS",
+      "detail": "Existing split covers every supplied training row exactly once"
+    },
+    {
+      "name": "source_labels_match",
+      "status": "PASS",
+      "detail": "Split labels compared by image ID with supplied train.csv"
+    },
+    {
+      "name": "csv_test.csv",
+      "status": "PASS",
+      "detail": "3000 rows; exact schema, unique nonblank IDs, finite prices where present"
+    },
+    {
+      "name": "test_count",
+      "status": "PASS",
+      "detail": "test=3000"
+    },
+    {
+      "name": "test_isolation",
+      "status": "PASS",
+      "detail": "Test IDs do not appear in the labelled partitions"
+    },
+    {
+      "name": "csv_sample_solution.csv",
+      "status": "PASS",
+      "detail": "3000 rows; exact schema, unique nonblank IDs, finite prices where present"
+    },
+    {
+      "name": "sample_id_order",
+      "status": "PASS",
+      "detail": "Template is used for format only, not ground truth"
+    },
+    {
+      "name": "phase2_run_log",
+      "status": "PENDING",
+      "detail": "Original phase2_results.json not supplied; no B1/B2 metric reproduction claimed"
+    },
+    {
+      "name": "artifact_x_scaler.joblib",
+      "status": "PENDING",
+      "detail": "Not supplied in this workspace; request the matching original run artifact"
+    },
+    {
+      "name": "artifact_ridge.joblib",
+      "status": "PENDING",
+      "detail": "Not supplied in this workspace; request the matching original run artifact"
+    },
+    {
+      "name": "artifact_mlp.keras",
+      "status": "PENDING",
+      "detail": "Not supplied in this workspace; request the matching original run artifact"
+    },
+    {
+      "name": "artifact_target_stats.json",
+      "status": "PENDING",
+      "detail": "Not supplied in this workspace; request the matching original run artifact"
+    },
+    {
+      "name": "submission_file",
+      "status": "PENDING",
+      "detail": "Baseline submission CSV not provided to this audit; repository presence may be recorded separately"
+    }
+  ],
+  "files_read": [
+    {
+      "file_name": "train_split.csv",
+      "bytes": 106253,
+      "sha256": "821c4be4f30087f70aa16b2c7b5735908da31c3d0745230315b9e4d5f0a59774",
+      "git_blob_sha1_lf": "05851b5173130d45b78f1057ec7f0e78cf827a06"
+    },
+    {
+      "file_name": "val_split.csv",
+      "bytes": 15192,
+      "sha256": "3a8236908586bdf8ceedd002130883425a8cf8295e3dc6d43c9b9db9e8ac3402",
+      "git_blob_sha1_lf": "54c0018bb7fbb08c59dd26c511928836e5ea46ba"
+    },
+    {
+      "file_name": "train.csv",
+      "bytes": 118058,
+      "sha256": "6a37aec7c596d98a2342aae32b0cf2eb660e56c92292fd1c324961ca5d8653d5",
+      "git_blob_sha1_lf": "718a2e9b8874b588a52b3d917f392baab5e61e4e"
+    },
+    {
+      "file_name": "test.csv",
+      "bytes": 31010,
+      "sha256": "3b204c0887200c43fc7ff7e5e0f897b7b82ea16cf2387d55b3bf31759db57de9",
+      "git_blob_sha1_lf": "362ff8d00265986e234085d1bf166472af9b7e89"
+    },
+    {
+      "file_name": "sample_solution.csv",
+      "bytes": 43016,
+      "sha256": "4172ca1e22147f8409908e1cf2c8f35603106acb563b4f914311d1ced6b8b3fe",
+      "git_blob_sha1_lf": "2147520f281d6d3113b076311a3f96ccc5be5186"
+    }
+  ],
+  "B0_recomputed": {
+    "precision": "Python float / float64-style CSV arithmetic; no float32 input cast",
+    "training_mean": 720.9804862857143,
+    "training_std_population": 396.2418544377052,
+    "training_min": 195.0,
+    "training_max": 2000.0,
+    "validation": {
+      "mse": 154431.69151180098,
+      "mae": 295.88284217485716,
+      "r2": -4.572477981090728e-05
+    }
+  },
+  "historical_values_source": "docs/experiments.md at 8cb91dc12b29035eee70d3c3caf7690c7540399d; not newly measured B1/B2 scores",
+  "summary": {
+    "pass": 16,
+    "fail": 0,
+    "pending": 6
+  },
+  "status": "SCOPED_CHECKS_PASS_ARTIFACTS_PENDING"
+}

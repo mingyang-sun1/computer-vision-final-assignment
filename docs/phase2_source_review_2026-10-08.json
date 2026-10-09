@@ -1,0 +1,25 @@
+Executed on 8 October 2026. Synthetic checker tests only; no real model execution.
+Command: python -m unittest discover -s tests -p "test_verify_phase2_baseline.py" -v
+
+test_b0_uses_training_mean_not_validation_mean (test_verify_phase2_baseline.CheckerUnitTests.test_b0_uses_training_mean_not_validation_mean) ... ok
+test_bad_metric_lengths_rejected (test_verify_phase2_baseline.CheckerUnitTests.test_bad_metric_lengths_rejected) ... ok
+test_constant_target_has_no_defined_r2 (test_verify_phase2_baseline.CheckerUnitTests.test_constant_target_has_no_defined_r2) ... ok
+test_crlf_identity_equivalent_but_exact_hash_differs (test_verify_phase2_baseline.CheckerUnitTests.test_crlf_identity_equivalent_but_exact_hash_differs) ... ok
+test_duplicate_ids_rejected (test_verify_phase2_baseline.CheckerUnitTests.test_duplicate_ids_rejected) ... ok
+test_malformed_row_width_rejected (test_verify_phase2_baseline.CheckerUnitTests.test_malformed_row_width_rejected) ... ok
+test_metrics_known_values (test_verify_phase2_baseline.CheckerUnitTests.test_metrics_known_values) ... ok
+test_nonfinite_json_rejected (test_verify_phase2_baseline.CheckerUnitTests.test_nonfinite_json_rejected) ... ok
+test_nonfinite_prices_rejected (test_verify_phase2_baseline.CheckerUnitTests.test_nonfinite_prices_rejected) ... ok
+test_refuse_output_overwrite (test_verify_phase2_baseline.CheckerUnitTests.test_refuse_output_overwrite) ... ok
+test_wrong_schema_rejected (test_verify_phase2_baseline.CheckerUnitTests.test_wrong_schema_rejected) ... ok
+test_bad_submission_order_is_failed (test_verify_phase2_baseline.SyntheticIntegrationTests.test_bad_submission_order_is_failed) ... ok
+test_full_artifact_checks_do_not_claim_training (test_verify_phase2_baseline.SyntheticIntegrationTests.test_full_artifact_checks_do_not_claim_training) ... ok
+test_mismatched_target_statistics_are_failed (test_verify_phase2_baseline.SyntheticIntegrationTests.test_mismatched_target_statistics_are_failed) ... ok
+test_missing_artifacts_are_pending_not_pass (test_verify_phase2_baseline.SyntheticIntegrationTests.test_missing_artifacts_are_pending_not_pass) ... ok
+test_require_artifacts_returns_two_and_does_not_overwrite (test_verify_phase2_baseline.SyntheticIntegrationTests.test_require_artifacts_returns_two_and_does_not_overwrite) ... ok
+test_wrong_winner_is_failed (test_verify_phase2_baseline.SyntheticIntegrationTests.test_wrong_winner_is_failed) ... ok
+
+----------------------------------------------------------------------
+Ran 17 tests in 0.368s
+
+OK
