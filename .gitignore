@@ -21,6 +21,10 @@ outputs/predictions/*
 *.keras
 *.ckpt
 
+# Regenerated on every build, and differs run to run. The committed report
+# is docs/report/report.docx; this is only a local rendering check.
+docs/report/report_preview.pdf
+
 # Python
 __pycache__/
 *.py[cod]
