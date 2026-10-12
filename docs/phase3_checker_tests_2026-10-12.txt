@@ -1,0 +1,260 @@
+{
+  "schema_version": 1,
+  "created_utc": "2026-10-12T08:38:49+00:00",
+  "reference_repository_commit": "4ba5d22751a529ac7f4ec56947ea86d7cb531159",
+  "scope": "Member A P05: E2 no-augmentation versus E4 moderate-augmentation CSV evidence and original artifact inventory",
+  "training_executed": false,
+  "model_loading_executed": false,
+  "images_read": false,
+  "kaggle_score_verified": false,
+  "precision_caveat": "Metrics use the exact decimal values in the exported CSVs, with Decimal arithmetic (50 significant digits) before JSON float serialization. Predictions, residuals and absolute errors were independently exported to one decimal place. Original full-precision predictions are not recovered.",
+  "rounding_assumptions": "Assume the same exact labels and each original prediction differs from its CSV value by at most 0.05. With MAE computed from the rounded predictions, abs(MSE_csv - MSE_original) <= 0.1 * MAE_csv + 0.0025. MAE differs by at most 0.05 and R2 by at most the MSE bound / label variance. Historical MSEs displayed to one decimal add a further 0.05 reporting bound. The original pipeline also casts targets/operations to float32. Original-log compatibility uses a separately stated 0.0001 price-unit numerical allowance in addition to the ideal CSV rounding bound; it is a comparison tolerance, not a verified maximum error for every original floating-point operation. Compatibility does not recover or verify the original run.",
+  "historical_values_source": "docs/experiments.md at 4ba5d22751a529ac7f4ec56947ea86d7cb531159; historical values, not new training results",
+  "checks": [
+    {
+      "name": "train_split.csv",
+      "status": "PASS",
+      "detail": "7000 rows; exact schema, unique nonblank IDs and finite numeric values"
+    },
+    {
+      "name": "val_split.csv",
+      "status": "PASS",
+      "detail": "1000 rows; exact schema, unique nonblank IDs and finite numeric values"
+    },
+    {
+      "name": "identity_train_split.csv",
+      "status": "PASS",
+      "detail": "LF-normalised Git blob 05851b5173130d45b78f1057ec7f0e78cf827a06; expected 05851b5173130d45b78f1057ec7f0e78cf827a06"
+    },
+    {
+      "name": "identity_val_split.csv",
+      "status": "PASS",
+      "detail": "LF-normalised Git blob 54c0018bb7fbb08c59dd26c511928836e5ea46ba; expected 54c0018bb7fbb08c59dd26c511928836e5ea46ba"
+    },
+    {
+      "name": "split_counts",
+      "status": "PASS",
+      "detail": "train=7000, validation=1000"
+    },
+    {
+      "name": "split_disjoint",
+      "status": "PASS",
+      "detail": "Training/validation overlap: 0 IDs"
+    },
+    {
+      "name": "positive_labels",
+      "status": "PASS",
+      "detail": "All committed training and validation labels must be positive"
+    },
+    {
+      "name": "csv_E2_finetune",
+      "status": "PASS",
+      "detail": "1000 rows; exact schema, unique nonblank IDs and finite numeric values"
+    },
+    {
+      "name": "csv_E4_augment",
+      "status": "PASS",
+      "detail": "1000 rows; exact schema, unique nonblank IDs and finite numeric values"
+    },
+    {
+      "name": "E2_finetune_coverage",
+      "status": "PASS",
+      "detail": "Join by image ID; missing=0, extra=0, rows=1000"
+    },
+    {
+      "name": "E2_finetune_source_labels",
+      "status": "PASS",
+      "detail": "Exact decimal source-label mismatches by ID: 0"
+    },
+    {
+      "name": "E2_finetune_rounded_errors",
+      "status": "PASS",
+      "detail": "0 inconsistent rows; prediction/residual/abs_error must be on the 0.1 grid, abs_error=abs(residual); separately rounded residual versus prediction allows 0.1 plus 1e-9 arithmetic tolerance"
+    },
+    {
+      "name": "E2_finetune_clipping",
+      "status": "PASS",
+      "detail": "Exported predictions must be within training-only price range [195.0, 2000.0]"
+    },
+    {
+      "name": "E4_augment_coverage",
+      "status": "PASS",
+      "detail": "Join by image ID; missing=0, extra=0, rows=1000"
+    },
+    {
+      "name": "E4_augment_source_labels",
+      "status": "PASS",
+      "detail": "Exact decimal source-label mismatches by ID: 0"
+    },
+    {
+      "name": "E4_augment_rounded_errors",
+      "status": "PASS",
+      "detail": "0 inconsistent rows; prediction/residual/abs_error must be on the 0.1 grid, abs_error=abs(residual); separately rounded residual versus prediction allows 0.1 plus 1e-9 arithmetic tolerance"
+    },
+    {
+      "name": "E4_augment_clipping",
+      "status": "PASS",
+      "detail": "Exported predictions must be within training-only price range [195.0, 2000.0]"
+    },
+    {
+      "name": "E2_finetune_historical_rounding",
+      "status": "PASS",
+      "detail": "CSV minus historical MSE=0.519475022; combined bound=23.6175414; compatibility only"
+    },
+    {
+      "name": "E4_augment_historical_rounding",
+      "status": "PASS",
+      "detail": "CSV minus historical MSE=-0.263672378; combined bound=24.6843624; compatibility only"
+    },
+    {
+      "name": "E2_finetune_original_log",
+      "status": "PENDING",
+      "detail": "Original run log missing: /workspace/scratch/ce8c38f1cd00/computer-vision-final-assignment/outputs/logs/phase3_E2_finetune.json; no training history reconstructed"
+    },
+    {
+      "name": "E2_finetune_checkpoint_inventory",
+      "status": "PENDING",
+      "detail": "Original checkpoint missing: /workspace/scratch/ce8c38f1cd00/computer-vision-final-assignment/outputs/models/finetuned_E2_finetune.keras; inventory only"
+    },
+    {
+      "name": "E4_augment_original_log",
+      "status": "PENDING",
+      "detail": "Original run log missing: /workspace/scratch/ce8c38f1cd00/computer-vision-final-assignment/outputs/logs/phase3_E4_augment.json; no training history reconstructed"
+    },
+    {
+      "name": "E4_augment_checkpoint_inventory",
+      "status": "PENDING",
+      "detail": "Original checkpoint missing: /workspace/scratch/ce8c38f1cd00/computer-vision-final-assignment/outputs/models/finetuned_E4_augment.keras; inventory only"
+    },
+    {
+      "name": "matched_run_conditions",
+      "status": "PENDING",
+      "detail": "Both valid original logs are required to compare the recorded run conditions"
+    }
+  ],
+  "files_read": [
+    {
+      "path": "/workspace/scratch/ce8c38f1cd00/computer-vision-final-assignment/data/splits/train_split.csv",
+      "file_name": "train_split.csv",
+      "bytes": 106253,
+      "sha256": "821c4be4f30087f70aa16b2c7b5735908da31c3d0745230315b9e4d5f0a59774",
+      "git_blob_sha1_lf": "05851b5173130d45b78f1057ec7f0e78cf827a06",
+      "repository_relative_path": "data/splits/train_split.csv"
+    },
+    {
+      "path": "/workspace/scratch/ce8c38f1cd00/computer-vision-final-assignment/data/splits/val_split.csv",
+      "file_name": "val_split.csv",
+      "bytes": 15192,
+      "sha256": "3a8236908586bdf8ceedd002130883425a8cf8295e3dc6d43c9b9db9e8ac3402",
+      "git_blob_sha1_lf": "54c0018bb7fbb08c59dd26c511928836e5ea46ba",
+      "repository_relative_path": "data/splits/val_split.csv"
+    },
+    {
+      "path": "/workspace/scratch/ce8c38f1cd00/computer-vision-final-assignment/outputs/predictions/val_predictions_E2_finetune.csv",
+      "file_name": "val_predictions_E2_finetune.csv",
+      "bytes": 33174,
+      "sha256": "d123bf1db4b1d0b2737691ac19fb9e154d30a83ae875cf87845af84f7fe61738",
+      "git_blob_sha1_lf": "6ed8deb3847516e33345eab6ef40646142c06986",
+      "repository_relative_path": "outputs/predictions/val_predictions_E2_finetune.csv"
+    },
+    {
+      "path": "/workspace/scratch/ce8c38f1cd00/computer-vision-final-assignment/outputs/predictions/val_predictions_E4_augment.csv",
+      "file_name": "val_predictions_E4_augment.csv",
+      "bytes": 33178,
+      "sha256": "64e02604747ee642f56e57b7c221b866d2beb7fec8ed4b3125ec8fa813fde838",
+      "git_blob_sha1_lf": "6260839aede5cc7e59de6de6179782582fdd5a7a",
+      "repository_relative_path": "outputs/predictions/val_predictions_E4_augment.csv"
+    }
+  ],
+  "runs": {
+    "E2_finetune": {
+      "csv_path": "/workspace/scratch/ce8c38f1cd00/computer-vision-final-assignment/outputs/predictions/val_predictions_E2_finetune.csv",
+      "metrics": {
+        "mse": 102746.219475022,
+        "mae": 235.650414,
+        "r2": 0.3346513496199572
+      },
+      "row_count": 1000,
+      "precision": "Metrics use the exact decimal values in the exported CSVs, with Decimal arithmetic (50 significant digits) before JSON float serialization. Predictions, residuals and absolute errors were independently exported to one decimal place. Original full-precision predictions are not recovered.",
+      "supplied_log": null,
+      "metrics_decimal": {
+        "mse": "102746.219475022",
+        "mae": "235.650414",
+        "r2": "0.33465134961995718195673582368203987971095235599820"
+      },
+      "label_variance": 154424.63047957493,
+      "rounding": {
+        "prediction_max_error": 0.05,
+        "mse_error_bound": 23.5675414,
+        "historical_reporting_max_error": 0.05,
+        "historical_combined_mse_bound": 23.6175414,
+        "log_price_numerical_allowance": 0.0001,
+        "log_mse_numerical_allowance": 0.0471400928
+      },
+      "historical": {
+        "mse": 102745.7,
+        "difference_csv_minus_historical_mse": 0.519475022,
+        "compatible_with_rounding": true
+      },
+      "model_inventory": {
+        "path": "/workspace/scratch/ce8c38f1cd00/computer-vision-final-assignment/outputs/models/finetuned_E2_finetune.keras",
+        "present": false,
+        "loaded": false,
+        "checkpoint_provenance_verified": false
+      }
+    },
+    "E4_augment": {
+      "csv_path": "/workspace/scratch/ce8c38f1cd00/computer-vision-final-assignment/outputs/predictions/val_predictions_E4_augment.csv",
+      "metrics": {
+        "mse": 108784.236327622,
+        "mae": 246.318624,
+        "r2": 0.2955512602504792
+      },
+      "row_count": 1000,
+      "precision": "Metrics use the exact decimal values in the exported CSVs, with Decimal arithmetic (50 significant digits) before JSON float serialization. Predictions, residuals and absolute errors were independently exported to one decimal place. Original full-precision predictions are not recovered.",
+      "supplied_log": null,
+      "metrics_decimal": {
+        "mse": "108784.236327622",
+        "mae": "246.318624",
+        "r2": "0.29555126025047915495910359828547861014214549348413"
+      },
+      "label_variance": 154424.63047957493,
+      "rounding": {
+        "prediction_max_error": 0.05,
+        "mse_error_bound": 24.6343624,
+        "historical_reporting_max_error": 0.05,
+        "historical_combined_mse_bound": 24.6843624,
+        "log_price_numerical_allowance": 0.0001,
+        "log_mse_numerical_allowance": 0.0492737348
+      },
+      "historical": {
+        "mse": 108784.5,
+        "difference_csv_minus_historical_mse": -0.263672378,
+        "compatible_with_rounding": true
+      },
+      "model_inventory": {
+        "path": "/workspace/scratch/ce8c38f1cd00/computer-vision-final-assignment/outputs/models/finetuned_E4_augment.keras",
+        "present": false,
+        "loaded": false,
+        "checkpoint_provenance_verified": false
+      }
+    }
+  },
+  "comparison": {
+    "mse_delta_e4_minus_e2": 6038.0168526,
+    "mse_change_percent": 5.876631649759012,
+    "mae_delta_e4_minus_e2": 10.66821,
+    "e4_better_count": 470,
+    "e4_worse_count": 529,
+    "equal_count": 1,
+    "basis": "Absolute errors recomputed from rounded CSV predictions joined by image ID; positive MSE delta means E4 is worse"
+  },
+  "csv_analysis_status": "PASS",
+  "status": "CSV_CHECKS_PASS_ORIGINAL_EVIDENCE_PENDING",
+  "summary": {
+    "pass": 19,
+    "fail": 0,
+    "pending": 5,
+    "status": "CSV_CHECKS_PASS_ORIGINAL_EVIDENCE_PENDING"
+  }
+}
