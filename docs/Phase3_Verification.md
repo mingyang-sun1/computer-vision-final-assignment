@@ -1,5 +1,7 @@
 # Phase 3 - Augmentation Comparison and Verification
 
+> **Update — 13 October 2026:** Member B subsequently supplied the two original Phase 3 JSON logs and two Keras checkpoints. The artifact-pending statements and 19/0/5 audit below are the **12 October snapshot**, not the current receipt status. See [Phase 3 original artifact update](Phase3_MemberB_Artifact_Update.md) for their verification, the known legacy-log metadata gaps, the corrected checker, and next actions.
+
 **Course:** COMP90086 Computer Vision, 2026 Semester 2  
 **Project:** Predicting House Prices  
 **Member A / document owner:** Mingyang Sun (1657392)  

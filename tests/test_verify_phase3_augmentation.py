@@ -248,6 +248,49 @@ class SyntheticIntegrationTests(unittest.TestCase):
         self.assertFalse(result["runs"]["E2_finetune"]["model_inventory"]["loaded"])
         self.assertEqual(len(result["files_read"]), 6)  # Checkpoints are statted, not read.
 
+    def test_legacy_member_b_schema_passes_with_explicit_metadata_gaps(self):
+        """Legacy log fields are never fabricated to pass the audit."""
+        self.add_synthetic_artifacts()
+        e2 = self.logs["E2_finetune"]
+        e2["experiment"] = "E2_partial_finetuning"
+        for key in ("augmentation", "epochs_cap", "patience", "best_epoch"):
+            e2.pop(key)
+        self.save_log("E2_finetune")
+        e4 = self.logs["E4_augment"]
+        e4.pop("patience")
+        self.save_log("E4_augment")
+        result = checker.audit(self.repo)
+        self.assertEqual(result["summary"]["fail"], 0, result["checks"])
+        self.assertEqual(result["summary"]["pending"], 3, result["checks"])
+        self.assertEqual(result["runs"]["E2_finetune"]["supplied_log"], e2)
+        self.assertEqual(result["runs"]["E2_finetune"]["log_observations"]["best_epoch_from_history"], 2)
+        for tag in checker.TAGS:
+            self.assertTrue(any(c["name"] == f"{tag}_legacy_metadata_gaps" and
+                                c["status"] == "PENDING" for c in result["checks"]))
+        self.assertTrue(any(c["name"] == "matched_run_conditions" and
+                            c["status"] == "PASS" for c in result["checks"]))
+        self.assertTrue(any(c["name"] == "matched_run_conditions_unrecorded" and
+                            c["status"] == "PENDING" for c in result["checks"]))
+
+    def test_missing_required_or_conflicting_legacy_metadata_still_fails(self):
+        self.add_synthetic_artifacts()
+        for tag, changed in (("E4_augment", {"augmentation": None}),
+                             ("E2_finetune", {"augmentation": True}),
+                             ("E2_finetune", {"seed": None}),
+                             ("E2_finetune", {"experiment": "unrelated"})):
+            with self.subTest(tag=tag, changed=changed):
+                before = self.logs[tag].copy()
+                for key, value in changed.items():
+                    if value is None:
+                        self.logs[tag].pop(key)
+                    else:
+                        self.logs[tag][key] = value
+                self.save_log(tag)
+                result = checker.audit(self.repo)
+                self.assert_failed_check(result, f"{tag}_original_log")
+                self.logs[tag] = before
+                self.save_log(tag)
+
     def test_wrong_settings_history_and_best_epoch_fail_without_losing_csv_analysis(self):
         self.add_synthetic_artifacts()
         original = json.loads(json.dumps(self.logs["E4_augment"]))

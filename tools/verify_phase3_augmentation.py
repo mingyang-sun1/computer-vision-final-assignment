@@ -149,32 +149,57 @@ def on_tenth_grid(value: Decimal) -> bool:
     return not places_beyond_tenths or not any(digits[-places_beyond_tenths:])
 
 
-def validate_log(log: dict[str, Any], tag: str) -> None:
-    """Validate the schema actually emitted by src/exp_finetune.py."""
-    expected = {"experiment": tag, "seed": 42, "img_size": 224,
-                "augmentation": tag == "E4_augment",
+def validate_log(log: dict[str, Any], tag: str) -> dict[str, Any]:
+    """Check recorded fields without inventing metadata absent from legacy logs.
+
+    The two original runs were saved before src/exp_finetune.py was updated to
+    record all current fields. In particular, legacy E2 has an older experiment
+    identifier and no explicit augmentation, patience, epoch cap or best epoch;
+    legacy E4 lacks patience. Missing data is returned to the audit as PENDING,
+    never filled with the current source-code defaults or claimed as verified.
+    """
+    if tag not in TAGS:
+        raise ValueError(f"Unknown experiment tag: {tag}")
+    accepted_names = {
+        "E2_finetune": {"E2_finetune", "E2_partial_finetuning"},
+        "E4_augment": {"E4_augment"},
+    }
+    if log.get("experiment") not in accepted_names[tag]:
+        raise ValueError(f"experiment: unrecognised name {log.get('experiment')!r} for {tag}")
+    expected = {"seed": 42, "img_size": 224,
                 "unfrozen": "layer4 (conv5) + regression head",
-                "learning_rate": 1e-4, "batch_size": 32,
-                "epochs_cap": 15, "patience": 4}
+                "learning_rate": 1e-4, "batch_size": 32}
     for key, value in expected.items():
         found = log.get(key)
         if type(found) is not type(value) or found != value:
             raise ValueError(f"{key}: expected {value!r}, got {found!r}")
+    allowed_missing = {
+        "E2_finetune": {"augmentation", "epochs_cap", "patience", "best_epoch"},
+        "E4_augment": {"patience"},
+    }[tag]
+    missing = sorted(k for k in allowed_missing if k not in log)
+    for key, expected_value in (("augmentation", tag == "E4_augment"),
+                                ("epochs_cap", 15), ("patience", 4)):
+        if key not in log:
+            if key not in allowed_missing:
+                raise ValueError(f"{key} is required for {tag}")
+        elif type(log[key]) is not type(expected_value) or log[key] != expected_value:
+            raise ValueError(f"{key}: expected {expected_value!r}, got {log[key]!r}")
     created = log.get("created_utc")
     if not isinstance(created, str):
         raise ValueError("created_utc must be an ISO timestamp with UTC offset")
     timestamp = datetime.fromisoformat(created.replace("Z", "+00:00"))
     if timestamp.utcoffset() is None or timestamp.utcoffset().total_seconds() != 0:
         raise ValueError("created_utc must use UTC")
-    for key in ("epochs_cap", "epochs_run", "best_epoch", "trainable_params", "total_params"):
+    for key in ("epochs_run", "trainable_params", "total_params"):
         if type(log.get(key)) is not int or log[key] <= 0:
             raise ValueError(f"{key} must be a positive integer")
-    if type(log.get("patience")) is not int or log["patience"] < 0:
-        raise ValueError("patience must be a nonnegative integer")
+    if "epochs_cap" in log and log["epochs_run"] > log["epochs_cap"]:
+        raise ValueError("epochs_run cannot exceed epochs_cap")
+    if "best_epoch" in log and (type(log["best_epoch"]) is not int or log["best_epoch"] <= 0):
+        raise ValueError("best_epoch must be a positive integer")
     if log["trainable_params"] > log["total_params"]:
         raise ValueError("trainable_params cannot exceed total_params")
-    if log["epochs_run"] > log["epochs_cap"]:
-        raise ValueError("epochs_run cannot exceed epochs_cap")
     history = log.get("history")
     if not isinstance(history, dict):
         raise ValueError("history must contain loss and val_loss arrays")
@@ -184,8 +209,8 @@ def validate_log(log: dict[str, Any], tag: str) -> None:
             raise ValueError(f"history.{key} length must equal epochs_run")
         if not all(finite_number(x) and x >= 0 for x in values):
             raise ValueError(f"history.{key} values must be finite and nonnegative")
-    best_epoch = min(range(log["epochs_run"]), key=history["val_loss"].__getitem__) + 1
-    if log["best_epoch"] != best_epoch:
+    derived_best_epoch = min(range(log["epochs_run"]), key=history["val_loss"].__getitem__) + 1
+    if "best_epoch" in log and log["best_epoch"] != derived_best_epoch:
         raise ValueError("best_epoch must be the first minimum of history.val_loss (1-based)")
     val = log.get("val")
     if not isinstance(val, dict) or not all(finite_number(val.get(k)) for k in ("mse", "mae", "r2")):
@@ -194,6 +219,13 @@ def validate_log(log: dict[str, Any], tag: str) -> None:
         raise ValueError("val metric ranges are invalid")
     if val["mae"] > math.sqrt(val["mse"]) + 1e-9:
         raise ValueError("val.mae cannot exceed sqrt(val.mse)")
+    return {
+        "recorded_experiment_name": log["experiment"],
+        "missing_source_fields": missing,
+        "best_epoch_from_history": derived_best_epoch,
+        "best_epoch_reported": log.get("best_epoch"),
+        "note": "best_epoch_from_history is derived, not a field added to the original log",
+    }
 
 
 def input_paths(repo: Path, e2_log: Path | None, e4_log: Path | None,
@@ -336,11 +368,14 @@ def audit(repo: Path, e2_log: Path | None = None, e4_log: Path | None = None,
                 pending(f"{tag}_original_log", f"Original run log missing: {path}; no training history reconstructed")
             else:
                 log = load_object(read(path))
-                validate_log(log, tag)
+                provenance = validate_log(log, tag)
                 logs[tag] = log
-                report["runs"][tag]["supplied_log"] = {k: v for k, v in log.items() if k != "history"}
-                report["runs"][tag]["supplied_log"]["history"] = log["history"]
-                check(f"{tag}_log_schema", True, "Original schema, fixed settings, finite metrics/history, epoch lengths and first argmin best epoch checked")
+                report["runs"][tag]["supplied_log"] = log  # Preserve raw metadata unchanged.
+                report["runs"][tag]["log_observations"] = provenance
+                check(f"{tag}_log_schema", True, "Recorded settings, finite metrics/history and derived minimum epoch checked; missing fields reported separately")
+                if provenance["missing_source_fields"]:
+                    pending(f"{tag}_legacy_metadata_gaps",
+                            f"Original log omits {provenance['missing_source_fields']}; retained as missing, no default values invented")
                 if csv_valid:
                     run = report["runs"][tag]
                     mse_limit = run["rounding"]["mse_error_bound"] + run["rounding"]["log_mse_numerical_allowance"]
@@ -367,12 +402,20 @@ def audit(repo: Path, e2_log: Path | None = None, e4_log: Path | None = None,
         except INPUT_ERRORS as exc:
             check(f"{tag}_checkpoint_inventory", False, f"{model_path}: {exc}")
     if len(logs) == 2:
-        fields = ("seed", "img_size", "unfrozen", "learning_rate", "batch_size", "epochs_cap", "patience", "trainable_params", "total_params")
+        common_fields = ("seed", "img_size", "unfrozen", "learning_rate", "batch_size", "epochs_run",
+                         "trainable_params", "total_params")
+        extra_fields = tuple(k for k in ("epochs_cap", "patience") if all(k in logs[tag] for tag in TAGS))
+        fields = common_fields + extra_fields
         mismatches = [k for k in fields if logs[TAGS[0]][k] != logs[TAGS[1]][k]]
         check("matched_run_conditions", not mismatches,
-              f"Matched fixed conditions, epoch cap, patience and parameter counts; differing fields: {mismatches}")
+              f"Compared common recorded fields {fields}; differing fields: {mismatches}")
+        unrecorded = sorted(k for k in ("epochs_cap", "patience", "augmentation")
+                            if any(k not in logs[tag] for tag in TAGS))
+        if unrecorded:
+            pending("matched_run_conditions_unrecorded",
+                    f"Cannot independently confirm equality of missing metadata {unrecorded}; source-code defaults are not original-run evidence")
     else:
-        pending("matched_run_conditions", "Both valid original logs are required to compare the recorded run conditions")
+        pending("matched_run_conditions", "Both valid original logs are required to compare recorded run conditions")
     counts = Counter(c["status"] for c in report["checks"])
     status = "FAILED" if counts["FAIL"] else ("CSV_CHECKS_PASS_ORIGINAL_EVIDENCE_PENDING" if counts["PENDING"] else "AVAILABLE_EVIDENCE_CHECKS_PASS_NOT_A_TRAINING_REPRODUCTION")
     report["status"] = status
