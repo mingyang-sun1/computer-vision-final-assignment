@@ -1,0 +1,159 @@
+{
+  "received_archive": "phase3.zip",
+  "archive_bytes": 405052678,
+  "archive_sha256": "849475ddb747a7fe3e13885a5c0f5453362c1a6c6afcee8aa91cee2458f7aef5",
+  "archive_crc": "PASS",
+  "archive_members": [
+    {
+      "file": "finetuned_E4_augment.keras",
+      "uncompressed_bytes": 221150770,
+      "compressed_bytes": 202568391
+    },
+    {
+      "file": "phase3_E4_augment.json",
+      "uncompressed_bytes": 1362,
+      "compressed_bytes": 641
+    },
+    {
+      "file": "phase3_E2_finetune.json",
+      "uncompressed_bytes": 1306,
+      "compressed_bytes": 617
+    },
+    {
+      "file": "finetuned_E2_finetune.keras",
+      "uncompressed_bytes": 221150770,
+      "compressed_bytes": 202482219
+    }
+  ],
+  "run_logs": {
+    "E2_finetune": {
+      "filename": "phase3_E2_finetune.json",
+      "bytes": 1306,
+      "sha256": "2ddc99bc6ba2f5fca2fa9019643f2a6e98faed1b94bcecdf0bc4073eaddf61a2",
+      "schema_observations": {
+        "recorded_experiment_name": "E2_partial_finetuning",
+        "missing_source_fields": [
+          "augmentation",
+          "best_epoch",
+          "epochs_cap",
+          "patience"
+        ],
+        "best_epoch_from_history": 12,
+        "best_epoch_reported": null,
+        "note": "best_epoch_from_history is derived, not a field added to the original log"
+      },
+      "seed": 42,
+      "img_size": 224,
+      "learning_rate": 0.0001,
+      "batch_size": 32,
+      "trainable_params": 15500801,
+      "total_params": 24112513,
+      "epochs_run": 15,
+      "metrics_recorded": {
+        "mse": 102745.69026578742,
+        "mae": 235.6500474090576,
+        "r2": 0.334654778594044
+      },
+      "min_val_loss": 0.6544323563575745,
+      "train_loss_epoch_10": 0.07988186925649643,
+      "train_loss_final_epoch": 0.06323502212762833,
+      "keras_model": {
+        "file_name": "finetuned_E2_finetune.keras",
+        "bytes": 221150770,
+        "sha256": "7aa37e2cd3b6131f682d2f36a9512e0189394780ad5c7ca0facfb5aa0e222371",
+        "keras_metadata": {
+          "keras_version": "3.11.3",
+          "date_saved": "2026-10-07@02:00:14"
+        },
+        "members": [
+          {
+            "name": "metadata.json",
+            "uncompressed_bytes": 64
+          },
+          {
+            "name": "config.json",
+            "uncompressed_bytes": 173912
+          },
+          {
+            "name": "model.weights.h5",
+            "uncompressed_bytes": 220976464
+          }
+        ],
+        "inner_archive_crc": "PASS",
+        "loaded_with_keras": false,
+        "prediction_provenance_verified": false
+      }
+    },
+    "E4_augment": {
+      "filename": "phase3_E4_augment.json",
+      "bytes": 1362,
+      "sha256": "fae1fe5326c2b1a2a83cbfe941b96712e89ff28cd3efcb21cbcf345c02cda4c1",
+      "schema_observations": {
+        "recorded_experiment_name": "E4_augment",
+        "missing_source_fields": [
+          "patience"
+        ],
+        "best_epoch_from_history": 14,
+        "best_epoch_reported": 14,
+        "note": "best_epoch_from_history is derived, not a field added to the original log"
+      },
+      "seed": 42,
+      "img_size": 224,
+      "learning_rate": 0.0001,
+      "batch_size": 32,
+      "trainable_params": 15500801,
+      "total_params": 24112513,
+      "epochs_run": 15,
+      "metrics_recorded": {
+        "mse": 108784.4669854441,
+        "mae": 246.31915214538574,
+        "r2": 0.2955497687083011
+      },
+      "min_val_loss": 0.6931387782096863,
+      "train_loss_epoch_10": 0.1971885710954666,
+      "train_loss_final_epoch": 0.13644324243068695,
+      "keras_model": {
+        "file_name": "finetuned_E4_augment.keras",
+        "bytes": 221150770,
+        "sha256": "5daeacb9135f1d19f246df281ba86c35ed3fefe40ce1e9bd79b5d4d8a24858df",
+        "keras_metadata": {
+          "keras_version": "3.11.3",
+          "date_saved": "2026-10-07@04:02:28"
+        },
+        "members": [
+          {
+            "name": "metadata.json",
+            "uncompressed_bytes": 64
+          },
+          {
+            "name": "config.json",
+            "uncompressed_bytes": 173912
+          },
+          {
+            "name": "model.weights.h5",
+            "uncompressed_bytes": 220976464
+          }
+        ],
+        "inner_archive_crc": "PASS",
+        "loaded_with_keras": false,
+        "prediction_provenance_verified": false
+      }
+    }
+  },
+  "recorded_comparison": {
+    "mse_delta_e4_minus_e2": 6038.776719656686,
+    "mse_change_percent": 5.877401479356736,
+    "lower_mse_model": "E2_finetune",
+    "metric_basis": "original run JSON; not recalculated from full-precision model predictions"
+  },
+  "limitations": [
+    "No fresh training or image inference was run",
+    "Nested Keras ZIP/CRC verified, but model weights were not loaded into TensorFlow/Keras",
+    "Cannot prove either .keras checkpoint produced its corresponding committed validation CSV",
+    "E2 legacy JSON omits explicit augmentation flag, epoch cap, patience, best epoch",
+    "E4 legacy JSON omits patience",
+    "E2 best epoch was derived from recorded loss history rather than present as an original field",
+    "Matching a fixed seed does not prove identical initial weights or random augmentation",
+    "Kaggle performance was not verified"
+  ]
+}

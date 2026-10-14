@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "artifact_name": "Phase 3 E3 source-review evidence",
+  "referenced_as": "[E3] in docs/Phase3_Verification.md",
+  "evidence_filename_snapshot_date": "2026-10-12",
+  "source_review_completed_date": "2026-10-14",
+  "provenance_note": "This replacement evidence record was created on 2026-10-14 to repair the missing [E3] file. The filename preserves the reference already present in the Phase 3 document; it does not imply that this JSON existed on 2026-10-12.",
+  "repository": "mingyang-sun1/computer-vision-final-assignment",
+  "source_snapshot_commit": "4ba5d22751a529ac7f4ec56947ea86d7cb531159",
+  "method": "Read-only inspection of repository source files and Git blob identities at the pinned commit. No training or inference was run as part of this source review.",
+  "scope": "Source-level comparison of E2_finetune (224px without augmentation) and E4_augment (224px with augmentation), and identification of how stored validation predictions were exported.",
+  "source_blobs_git_sha1": {
+    "config.py": "e5ccb24874258ed592a9fe6630911fef3ac22cf3",
+    "src/exp_finetune.py": "a03899bae26fbf582a26660197f74e24b2615dd6",
+    "src/data.py": "8d8efb360fe831ced5facd1fae2d1a754ebbd38d",
+    "src/metrics.py": "0bc8341127b40ab2baa930d3705dcffdda81d668",
+    "src/error_analysis.py": "1eb924d360bd8e92af34d039c1085e621c02251a",
+    "docs/experiments.md": "c617874feb72e710fd83d3baf0cf3d408ade2f78",
+    ".gitignore": "c0587a89d7acfe28d73dd634321e1f5734410685",
+    "data/splits/train_split.csv": "05851b5173130d45b78f1057ec7f0e78cf827a06",
+    "data/splits/val_split.csv": "54c0018bb7fbb08c59dd26c511928836e5ea46ba",
+    "outputs/predictions/val_predictions_E2_finetune.csv": "6ed8deb3847516e33345eab6ef40646142c06986",
+    "outputs/predictions/val_predictions_E4_augment.csv": "6260839aede5cc7e59de6de6179782582fdd5a7a"
+  },
+  "inspected_code_findings": [
+    {
+      "id": "source_E2_vs_E4",
+      "source": "src/exp_finetune.py",
+      "lines": "152-174",
+      "finding": "The default invocation uses image size 224 and augmentation disabled (E2). The --augment flag enables the augmenter and selects E4_augment by default. The model-building and training functions are shared."
+    },
+    {
+      "id": "source_augmentation_policy",
+      "source": "src/exp_finetune.py",
+      "lines": "73-100",
+      "finding": "E4 configures RandomFlip(horizontal), RandomTranslation(0.1, 0.1), RandomZoom(0.1), RandomBrightness(0.15; value range 0..255) and RandomContrast(0.15; value range 0..255); preprocessing is decode JPEG, resize, optional augmentation with training=True, then ResNet-50 preprocess_input."
+    },
+    {
+      "id": "source_training_only",
+      "source": "src/exp_finetune.py",
+      "lines": "182-185",
+      "finding": "The training dataset is built with the optional augmenter. Validation is built without the augmenter."
+    },
+    {
+      "id": "source_backbone_and_head",
+      "source": "src/exp_finetune.py",
+      "lines": "103-121",
+      "finding": "ImageNet-pretrained ResNet-50 with include_top=False and average pooling; non-conv5 layers frozen; backbone invoked with training=False; regression head Dropout(0.2), Dense(256, relu), Dense(1); Adam learning rate 0.0001 and MSE loss."
+    },
+    {
+      "id": "source_training_protocol",
+      "source": "src/exp_finetune.py",
+      "lines": "124-143, 152-203",
+      "finding": "Dataset uses seeded shuffling for training, batch size from config, labels standardised using training mean and population standard deviation, a default 15-epoch cap, and early stopping on val_loss with patience 4 and best-weight restoration; predictions are clipped to the training label range after inverse target scaling."
+    },
+    {
+      "id": "source_shared_split",
+      "source": "config.py; src/data.py",
+      "lines": "config.py:40-46; src/data.py:151-157",
+      "finding": "Seed 42 is configured centrally, and the experiment loads existing committed training/validation split CSV files instead of recreating the split during training."
+    },
+    {
+      "id": "source_metric_definitions",
+      "source": "src/metrics.py",
+      "lines": "18-47",
+      "finding": "Metric functions calculate mean squared error, mean absolute error and coefficient of determination (R2) from supplied labels and predictions."
+    },
+    {
+      "id": "source_prediction_export_precision",
+      "source": "src/error_analysis.py",
+      "lines": "174-184",
+      "finding": "Validation price_pred, residual and abs_error columns are independently rounded to one decimal place on CSV export; therefore an audit of committed CSVs need not exactly reproduce full-precision historical run metrics."
+    },
+    {
+      "id": "source_historical_results",
+      "source": "docs/experiments.md",
+      "lines": "88-115, 141-166",
+      "finding": "The historical report records E2 validation MSE approximately 102745.7 and E4 approximately 108784.5. These are historical records, not new computations from this source review."
+    },
+    {
+      "id": "source_artifact_policy",
+      "source": ".gitignore",
+      "lines": "10-22",
+      "finding": "Generated artifacts under outputs are generally excluded from ordinary commits except prediction CSVs, and model checkpoint extensions are ignored."
+    }
+  ],
+  "relationship_to_other_phase3_evidence": {
+    "E1": "docs/evidence/phase3_augmentation_audit_2026-10-12.json contains separately executed read-only CSV checks and recalculated metrics; this source review does not reproduce those checks.",
+    "E2": "docs/figures/phase3_augmentation_comparison.svg visualises the existing comparison.",
+    "E4": "docs/evidence/phase3_checker_tests_2026-10-12.txt records tests of the evidence checker; those tests do not train models."
+  },
+  "limitations": [
+    "These findings describe inspected source code at the pinned commit; they do not independently prove that historical experiments were run under all those exact defaults.",
+    "A shared configured seed does not establish identical model-head initialisation or random draws across runs.",
+    "The original experiment files later received from Member B contain some legacy-schema fields missing from the present code; see docs/Phase3_MemberB_Artifact_Update.md.",
+    "No model or dataset images were loaded in this source review.",
+    "No training, inference, checkpoint performance verification, or Kaggle evaluation was performed.",
+    "The historical prediction provenance cannot be established solely from a source-code review."
+  ],
+  "review_or_teammate_approval": "Not asserted. This JSON documents a source inspection, not a teammate review or approval."
+}
