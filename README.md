@@ -14,7 +14,9 @@ of its exterior, evaluated by mean squared error on the Kaggle test set.
 | Frozen ResNet-50 features + Ridge (baseline) | 114,853.7 | 114,147.16 |
 | **Final model: ensemble of three fine-tuned runs** | **95,850.6** | **96,958.98** |
 
-The final model is **15.1% better than the baseline** on the test set.
+The recorded Kaggle MSE is **15.1% lower than the baseline**. This is a
+historical reported result, not a newly verified score. Model selection
+uses validation evidence; see the Phase 4 record below.
 
 ## The final model
 
@@ -34,6 +36,27 @@ whether augmentation was used, so they make partly different errors on the
 same images; averaging cancels the independent part.
 
 The final submission is `outputs/predictions/submission_ensemble.csv`.
+
+## Phase 4 — comparison and selection
+
+This follows the **revised Phase 1–8 plan**. See the
+[Phase 4 selection record](docs/Phase4_Model_Selection.md),
+[complete comparison](docs/tables/Phase4_Comparison.md), and
+[updated experiment log](docs/experiments.md#phase-4--model-comparison-and-selection).
+The source review recommends retaining the existing E2/E3/E4 equal mean;
+it does not claim a new training run or completed A/B approval.
+
+```powershell
+py -3 -m unittest discover -s tests -p "test_verify_phase4_selection.py" -v
+py -3 tools/verify_phase4_selection.py --repo-root .
+```
+
+The checker uses Python 3.10+ and the standard library only. It needs the
+committed split/prediction CSVs, not images, GPU packages, or checkpoints.
+Outputs go into a **new** `docs/evidence/phase4_run_<timestamp>/` folder.
+Historical scores and newly computed CSV scores remain separate. A fresh
+full-CSV run is still required on the local repository; synthetic tests
+are not a substitute for that run. No existing submission is overwritten.
 
 ## Environment
 
@@ -183,12 +206,14 @@ in the middle of the distribution is nearly irrelevant to the score. The
 report's future-work section follows from this: the objective, not the
 architecture, is the thing to change.
 
-A methodological note that the report also covers: validation MSE is
-*optimistic* whenever the epoch is chosen on it, and the optimism grows with
-the noise of the per-epoch curve. E3's validation score was 2.6% optimistic
-on test. Ensembling reverses this — its test result beat its validation
-estimate — because averaging reduces the variance a single 1000-image split
-measures badly.
+Selecting checkpoints and model configurations on a validation set can
+make the selected validation score optimistic; a difference between one
+validation score and a Kaggle score alone does not prove the cause.
+For the ensemble, the reported Kaggle MSE (96,958.98) is **higher** than the
+reported validation MSE (95,850.6), by about **1.16%**. Its relative gain over
+E3 is larger on Kaggle, but its absolute Kaggle error did not beat its
+validation error. The Phase 4 review does not independently verify Kaggle
+scores.
 
 ## Rules the project is bound by
 

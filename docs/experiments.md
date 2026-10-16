@@ -51,8 +51,11 @@ Observations:
 
 ## Phase 3 — improvement experiments
 
-Each experiment changes exactly one factor relative to the row it is
-compared against. Deadline 12 Oct.
+Experiments use the fixed split. E3 and E4 vary the described resolution
+and augmentation policy relative to E2. B1 versus E2 also changes the
+regression head and optimisation method, so it is a comparison of methods,
+not a pure unfreezing ablation. These are saved runs, not repeated trials.
+Original improvement-experiment deadline: 12 Oct.
 
 ### E1 — input resolution
 
@@ -87,11 +90,12 @@ Observations:
 
 ### E2 — partial fine-tuning
 
-Compared directly against B1. Resolution is held at 224px and the split and
-seed are unchanged, so the only factor differing is whether the backbone
-adapts. Layer4 (14.9M of the backbone's 23.5M parameters) plus a new
-regression head are unfrozen; Adam at 1e-4; early stopping on validation
-loss.
+Compared against B1 as a complete method. Both use 224px images and the
+same documented split/seed, but B1 uses frozen features with Ridge while
+E2 adapts the last CNN stage with a neural regression head and Adam.
+The result does not isolate unfreezing alone. The recorded setup uses
+learning rate 1e-4 and validation-loss checkpoint selection; legacy-log
+limitations are recorded in [the Phase 3 artifact supplement](Phase3_MemberB_Artifact_Update.md).
 
 | Configuration | Val MSE | Val MAE | Val R² | Kaggle MSE | vs B1 | Best epoch |
 |---|---|---|---|---|---|---|
@@ -99,7 +103,9 @@ loss.
 | **E2 layer4 fine-tuned** | **102,745.7** | **235.7** | **0.335** | **103,129** | **−10.5%** | 12 of 15 |
 
 Reproduce: `python -m src.exp_finetune`
-Raw log: `outputs/logs/phase3_finetune.json` (includes the full per-epoch history)
+Original tagged log received: `outputs/logs/phase3_E2_finetune.json`.
+The earlier name `phase3_finetune.json` is a historical documentation alias;
+the legacy schema is described in the Phase 3 artifact supplement.
 
 Observations:
 
@@ -168,6 +174,13 @@ Observations:
   convergence is not yet tested, and testing it needs a longer run — see
   the pending experiment below.
 
+**Phase 4 interpretation note:** the historical E4 observations above are
+not proof of a learning mechanism or of performance after convergence.
+A fixed training budget defines a useful comparison; augmented and
+unchanged training-loss values are not directly comparable measurements.
+The later [original-artifact supplement](Phase3_MemberB_Artifact_Update.md)
+provides the more carefully qualified E2/E4 interpretation.
+
 ### Phase 3 summary
 
 | ID | Configuration | Val MSE | Val R² | Kaggle MSE | vs B1 (val) | vs B1 (test) |
@@ -226,12 +239,12 @@ Observations:
 - **The ensemble is worth 3.2% on validation and 4.6% on test.** The three
   runs make different errors -- different input resolutions, and one trained
   with augmentation -- so averaging cancels part of the variance.
-- **This is the first change whose test result beat its validation
-  estimate.** Every fine-tuned configuration so far has come in 0.4-2.6%
-  *worse* on test than on validation, because the epoch was selected on the
-  validation set. Averaging reduces variance, and variance is exactly what
-  a single 1000-image validation split is bad at measuring. So the ensemble
-  is understated by validation, not overstated.
+- **The absolute Kaggle error is not lower than validation error.** The
+  reported 96,958.98 is **1,108.38 higher** than 95,850.6, or about **1.16%**
+  higher. The relative improvement over E3 is larger on Kaggle, but that is
+  a different comparison. These observations do not establish why the
+  evaluation scores differ. The Kaggle result is historical and was not
+  independently checked in this Phase 4 review.
 - Not every subset helps: E2+E4 is 0.66% *worse* than E3 alone, because E4
   is the weakest of the three and its errors are not different enough to
   compensate. Adding E2 to E3+E4 still helps, so all three are used.
@@ -244,9 +257,56 @@ Observations:
 | E3 fine-tuned 320px | 99,051.0 | 101,594.15 | −11.0% |
 | **E2+E3+E4 ensemble** | 95,850.6 | **96,958.98** | **−15.1%** |
 
+## Phase 4 — model comparison and selection
+
+**Reviewed:** 16 October 2026, against main `90959c4`. This section follows
+the revised Phase 1–8 plan. It does not introduce another training experiment.
+
+**Recommended configuration:** retain the existing equal-weight ensemble of
+`E2_finetune`, `E3_320px`, and `E4_augment`. The historical validation MSE is
+**95,850.6**, compared with **99,051.0** for the E3 run table and **114,853.7**
+for B1. From those reported values, the reductions are **3.23%** and
+**16.55%**, respectively. Selection is based on validation MSE, not Kaggle
+scores. This is the best documented core candidate, not a claim about all
+possible models or independently verified statistical superiority.
+
+The [complete comparison](tables/Phase4_Comparison.md) includes all eleven
+numerical baseline/resolution/core configurations recorded above. The
+[selection record](Phase4_Model_Selection.md) explains the decision,
+limitations, remaining checks, and Member A/B review. The
+[historical figure](figures/phase4_historical_validation_mse.svg) is explicitly
+labelled as reported evidence.
+
+**Evidence status:** source review, historical comparison, and the Member A
+selection write-up are prepared. A fresh full-CSV audit has not been run in
+the preparation environment. Run the new checker on the local repository:
+
+```powershell
+py -3 -m unittest discover -s tests -p "test_verify_phase4_selection.py" -v
+py -3 tools/verify_phase4_selection.py --repo-root .
+```
+
+The checker aligns validation predictions by `imageid`, verifies the pinned
+inputs and fixed split, recomputes MSE/MAE/R2, evaluates both V3 columns,
+and checks the stored 3,000-row ensemble arithmetic. It writes a **new**
+`docs/evidence/phase4_run_<timestamp>/` directory and never overwrites
+training data, original predictions, checkpoints, or existing evidence.
+A numerical candidate is not automatically an approved team decision.
+
+**Handoff:** confirm the audit result and model choice with Member B, record
+the actual review date, and retain the exact evidence directory for Phase 5.
+E3's existing error analysis is a single-model reference; the selected
+ensemble needs its own error analysis if it remains the final model. Reuse
+`validation_ensemble.csv` from the new audit rather than relabelling E3's
+results as ensemble results. Model loading and full reproducibility remain
+Phase 7 work; the E2/E4 artifact handoff already recorded in Phase 3 is not
+reopened simply because large files are excluded from GitHub.
+
 ## Phase 5 — error analysis
 
-Run on E3, the best configuration. Reproduce with
+The existing analysis below is for **E3, the best documented single core
+model**, not the selected ensemble. It is retained as historical Phase 5
+reference evidence; it must not be relabelled as E5 analysis. Reproduce with
 `python -m src.error_analysis --tag E3_320px`. Raw output in
 `outputs/logs/error_analysis_E3_320px.json`; the per-image predictions are in
 `outputs/predictions/val_predictions_E3_320px.csv`, sorted by absolute error.
@@ -323,8 +383,3 @@ main thing to change:
   not rewarded for retreating to the mean;
 - weight expensive samples more heavily in the loss;
 - two-stage prediction: classify a price band first, then regress within it.
-
-## Phase 4 — final model selection
-
-_To be filled in after 16 Oct. Record which configuration was chosen and the
-evidence it was chosen on._
