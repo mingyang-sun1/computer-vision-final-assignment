@@ -7,7 +7,7 @@
 **Member B:** Yikai Qian — experiment provenance, necessary final controlled results and joint selection  
 **Reference commit:** `90959c41384c7bd3c8c5a48147e8272246071bbe`  
 **Prepared:** 16 October 2026  
-**Status:** Member A source-based comparison and selection write-up prepared. Fresh full-CSV execution and joint model approval remain to be recorded.
+**Status:** Member A source-based comparison and selection write-up prepared. The fresh full-CSV execution was completed by Member B on 16 October 2026 and is recorded in section 7; Member A's acknowledgement remains to be recorded.
 
 ## 1. Repository state checked first
 
@@ -152,8 +152,8 @@ optional strict flag retains exit 2 while any manual PENDING remains.
 | Selection rationale and configuration | Prepared; retain existing E5 recommendation |
 | Updated README / experiment log | Full replacement files included in this package |
 | New checker tests | 43 synthetic tests passed; saved log includes command and scope |
-| Fresh complete repository CSV recalculation | **Not executed in this preparation environment**; run locally |
-| Existing Phase 2/3 regression suites | Not rerun in this preparation; no pass claim |
+| Fresh complete repository CSV recalculation | **Executed by Member B, 16 October 2026** — `docs/evidence/phase4_run_20261016T124243_097811Z/`, 25 PASS / 0 FAIL / 4 PENDING |
+| Existing Phase 2/3 regression suites | **Rerun by Member B, 16 October 2026** — 43 tests pass; Phase 1 checker 32/32, Phase 2 checker 33/0/0, Phase 3 checker 26/0/3 |
 | Original model loading / provenance | Not executed; retained for Phase 7 reproducibility |
 | Both members' approval | **Pending**; record the actual decision, date and evidence path |
 | GitHub writes | None performed by this handoff |
@@ -171,12 +171,45 @@ analysis must stay labelled E3; do not use it as the ensemble's result.
 
 | Review field | Value to record after actual review |
 |---|---|
-| Actual final model | Pending joint review |
+| Actual final model | E5, equal mean of E2 + E3 + E4. **Member B agrees**; Member A acknowledgement still to record |
 | Member A acknowledgement/date | Pending |
-| Member B acknowledgement/date | Pending |
-| Local audit directory | Pending |
-| Additional decision-relevant experiments | Confirm with Member B; do not invent |
-| Phase 5 prediction file | Exact `validation_ensemble.csv` from the approved audit if E5 is selected |
+| Member B acknowledgement/date | **Yikai Qian, 16 October 2026** |
+| Local audit directory | **`docs/evidence/phase4_run_20261016T124243_097811Z/`** |
+| Additional decision-relevant experiments | **None that change the decision.** A fourth decorrelated model (v3, frozen ConvNeXt) was tested as an ensemble member and rejected: best case +0.33%, within noise. Recorded in `docs/experiments.md` under E5 |
+| Phase 5 prediction file | **`docs/evidence/phase4_run_20261016T124243_097811Z/validation_ensemble.csv`** |
+
+### Member B review, 16 October 2026
+
+Executed the checker on a machine holding the original artifacts, as section 6
+and the handoff both require. Result **25 PASS / 0 FAIL / 4 PENDING**, exit 0,
+against reference commit `90959c4`. The preparation-environment run recorded
+elsewhere in this repository reports 10 PENDING; the difference is the local
+presence of the training logs, checkpoints and prediction exports, so this run
+is the stronger of the two and is the one cited above.
+
+The checker recomputed every candidate from the committed prediction CSVs by
+`imageid`, independently of any figure or document. All eleven rows agree with
+`docs/experiments.md`: E2 102,746.22, E3 99,051.20, E4 108,784.24,
+B0 154,431.69, v3@224 110,013.04, v3@320 109,155.39, and the ensemble
+95,850.62 unrounded / 95,852.00 at the exported one-decimal precision. Nothing
+in the selection depends on a number that the recomputation did not reproduce.
+
+I agree with retaining E5. The four PENDING checks are the honest ones:
+`test_manifest` (the course `test.csv` was not supplied to this run),
+`original_artifacts` (the checker can record that the checkpoints exist but
+cannot execute them), `v3_run_identity` (v3's column names do not by themselves
+establish its backbone, though `src/exp_frozen_backbone.py` and the Kaggle
+notebook do), and `joint_review`, which is this record.
+
+Two corrections to earlier Member B text were made by Member A during this
+phase and are correct; they are noted in section 5. I confirm both: the
+ensemble's absolute Kaggle error is not below its validation error, and B1
+versus E2 is a comparison of methods rather than a pure unfreezing ablation.
+
+Also confirmed for the handoff: the E3 run log is
+`outputs/logs/phase3_E3_320px.json` and its checkpoint
+`outputs/models/finetuned_E3_320px.keras` (221,150,770 bytes), both regenerable
+with `python -m src.exp_finetune --img-size 320 --tag E3_320px`.
 
 ## Sources
 

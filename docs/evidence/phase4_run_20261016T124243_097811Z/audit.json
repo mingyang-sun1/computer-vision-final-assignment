@@ -1,0 +1,5383 @@
+{
+  "schema_version": 2,
+  "checker_version": "2.0.0",
+  "created_utc": "2026-10-16T12:42:43.097811+00:00",
+  "reference_commit": "90959c41384c7bd3c8c5a48147e8272246071bbe",
+  "local_git": {
+    "head": "e687311fa391c88dc8e21e2d432b4447c5a732a8",
+    "status": ""
+  },
+  "scope": "Revised Phase 4 / Member A: existing model comparison and provisional selection",
+  "training_executed": false,
+  "model_loading_executed": false,
+  "images_read": false,
+  "kaggle_score_verified": false,
+  "test_scores_used_for_selection": false,
+  "checks": [
+    {
+      "name": "identity:data/splits/train_split.csv",
+      "status": "PASS",
+      "detail": "LF-normalized identity matches inspected snapshot"
+    },
+    {
+      "name": "identity:data/splits/val_split.csv",
+      "status": "PASS",
+      "detail": "LF-normalized identity matches inspected snapshot"
+    },
+    {
+      "name": "identity:outputs/predictions/val_predictions_E2_finetune.csv",
+      "status": "PASS",
+      "detail": "LF-normalized identity matches inspected snapshot"
+    },
+    {
+      "name": "identity:outputs/predictions/val_predictions_E3_320px.csv",
+      "status": "PASS",
+      "detail": "LF-normalized identity matches inspected snapshot"
+    },
+    {
+      "name": "identity:outputs/predictions/val_predictions_E4_augment.csv",
+      "status": "PASS",
+      "detail": "LF-normalized identity matches inspected snapshot"
+    },
+    {
+      "name": "identity:outputs/predictions/submission_phase2_ridge.csv",
+      "status": "PASS",
+      "detail": "LF-normalized identity matches inspected snapshot"
+    },
+    {
+      "name": "identity:outputs/predictions/submission_phase3_E2_finetune.csv",
+      "status": "PASS",
+      "detail": "LF-normalized identity matches inspected snapshot"
+    },
+    {
+      "name": "identity:outputs/predictions/submission_phase3_E3_320px.csv",
+      "status": "PASS",
+      "detail": "LF-normalized identity matches inspected snapshot"
+    },
+    {
+      "name": "identity:outputs/predictions/submission_phase3_E4_augment.csv",
+      "status": "PASS",
+      "detail": "LF-normalized identity matches inspected snapshot"
+    },
+    {
+      "name": "identity:outputs/predictions/submission_ensemble.csv",
+      "status": "PASS",
+      "detail": "LF-normalized identity matches inspected snapshot"
+    },
+    {
+      "name": "identity:outputs/predictions/v3_val_predictions.csv",
+      "status": "PASS",
+      "detail": "LF-normalized identity matches inspected snapshot"
+    },
+    {
+      "name": "identity:src/ensemble.py",
+      "status": "PASS",
+      "detail": "LF-normalized identity matches inspected snapshot"
+    },
+    {
+      "name": "fixed_split",
+      "status": "PASS",
+      "detail": "7000 training / 1000 validation; disjoint IDs"
+    },
+    {
+      "name": "validation:E2_finetune",
+      "status": "PASS",
+      "detail": "Unique IDs aligned by imageid; labels, range and export grid checked"
+    },
+    {
+      "name": "validation:E3_320px",
+      "status": "PASS",
+      "detail": "Unique IDs aligned by imageid; labels, range and export grid checked"
+    },
+    {
+      "name": "validation:E4_augment",
+      "status": "PASS",
+      "detail": "Unique IDs aligned by imageid; labels, range and export grid checked"
+    },
+    {
+      "name": "v3_validation",
+      "status": "PASS",
+      "detail": "Both existing columns checked; original run identity remains unconfirmed"
+    },
+    {
+      "name": "submission_arithmetic",
+      "status": "PASS",
+      "detail": "3000 rows match three-component mean rounded to 1 dp"
+    },
+    {
+      "name": "test_manifest",
+      "status": "PENDING",
+      "detail": "Optional course test.csv not supplied. The stored submissions agree internally; external manifest verification is deferred."
+    },
+    {
+      "name": "selection",
+      "status": "PASS",
+      "detail": "Numerical candidate only: E5_mean_export_1dp; not final approval"
+    },
+    {
+      "name": "inventory:outputs/logs/phase3_E2_finetune.json",
+      "status": "PASS",
+      "detail": "Nonempty local file only; not executed or matched to predictions"
+    },
+    {
+      "name": "inventory:outputs/models/finetuned_E2_finetune.keras",
+      "status": "PASS",
+      "detail": "Nonempty local file only; not executed or matched to predictions"
+    },
+    {
+      "name": "inventory:outputs/logs/phase3_E3_320px.json",
+      "status": "PASS",
+      "detail": "Nonempty local file only; not executed or matched to predictions"
+    },
+    {
+      "name": "inventory:outputs/models/finetuned_E3_320px.keras",
+      "status": "PASS",
+      "detail": "Nonempty local file only; not executed or matched to predictions"
+    },
+    {
+      "name": "inventory:outputs/logs/phase3_E4_augment.json",
+      "status": "PASS",
+      "detail": "Nonempty local file only; not executed or matched to predictions"
+    },
+    {
+      "name": "inventory:outputs/models/finetuned_E4_augment.keras",
+      "status": "PASS",
+      "detail": "Nonempty local file only; not executed or matched to predictions"
+    },
+    {
+      "name": "original_artifacts",
+      "status": "PENDING",
+      "detail": "Phase 7 reproducibility follow-up. E2/E4 receipt is already recorded in Phase3_MemberB_Artifact_Update.md. Do not request those files again solely because they are absent from GitHub. Inventory is not checkpoint-to-prediction provenance."
+    },
+    {
+      "name": "v3_run_identity",
+      "status": "PENDING",
+      "detail": "Supplementary V3 comparison requires its original run identity. Do not infer backbone or preprocessing from the column names alone."
+    },
+    {
+      "name": "joint_review",
+      "status": "PENDING",
+      "detail": "Member A and Member B must approve the candidate and record actual review date"
+    }
+  ],
+  "input_files": [
+    {
+      "path": "data/splits/train_split.csv",
+      "bytes": 113254,
+      "sha256": "30b88453efe1f3089fc6bfc57ac7990ac52473c1e669f1332b66aa9911c6f756",
+      "git_blob_sha1_lf": "05851b5173130d45b78f1057ec7f0e78cf827a06"
+    },
+    {
+      "path": "data/splits/val_split.csv",
+      "bytes": 16193,
+      "sha256": "0395a497936429c842343170a83f240479573f79070a6993d82e21abb9f62c99",
+      "git_blob_sha1_lf": "54c0018bb7fbb08c59dd26c511928836e5ea46ba"
+    },
+    {
+      "path": "outputs/predictions/val_predictions_E2_finetune.csv",
+      "bytes": 34175,
+      "sha256": "754592f0d95b1757ba305fd86e48fab1fcd77e7093e2021bfcba8d1cb8ef0b02",
+      "git_blob_sha1_lf": "6ed8deb3847516e33345eab6ef40646142c06986"
+    },
+    {
+      "path": "outputs/predictions/val_predictions_E3_320px.csv",
+      "bytes": 34143,
+      "sha256": "215ccd62c87fbe9fc8d83fa560d29713c815b31666959b7d2478520bd12bb562",
+      "git_blob_sha1_lf": "1b838b037d504375033644ee0a84c6760dd41f24"
+    },
+    {
+      "path": "outputs/predictions/val_predictions_E4_augment.csv",
+      "bytes": 34179,
+      "sha256": "45b1e5a068a4fd11044454991a0b84bf2bec57612d4a47719d6222f8d4c580ef",
+      "git_blob_sha1_lf": "6260839aede5cc7e59de6de6179782582fdd5a7a"
+    },
+    {
+      "path": "outputs/predictions/submission_phase2_ridge.csv",
+      "bytes": 49319,
+      "sha256": "32a8bee0dcee37c0f56f64d95fb3d33c186dfcfd83e6e57357063423d4703cc7",
+      "git_blob_sha1_lf": "856a86573a39ee4c6e24b55dc046632420906f3d"
+    },
+    {
+      "path": "outputs/predictions/submission_phase3_E2_finetune.csv",
+      "bytes": 49374,
+      "sha256": "338a0653b09b2da176c7068310374747f5b333626e1adefbd426aba948d487d8",
+      "git_blob_sha1_lf": "dcaefb73744451a25bd5cdcbb45548407352de87"
+    },
+    {
+      "path": "outputs/predictions/submission_phase3_E3_320px.csv",
+      "bytes": 49442,
+      "sha256": "8e552824ff21063acaa65ea1a3bf92e2c0edf65702172173253623364807a851",
+      "git_blob_sha1_lf": "4c12698c2793f198e7d95a80de541cea28d3d58a"
+    },
+    {
+      "path": "outputs/predictions/submission_phase3_E4_augment.csv",
+      "bytes": 49392,
+      "sha256": "1bdebbac6b5b3f569a5bf7cd6bf6b3be4fdc9b45833570aa6a9f3e696180b3cc",
+      "git_blob_sha1_lf": "e9cab1f3d75311c50b69462268a41caca25fcee7"
+    },
+    {
+      "path": "outputs/predictions/submission_ensemble.csv",
+      "bytes": 49363,
+      "sha256": "73e4fef99528b3aa6c43774f4bf5d19d0f15f1280c47b8f4d779082221307e11",
+      "git_blob_sha1_lf": "bceaab97bb957dade32f85e16d55daf3e20192c5"
+    },
+    {
+      "path": "outputs/predictions/v3_val_predictions.csv",
+      "bytes": 52218,
+      "sha256": "d56a1a1bf1a8552d40493ae5ccf2c6e85c936223856dc4845c71e3d74121a889",
+      "git_blob_sha1_lf": "edfa94a798d953803000b07334a8525b36c47090"
+    },
+    {
+      "path": "src/ensemble.py",
+      "bytes": 3382,
+      "sha256": "d99a03b9060871b3ab3e1004c7aa73c9ef3fee6985c6f82f893ff57bb063765c",
+      "git_blob_sha1_lf": "618a36b99eb2487fda30bd19a707cc21ccc2b5b9"
+    }
+  ],
+  "metrics": {
+    "E2_finetune": {
+      "mse": 102746.219475022,
+      "mae": 235.650414,
+      "r2": 0.3346513496199572
+    },
+    "E3_320px": {
+      "mse": 99051.197058022,
+      "mae": 229.764228,
+      "r2": 0.3585790249235981
+    },
+    "E4_augment": {
+      "mse": 108784.236327622,
+      "mae": 246.318624,
+      "r2": 0.2955512602504792
+    },
+    "B0_mean": {
+      "mse": 154431.69151180095,
+      "mae": 295.88284217485716,
+      "r2": -4.572477981074592e-05
+    },
+    "E5_mean_unrounded": {
+      "mse": 95850.62043133311,
+      "mae": 226.42078666666666,
+      "r2": 0.37930484189171587
+    },
+    "E5_mean_export_1dp": {
+      "mse": 95852.002675622,
+      "mae": 226.42302,
+      "r2": 0.37929589096021876
+    },
+    "V3_stored_224": {
+      "mse": 110013.04066563788,
+      "mae": 247.09619372274332,
+      "r2": 0.28759395231197377
+    },
+    "V3_stored_320": {
+      "mse": 109155.38512617556,
+      "mae": 241.96020312387185,
+      "r2": 0.2931478301927161
+    }
+  },
+  "artifacts": [
+    {
+      "path": "outputs/logs/phase3_E2_finetune.json",
+      "present": true,
+      "bytes": 1306,
+      "loaded_or_provenance_verified": false
+    },
+    {
+      "path": "outputs/models/finetuned_E2_finetune.keras",
+      "present": true,
+      "bytes": 221150770,
+      "loaded_or_provenance_verified": false
+    },
+    {
+      "path": "outputs/logs/phase3_E3_320px.json",
+      "present": true,
+      "bytes": 1312,
+      "loaded_or_provenance_verified": false
+    },
+    {
+      "path": "outputs/models/finetuned_E3_320px.keras",
+      "present": true,
+      "bytes": 221150770,
+      "loaded_or_provenance_verified": false
+    },
+    {
+      "path": "outputs/logs/phase3_E4_augment.json",
+      "present": true,
+      "bytes": 1362,
+      "loaded_or_provenance_verified": false
+    },
+    {
+      "path": "outputs/models/finetuned_E4_augment.keras",
+      "present": true,
+      "bytes": 221150770,
+      "loaded_or_provenance_verified": false
+    }
+  ],
+  "reported_reference_mse": {
+    "B1": 114853.7,
+    "E3": 99051.0,
+    "E5": 95850.6
+  },
+  "reported_references_recomputed": false,
+  "artifact_inventory_is_phase7_follow_up": true,
+  "candidate": {
+    "status": "PROVISIONAL",
+    "id": "E5_mean_export_1dp",
+    "selection_metric": "validation MSE from the pinned rounded CSV evidence",
+    "validation_mse": 95852.002675622,
+    "scope": [
+      "E2_finetune",
+      "E3_320px",
+      "E4_augment",
+      "E5_mean_export_1dp"
+    ],
+    "review_date": null,
+    "approved_by": [],
+    "weights": [
+      "1/3",
+      "1/3",
+      "1/3"
+    ],
+    "source_tags": [
+      "E2_finetune",
+      "E3_320px",
+      "E4_augment"
+    ],
+    "joint_approval": "PENDING",
+    "checkpoint_provenance_verified": false
+  },
+  "joint_approval": "PENDING",
+  "precision": "Decimal(50) arithmetic on exported predictions; JSON metrics are floats. The deployed-style ensemble rounds the mean to one decimal. Historical full-precision run scores are not recovered.",
+  "paired_comparisons": {
+    "E3_320px_vs_E2_finetune": {
+      "lower_absolute_error": 495,
+      "equal_absolute_error": 0,
+      "higher_absolute_error": 505,
+      "mse_change_percent": -3.5962611917787157,
+      "interpretation": "Descriptive paired comparison, not a significance test."
+    },
+    "E4_augment_vs_E2_finetune": {
+      "lower_absolute_error": 470,
+      "equal_absolute_error": 1,
+      "higher_absolute_error": 529,
+      "mse_change_percent": 5.876631649759023,
+      "interpretation": "Descriptive paired comparison, not a significance test."
+    },
+    "E5_mean_export_1dp_vs_E3_320px": {
+      "lower_absolute_error": 515,
+      "equal_absolute_error": 0,
+      "higher_absolute_error": 485,
+      "mse_change_percent": -3.229839191671735,
+      "interpretation": "Descriptive paired comparison, not a significance test."
+    }
+  },
+  "ensemble_validation_rows": [
+    {
+      "imageid": "3508.jpg",
+      "price_true": "1595.0",
+      "price_pred": "886.6"
+    },
+    {
+      "imageid": "6840.jpg",
+      "price_true": "999.0",
+      "price_pred": "805.5"
+    },
+    {
+      "imageid": "4334.jpg",
+      "price_true": "1325.0",
+      "price_pred": "646.6"
+    },
+    {
+      "imageid": "2463.jpg",
+      "price_true": "219.0",
+      "price_pred": "438.3"
+    },
+    {
+      "imageid": "6677.jpg",
+      "price_true": "575.0",
+      "price_pred": "635.0"
+    },
+    {
+      "imageid": "173.jpg",
+      "price_true": "795.0",
+      "price_pred": "606.9"
+    },
+    {
+      "imageid": "2426.jpg",
+      "price_true": "749.9",
+      "price_pred": "871.1"
+    },
+    {
+      "imageid": "3431.jpg",
+      "price_true": "440.0",
+      "price_pred": "645.0"
+    },
+    {
+      "imageid": "7964.jpg",
+      "price_true": "1079.0",
+      "price_pred": "1114.7"
+    },
+    {
+      "imageid": "1007.jpg",
+      "price_true": "899.0",
+      "price_pred": "867.9"
+    },
+    {
+      "imageid": "1693.jpg",
+      "price_true": "559.0",
+      "price_pred": "635.0"
+    },
+    {
+      "imageid": "1842.jpg",
+      "price_true": "650.0",
+      "price_pred": "886.8"
+    },
+    {
+      "imageid": "5959.jpg",
+      "price_true": "409.0",
+      "price_pred": "462.4"
+    },
+    {
+      "imageid": "7150.jpg",
+      "price_true": "695.0",
+      "price_pred": "1131.0"
+    },
+    {
+      "imageid": "6940.jpg",
+      "price_true": "849.9",
+      "price_pred": "816.1"
+    },
+    {
+      "imageid": "7599.jpg",
+      "price_true": "1294.99",
+      "price_pred": "850.8"
+    },
+    {
+      "imageid": "3942.jpg",
+      "price_true": "389.9",
+      "price_pred": "593.1"
+    },
+    {
+      "imageid": "2944.jpg",
+      "price_true": "450.0",
+      "price_pred": "640.8"
+    },
+    {
+      "imageid": "5196.jpg",
+      "price_true": "330.0",
+      "price_pred": "519.6"
+    },
+    {
+      "imageid": "1025.jpg",
+      "price_true": "769.0",
+      "price_pred": "1151.1"
+    },
+    {
+      "imageid": "4790.jpg",
+      "price_true": "589.9",
+      "price_pred": "619.9"
+    },
+    {
+      "imageid": "235.jpg",
+      "price_true": "369.9",
+      "price_pred": "677.5"
+    },
+    {
+      "imageid": "4747.jpg",
+      "price_true": "419.9",
+      "price_pred": "508.2"
+    },
+    {
+      "imageid": "5460.jpg",
+      "price_true": "225.0",
+      "price_pred": "512.2"
+    },
+    {
+      "imageid": "7497.jpg",
+      "price_true": "560.0",
+      "price_pred": "652.0"
+    },
+    {
+      "imageid": "2633.jpg",
+      "price_true": "424.9",
+      "price_pred": "619.2"
+    },
+    {
+      "imageid": "4497.jpg",
+      "price_true": "210.0",
+      "price_pred": "410.9"
+    },
+    {
+      "imageid": "3364.jpg",
+      "price_true": "535.0",
+      "price_pred": "666.3"
+    },
+    {
+      "imageid": "7395.jpg",
+      "price_true": "799.0",
+      "price_pred": "827.1"
+    },
+    {
+      "imageid": "4417.jpg",
+      "price_true": "274.0",
+      "price_pred": "468.7"
+    },
+    {
+      "imageid": "6690.jpg",
+      "price_true": "565.0",
+      "price_pred": "476.1"
+    },
+    {
+      "imageid": "5022.jpg",
+      "price_true": "780.0",
+      "price_pred": "702.6"
+    },
+    {
+      "imageid": "7046.jpg",
+      "price_true": "423.65",
+      "price_pred": "829.9"
+    },
+    {
+      "imageid": "2297.jpg",
+      "price_true": "605.0",
+      "price_pred": "534.1"
+    },
+    {
+      "imageid": "6692.jpg",
+      "price_true": "1650.0",
+      "price_pred": "954.7"
+    },
+    {
+      "imageid": "528.jpg",
+      "price_true": "1379.0",
+      "price_pred": "1080.6"
+    },
+    {
+      "imageid": "4220.jpg",
+      "price_true": "564.9",
+      "price_pred": "557.4"
+    },
+    {
+      "imageid": "5228.jpg",
+      "price_true": "749.0",
+      "price_pred": "845.1"
+    },
+    {
+      "imageid": "778.jpg",
+      "price_true": "485.0",
+      "price_pred": "568.2"
+    },
+    {
+      "imageid": "140.jpg",
+      "price_true": "739.9",
+      "price_pred": "645.9"
+    },
+    {
+      "imageid": "457.jpg",
+      "price_true": "349.0",
+      "price_pred": "630.4"
+    },
+    {
+      "imageid": "1098.jpg",
+      "price_true": "725.0",
+      "price_pred": "668.8"
+    },
+    {
+      "imageid": "1809.jpg",
+      "price_true": "925.0",
+      "price_pred": "1083.8"
+    },
+    {
+      "imageid": "980.jpg",
+      "price_true": "685.0",
+      "price_pred": "665.9"
+    },
+    {
+      "imageid": "933.jpg",
+      "price_true": "1174.9",
+      "price_pred": "1379.1"
+    },
+    {
+      "imageid": "3036.jpg",
+      "price_true": "799.888",
+      "price_pred": "679.1"
+    },
+    {
+      "imageid": "5516.jpg",
+      "price_true": "749.0",
+      "price_pred": "576.3"
+    },
+    {
+      "imageid": "2899.jpg",
+      "price_true": "790.0",
+      "price_pred": "853.2"
+    },
+    {
+      "imageid": "4508.jpg",
+      "price_true": "888.8",
+      "price_pred": "787.0"
+    },
+    {
+      "imageid": "5137.jpg",
+      "price_true": "639.998",
+      "price_pred": "457.9"
+    },
+    {
+      "imageid": "968.jpg",
+      "price_true": "975.0",
+      "price_pred": "970.3"
+    },
+    {
+      "imageid": "3932.jpg",
+      "price_true": "485.0",
+      "price_pred": "787.4"
+    },
+    {
+      "imageid": "5725.jpg",
+      "price_true": "699.0",
+      "price_pred": "774.8"
+    },
+    {
+      "imageid": "3919.jpg",
+      "price_true": "589.999",
+      "price_pred": "920.9"
+    },
+    {
+      "imageid": "2282.jpg",
+      "price_true": "505.0",
+      "price_pred": "744.5"
+    },
+    {
+      "imageid": "6777.jpg",
+      "price_true": "749.0",
+      "price_pred": "587.2"
+    },
+    {
+      "imageid": "6322.jpg",
+      "price_true": "569.0",
+      "price_pred": "735.4"
+    },
+    {
+      "imageid": "7907.jpg",
+      "price_true": "1298.0",
+      "price_pred": "1150.3"
+    },
+    {
+      "imageid": "263.jpg",
+      "price_true": "1650.0",
+      "price_pred": "915.3"
+    },
+    {
+      "imageid": "170.jpg",
+      "price_true": "309.0",
+      "price_pred": "625.8"
+    },
+    {
+      "imageid": "4596.jpg",
+      "price_true": "700.0",
+      "price_pred": "604.6"
+    },
+    {
+      "imageid": "90.jpg",
+      "price_true": "399.9",
+      "price_pred": "490.6"
+    },
+    {
+      "imageid": "5422.jpg",
+      "price_true": "968.0",
+      "price_pred": "750.5"
+    },
+    {
+      "imageid": "3909.jpg",
+      "price_true": "225.0",
+      "price_pred": "365.0"
+    },
+    {
+      "imageid": "6429.jpg",
+      "price_true": "498.5",
+      "price_pred": "646.4"
+    },
+    {
+      "imageid": "113.jpg",
+      "price_true": "289.9",
+      "price_pred": "478.8"
+    },
+    {
+      "imageid": "4738.jpg",
+      "price_true": "279.5",
+      "price_pred": "707.9"
+    },
+    {
+      "imageid": "5485.jpg",
+      "price_true": "299.0",
+      "price_pred": "842.3"
+    },
+    {
+      "imageid": "1015.jpg",
+      "price_true": "724.9",
+      "price_pred": "980.0"
+    },
+    {
+      "imageid": "2958.jpg",
+      "price_true": "214.9",
+      "price_pred": "516.6"
+    },
+    {
+      "imageid": "2317.jpg",
+      "price_true": "750.0",
+      "price_pred": "775.9"
+    },
+    {
+      "imageid": "664.jpg",
+      "price_true": "349.0",
+      "price_pred": "754.6"
+    },
+    {
+      "imageid": "7966.jpg",
+      "price_true": "549.999",
+      "price_pred": "578.8"
+    },
+    {
+      "imageid": "7823.jpg",
+      "price_true": "459.0",
+      "price_pred": "576.4"
+    },
+    {
+      "imageid": "568.jpg",
+      "price_true": "778.9",
+      "price_pred": "755.5"
+    },
+    {
+      "imageid": "7309.jpg",
+      "price_true": "349.9",
+      "price_pred": "610.2"
+    },
+    {
+      "imageid": "1028.jpg",
+      "price_true": "750.0",
+      "price_pred": "810.9"
+    },
+    {
+      "imageid": "6796.jpg",
+      "price_true": "399.9",
+      "price_pred": "580.8"
+    },
+    {
+      "imageid": "107.jpg",
+      "price_true": "299.0",
+      "price_pred": "396.2"
+    },
+    {
+      "imageid": "7646.jpg",
+      "price_true": "570.0",
+      "price_pred": "858.1"
+    },
+    {
+      "imageid": "2638.jpg",
+      "price_true": "1625.0",
+      "price_pred": "1061.9"
+    },
+    {
+      "imageid": "1488.jpg",
+      "price_true": "1175.0",
+      "price_pred": "922.4"
+    },
+    {
+      "imageid": "4397.jpg",
+      "price_true": "630.0",
+      "price_pred": "794.8"
+    },
+    {
+      "imageid": "2061.jpg",
+      "price_true": "1449.7",
+      "price_pred": "649.3"
+    },
+    {
+      "imageid": "4645.jpg",
+      "price_true": "1395.0",
+      "price_pred": "1106.4"
+    },
+    {
+      "imageid": "1273.jpg",
+      "price_true": "350.0",
+      "price_pred": "495.1"
+    },
+    {
+      "imageid": "1478.jpg",
+      "price_true": "569.999",
+      "price_pred": "771.3"
+    },
+    {
+      "imageid": "1757.jpg",
+      "price_true": "639.999",
+      "price_pred": "649.6"
+    },
+    {
+      "imageid": "6638.jpg",
+      "price_true": "1939.0",
+      "price_pred": "1101.1"
+    },
+    {
+      "imageid": "1876.jpg",
+      "price_true": "1022.0",
+      "price_pred": "1003.5"
+    },
+    {
+      "imageid": "1777.jpg",
+      "price_true": "599.0",
+      "price_pred": "654.3"
+    },
+    {
+      "imageid": "1558.jpg",
+      "price_true": "999.0",
+      "price_pred": "946.3"
+    },
+    {
+      "imageid": "439.jpg",
+      "price_true": "539.0",
+      "price_pred": "573.4"
+    },
+    {
+      "imageid": "2491.jpg",
+      "price_true": "880.0",
+      "price_pred": "639.7"
+    },
+    {
+      "imageid": "2467.jpg",
+      "price_true": "1799.0",
+      "price_pred": "1027.1"
+    },
+    {
+      "imageid": "6255.jpg",
+      "price_true": "525.0",
+      "price_pred": "973.2"
+    },
+    {
+      "imageid": "4367.jpg",
+      "price_true": "248.9",
+      "price_pred": "426.5"
+    },
+    {
+      "imageid": "5347.jpg",
+      "price_true": "334.9",
+      "price_pred": "443.1"
+    },
+    {
+      "imageid": "4986.jpg",
+      "price_true": "1589.0",
+      "price_pred": "1048.1"
+    },
+    {
+      "imageid": "7260.jpg",
+      "price_true": "269.0",
+      "price_pred": "501.1"
+    },
+    {
+      "imageid": "2138.jpg",
+      "price_true": "1995.0",
+      "price_pred": "577.2"
+    },
+    {
+      "imageid": "3746.jpg",
+      "price_true": "1549.9",
+      "price_pred": "1097.2"
+    },
+    {
+      "imageid": "5810.jpg",
+      "price_true": "469.9",
+      "price_pred": "825.2"
+    },
+    {
+      "imageid": "4991.jpg",
+      "price_true": "899.99",
+      "price_pred": "806.3"
+    },
+    {
+      "imageid": "3705.jpg",
+      "price_true": "1599.0",
+      "price_pred": "1037.6"
+    },
+    {
+      "imageid": "3077.jpg",
+      "price_true": "229.0",
+      "price_pred": "258.2"
+    },
+    {
+      "imageid": "7932.jpg",
+      "price_true": "1549.0",
+      "price_pred": "715.2"
+    },
+    {
+      "imageid": "7460.jpg",
+      "price_true": "414.0",
+      "price_pred": "758.3"
+    },
+    {
+      "imageid": "2069.jpg",
+      "price_true": "1244.5",
+      "price_pred": "661.7"
+    },
+    {
+      "imageid": "3360.jpg",
+      "price_true": "350.0",
+      "price_pred": "685.0"
+    },
+    {
+      "imageid": "718.jpg",
+      "price_true": "1135.0",
+      "price_pred": "944.0"
+    },
+    {
+      "imageid": "1787.jpg",
+      "price_true": "597.0",
+      "price_pred": "692.3"
+    },
+    {
+      "imageid": "7422.jpg",
+      "price_true": "1095.0",
+      "price_pred": "679.6"
+    },
+    {
+      "imageid": "7084.jpg",
+      "price_true": "499.0",
+      "price_pred": "487.9"
+    },
+    {
+      "imageid": "3285.jpg",
+      "price_true": "485.0",
+      "price_pred": "636.8"
+    },
+    {
+      "imageid": "4998.jpg",
+      "price_true": "1099.0",
+      "price_pred": "919.3"
+    },
+    {
+      "imageid": "1017.jpg",
+      "price_true": "210.0",
+      "price_pred": "585.8"
+    },
+    {
+      "imageid": "5696.jpg",
+      "price_true": "679.99",
+      "price_pred": "539.3"
+    },
+    {
+      "imageid": "5833.jpg",
+      "price_true": "450.0",
+      "price_pred": "493.9"
+    },
+    {
+      "imageid": "5583.jpg",
+      "price_true": "489.0",
+      "price_pred": "495.1"
+    },
+    {
+      "imageid": "2621.jpg",
+      "price_true": "650.0",
+      "price_pred": "819.2"
+    },
+    {
+      "imageid": "3700.jpg",
+      "price_true": "898.0",
+      "price_pred": "799.5"
+    },
+    {
+      "imageid": "438.jpg",
+      "price_true": "395.0",
+      "price_pred": "607.9"
+    },
+    {
+      "imageid": "3928.jpg",
+      "price_true": "1395.0",
+      "price_pred": "937.2"
+    },
+    {
+      "imageid": "3815.jpg",
+      "price_true": "724.999",
+      "price_pred": "693.6"
+    },
+    {
+      "imageid": "5462.jpg",
+      "price_true": "449.9",
+      "price_pred": "820.9"
+    },
+    {
+      "imageid": "6956.jpg",
+      "price_true": "240.0",
+      "price_pred": "627.7"
+    },
+    {
+      "imageid": "1509.jpg",
+      "price_true": "520.0",
+      "price_pred": "663.2"
+    },
+    {
+      "imageid": "950.jpg",
+      "price_true": "380.0",
+      "price_pred": "551.0"
+    },
+    {
+      "imageid": "1784.jpg",
+      "price_true": "290.0",
+      "price_pred": "665.2"
+    },
+    {
+      "imageid": "1557.jpg",
+      "price_true": "749.9",
+      "price_pred": "1069.8"
+    },
+    {
+      "imageid": "2209.jpg",
+      "price_true": "514.9",
+      "price_pred": "722.7"
+    },
+    {
+      "imageid": "2801.jpg",
+      "price_true": "499.999",
+      "price_pred": "491.0"
+    },
+    {
+      "imageid": "4097.jpg",
+      "price_true": "899.9",
+      "price_pred": "705.5"
+    },
+    {
+      "imageid": "3033.jpg",
+      "price_true": "289.9",
+      "price_pred": "621.3"
+    },
+    {
+      "imageid": "1979.jpg",
+      "price_true": "359.999",
+      "price_pred": "519.0"
+    },
+    {
+      "imageid": "1897.jpg",
+      "price_true": "699.999",
+      "price_pred": "550.0"
+    },
+    {
+      "imageid": "456.jpg",
+      "price_true": "585.0",
+      "price_pred": "756.1"
+    },
+    {
+      "imageid": "6143.jpg",
+      "price_true": "850.0",
+      "price_pred": "561.0"
+    },
+    {
+      "imageid": "3569.jpg",
+      "price_true": "775.0",
+      "price_pred": "788.1"
+    },
+    {
+      "imageid": "7167.jpg",
+      "price_true": "499.9",
+      "price_pred": "508.2"
+    },
+    {
+      "imageid": "6411.jpg",
+      "price_true": "849.0",
+      "price_pred": "1191.5"
+    },
+    {
+      "imageid": "3165.jpg",
+      "price_true": "690.0",
+      "price_pred": "519.6"
+    },
+    {
+      "imageid": "6226.jpg",
+      "price_true": "489.9",
+      "price_pred": "723.5"
+    },
+    {
+      "imageid": "7269.jpg",
+      "price_true": "450.0",
+      "price_pred": "684.2"
+    },
+    {
+      "imageid": "7524.jpg",
+      "price_true": "679.0",
+      "price_pred": "634.0"
+    },
+    {
+      "imageid": "5818.jpg",
+      "price_true": "1449.888",
+      "price_pred": "1108.9"
+    },
+    {
+      "imageid": "2384.jpg",
+      "price_true": "339.0",
+      "price_pred": "699.3"
+    },
+    {
+      "imageid": "5321.jpg",
+      "price_true": "709.999",
+      "price_pred": "760.3"
+    },
+    {
+      "imageid": "3080.jpg",
+      "price_true": "1100.0",
+      "price_pred": "839.8"
+    },
+    {
+      "imageid": "648.jpg",
+      "price_true": "299.0",
+      "price_pred": "464.4"
+    },
+    {
+      "imageid": "6489.jpg",
+      "price_true": "265.0",
+      "price_pred": "342.2"
+    },
+    {
+      "imageid": "5623.jpg",
+      "price_true": "599.9",
+      "price_pred": "509.8"
+    },
+    {
+      "imageid": "1585.jpg",
+      "price_true": "640.0",
+      "price_pred": "760.2"
+    },
+    {
+      "imageid": "7790.jpg",
+      "price_true": "430.0",
+      "price_pred": "827.2"
+    },
+    {
+      "imageid": "4268.jpg",
+      "price_true": "350.0",
+      "price_pred": "369.3"
+    },
+    {
+      "imageid": "2134.jpg",
+      "price_true": "740.0",
+      "price_pred": "567.9"
+    },
+    {
+      "imageid": "3989.jpg",
+      "price_true": "539.0",
+      "price_pred": "556.2"
+    },
+    {
+      "imageid": "489.jpg",
+      "price_true": "375.0",
+      "price_pred": "742.5"
+    },
+    {
+      "imageid": "2356.jpg",
+      "price_true": "349.9",
+      "price_pred": "539.8"
+    },
+    {
+      "imageid": "7493.jpg",
+      "price_true": "315.0",
+      "price_pred": "471.1"
+    },
+    {
+      "imageid": "2777.jpg",
+      "price_true": "850.0",
+      "price_pred": "927.0"
+    },
+    {
+      "imageid": "7168.jpg",
+      "price_true": "1015.0",
+      "price_pred": "1329.2"
+    },
+    {
+      "imageid": "3714.jpg",
+      "price_true": "929.0",
+      "price_pred": "1028.3"
+    },
+    {
+      "imageid": "398.jpg",
+      "price_true": "720.0",
+      "price_pred": "766.8"
+    },
+    {
+      "imageid": "6470.jpg",
+      "price_true": "869.0",
+      "price_pred": "876.2"
+    },
+    {
+      "imageid": "2462.jpg",
+      "price_true": "699.9",
+      "price_pred": "546.3"
+    },
+    {
+      "imageid": "5574.jpg",
+      "price_true": "750.0",
+      "price_pred": "738.1"
+    },
+    {
+      "imageid": "5673.jpg",
+      "price_true": "519.0",
+      "price_pred": "486.0"
+    },
+    {
+      "imageid": "4651.jpg",
+      "price_true": "1899.9",
+      "price_pred": "1171.1"
+    },
+    {
+      "imageid": "2253.jpg",
+      "price_true": "850.0",
+      "price_pred": "654.2"
+    },
+    {
+      "imageid": "6541.jpg",
+      "price_true": "759.9",
+      "price_pred": "637.8"
+    },
+    {
+      "imageid": "4575.jpg",
+      "price_true": "555.0",
+      "price_pred": "507.2"
+    },
+    {
+      "imageid": "5470.jpg",
+      "price_true": "659.0",
+      "price_pred": "676.3"
+    },
+    {
+      "imageid": "6251.jpg",
+      "price_true": "1075.0",
+      "price_pred": "1181.3"
+    },
+    {
+      "imageid": "2965.jpg",
+      "price_true": "1758.0",
+      "price_pred": "775.6"
+    },
+    {
+      "imageid": "6682.jpg",
+      "price_true": "739.9",
+      "price_pred": "779.9"
+    },
+    {
+      "imageid": "4037.jpg",
+      "price_true": "499.9",
+      "price_pred": "604.8"
+    },
+    {
+      "imageid": "3884.jpg",
+      "price_true": "384.9",
+      "price_pred": "616.6"
+    },
+    {
+      "imageid": "4105.jpg",
+      "price_true": "219.0",
+      "price_pred": "439.5"
+    },
+    {
+      "imageid": "407.jpg",
+      "price_true": "1699.99",
+      "price_pred": "1259.3"
+    },
+    {
+      "imageid": "1087.jpg",
+      "price_true": "799.0",
+      "price_pred": "1191.6"
+    },
+    {
+      "imageid": "2083.jpg",
+      "price_true": "979.0",
+      "price_pred": "924.0"
+    },
+    {
+      "imageid": "3693.jpg",
+      "price_true": "789.0",
+      "price_pred": "1017.9"
+    },
+    {
+      "imageid": "7052.jpg",
+      "price_true": "450.0",
+      "price_pred": "412.9"
+    },
+    {
+      "imageid": "2837.jpg",
+      "price_true": "885.0",
+      "price_pred": "692.7"
+    },
+    {
+      "imageid": "3537.jpg",
+      "price_true": "349.0",
+      "price_pred": "644.7"
+    },
+    {
+      "imageid": "7015.jpg",
+      "price_true": "779.9",
+      "price_pred": "732.6"
+    },
+    {
+      "imageid": "2412.jpg",
+      "price_true": "949.007",
+      "price_pred": "662.1"
+    },
+    {
+      "imageid": "7083.jpg",
+      "price_true": "899.999",
+      "price_pred": "736.5"
+    },
+    {
+      "imageid": "2964.jpg",
+      "price_true": "1800.0",
+      "price_pred": "1141.1"
+    },
+    {
+      "imageid": "6358.jpg",
+      "price_true": "858.0",
+      "price_pred": "1338.5"
+    },
+    {
+      "imageid": "2252.jpg",
+      "price_true": "548.0",
+      "price_pred": "940.6"
+    },
+    {
+      "imageid": "4413.jpg",
+      "price_true": "769.5",
+      "price_pred": "587.7"
+    },
+    {
+      "imageid": "2056.jpg",
+      "price_true": "530.0",
+      "price_pred": "514.7"
+    },
+    {
+      "imageid": "5491.jpg",
+      "price_true": "250.0",
+      "price_pred": "493.1"
+    },
+    {
+      "imageid": "360.jpg",
+      "price_true": "615.0",
+      "price_pred": "654.2"
+    },
+    {
+      "imageid": "2514.jpg",
+      "price_true": "799.0",
+      "price_pred": "875.2"
+    },
+    {
+      "imageid": "835.jpg",
+      "price_true": "1099.0",
+      "price_pred": "1257.6"
+    },
+    {
+      "imageid": "2686.jpg",
+      "price_true": "798.0",
+      "price_pred": "624.7"
+    },
+    {
+      "imageid": "5472.jpg",
+      "price_true": "399.75",
+      "price_pred": "433.7"
+    },
+    {
+      "imageid": "7565.jpg",
+      "price_true": "619.9",
+      "price_pred": "623.5"
+    },
+    {
+      "imageid": "1191.jpg",
+      "price_true": "597.0",
+      "price_pred": "687.3"
+    },
+    {
+      "imageid": "169.jpg",
+      "price_true": "419.999",
+      "price_pred": "637.0"
+    },
+    {
+      "imageid": "2116.jpg",
+      "price_true": "349.999",
+      "price_pred": "538.3"
+    },
+    {
+      "imageid": "3818.jpg",
+      "price_true": "508.0",
+      "price_pred": "767.3"
+    },
+    {
+      "imageid": "233.jpg",
+      "price_true": "867.0",
+      "price_pred": "1029.3"
+    },
+    {
+      "imageid": "7995.jpg",
+      "price_true": "629.0",
+      "price_pred": "820.3"
+    },
+    {
+      "imageid": "2705.jpg",
+      "price_true": "625.0",
+      "price_pred": "693.4"
+    },
+    {
+      "imageid": "957.jpg",
+      "price_true": "349.0",
+      "price_pred": "618.2"
+    },
+    {
+      "imageid": "7166.jpg",
+      "price_true": "450.0",
+      "price_pred": "408.1"
+    },
+    {
+      "imageid": "5379.jpg",
+      "price_true": "599.9",
+      "price_pred": "778.3"
+    },
+    {
+      "imageid": "7054.jpg",
+      "price_true": "344.9",
+      "price_pred": "645.2"
+    },
+    {
+      "imageid": "132.jpg",
+      "price_true": "829.0",
+      "price_pred": "998.3"
+    },
+    {
+      "imageid": "5535.jpg",
+      "price_true": "1489.0",
+      "price_pred": "606.8"
+    },
+    {
+      "imageid": "7252.jpg",
+      "price_true": "1120.0",
+      "price_pred": "323.1"
+    },
+    {
+      "imageid": "395.jpg",
+      "price_true": "569.0",
+      "price_pred": "867.9"
+    },
+    {
+      "imageid": "96.jpg",
+      "price_true": "659.0",
+      "price_pred": "683.3"
+    },
+    {
+      "imageid": "4418.jpg",
+      "price_true": "1150.0",
+      "price_pred": "757.3"
+    },
+    {
+      "imageid": "1957.jpg",
+      "price_true": "265.0",
+      "price_pred": "415.6"
+    },
+    {
+      "imageid": "3594.jpg",
+      "price_true": "265.0",
+      "price_pred": "735.9"
+    },
+    {
+      "imageid": "1768.jpg",
+      "price_true": "319.9",
+      "price_pred": "568.8"
+    },
+    {
+      "imageid": "651.jpg",
+      "price_true": "799.9",
+      "price_pred": "434.9"
+    },
+    {
+      "imageid": "820.jpg",
+      "price_true": "1500.0",
+      "price_pred": "899.6"
+    },
+    {
+      "imageid": "7302.jpg",
+      "price_true": "658.0",
+      "price_pred": "570.0"
+    },
+    {
+      "imageid": "4451.jpg",
+      "price_true": "585.0",
+      "price_pred": "630.9"
+    },
+    {
+      "imageid": "7308.jpg",
+      "price_true": "255.0",
+      "price_pred": "577.2"
+    },
+    {
+      "imageid": "802.jpg",
+      "price_true": "675.0",
+      "price_pred": "596.7"
+    },
+    {
+      "imageid": "6646.jpg",
+      "price_true": "840.0",
+      "price_pred": "634.6"
+    },
+    {
+      "imageid": "1225.jpg",
+      "price_true": "600.0",
+      "price_pred": "562.7"
+    },
+    {
+      "imageid": "4170.jpg",
+      "price_true": "425.0",
+      "price_pred": "662.0"
+    },
+    {
+      "imageid": "2951.jpg",
+      "price_true": "371.99",
+      "price_pred": "677.4"
+    },
+    {
+      "imageid": "1235.jpg",
+      "price_true": "499.0",
+      "price_pred": "761.8"
+    },
+    {
+      "imageid": "5432.jpg",
+      "price_true": "739.9",
+      "price_pred": "658.8"
+    },
+    {
+      "imageid": "762.jpg",
+      "price_true": "242.9",
+      "price_pred": "197.1"
+    },
+    {
+      "imageid": "5248.jpg",
+      "price_true": "399.0",
+      "price_pred": "557.8"
+    },
+    {
+      "imageid": "2106.jpg",
+      "price_true": "320.0",
+      "price_pred": "397.7"
+    },
+    {
+      "imageid": "5341.jpg",
+      "price_true": "969.0",
+      "price_pred": "772.9"
+    },
+    {
+      "imageid": "4648.jpg",
+      "price_true": "1100.0",
+      "price_pred": "881.4"
+    },
+    {
+      "imageid": "4785.jpg",
+      "price_true": "525.0",
+      "price_pred": "984.1"
+    },
+    {
+      "imageid": "1234.jpg",
+      "price_true": "549.5",
+      "price_pred": "599.9"
+    },
+    {
+      "imageid": "1141.jpg",
+      "price_true": "779.9",
+      "price_pred": "867.6"
+    },
+    {
+      "imageid": "1528.jpg",
+      "price_true": "989.0",
+      "price_pred": "616.4"
+    },
+    {
+      "imageid": "1042.jpg",
+      "price_true": "510.0",
+      "price_pred": "660.5"
+    },
+    {
+      "imageid": "3208.jpg",
+      "price_true": "1350.0",
+      "price_pred": "1110.6"
+    },
+    {
+      "imageid": "3867.jpg",
+      "price_true": "549.5",
+      "price_pred": "936.2"
+    },
+    {
+      "imageid": "1044.jpg",
+      "price_true": "769.0",
+      "price_pred": "717.5"
+    },
+    {
+      "imageid": "2796.jpg",
+      "price_true": "309.0",
+      "price_pred": "619.4"
+    },
+    {
+      "imageid": "7749.jpg",
+      "price_true": "330.0",
+      "price_pred": "523.2"
+    },
+    {
+      "imageid": "1170.jpg",
+      "price_true": "725.0",
+      "price_pred": "674.1"
+    },
+    {
+      "imageid": "6773.jpg",
+      "price_true": "695.9",
+      "price_pred": "474.0"
+    },
+    {
+      "imageid": "2986.jpg",
+      "price_true": "799.9",
+      "price_pred": "1152.5"
+    },
+    {
+      "imageid": "3076.jpg",
+      "price_true": "1200.0",
+      "price_pred": "1063.2"
+    },
+    {
+      "imageid": "46.jpg",
+      "price_true": "838.0",
+      "price_pred": "771.1"
+    },
+    {
+      "imageid": "4211.jpg",
+      "price_true": "1445.0",
+      "price_pred": "1287.2"
+    },
+    {
+      "imageid": "2186.jpg",
+      "price_true": "599.0",
+      "price_pred": "494.5"
+    },
+    {
+      "imageid": "4511.jpg",
+      "price_true": "727.0",
+      "price_pred": "477.7"
+    },
+    {
+      "imageid": "2838.jpg",
+      "price_true": "1174.0",
+      "price_pred": "1293.7"
+    },
+    {
+      "imageid": "4838.jpg",
+      "price_true": "697.0",
+      "price_pred": "690.0"
+    },
+    {
+      "imageid": "5130.jpg",
+      "price_true": "755.0",
+      "price_pred": "657.4"
+    },
+    {
+      "imageid": "6347.jpg",
+      "price_true": "349.0",
+      "price_pred": "841.0"
+    },
+    {
+      "imageid": "1778.jpg",
+      "price_true": "225.0",
+      "price_pred": "593.1"
+    },
+    {
+      "imageid": "3495.jpg",
+      "price_true": "1264.0",
+      "price_pred": "1037.0"
+    },
+    {
+      "imageid": "2616.jpg",
+      "price_true": "579.0",
+      "price_pred": "467.9"
+    },
+    {
+      "imageid": "4217.jpg",
+      "price_true": "1595.0",
+      "price_pred": "1002.6"
+    },
+    {
+      "imageid": "2283.jpg",
+      "price_true": "309.0",
+      "price_pred": "508.5"
+    },
+    {
+      "imageid": "6316.jpg",
+      "price_true": "819.999",
+      "price_pred": "588.6"
+    },
+    {
+      "imageid": "4406.jpg",
+      "price_true": "270.0",
+      "price_pred": "565.7"
+    },
+    {
+      "imageid": "4997.jpg",
+      "price_true": "775.0",
+      "price_pred": "759.6"
+    },
+    {
+      "imageid": "1956.jpg",
+      "price_true": "665.0",
+      "price_pred": "649.7"
+    },
+    {
+      "imageid": "5590.jpg",
+      "price_true": "564.0",
+      "price_pred": "647.8"
+    },
+    {
+      "imageid": "7671.jpg",
+      "price_true": "500.0",
+      "price_pred": "885.7"
+    },
+    {
+      "imageid": "3833.jpg",
+      "price_true": "1550.0",
+      "price_pred": "1058.6"
+    },
+    {
+      "imageid": "6816.jpg",
+      "price_true": "949.0",
+      "price_pred": "636.0"
+    },
+    {
+      "imageid": "5697.jpg",
+      "price_true": "565.0",
+      "price_pred": "704.6"
+    },
+    {
+      "imageid": "6007.jpg",
+      "price_true": "1375.0",
+      "price_pred": "1184.0"
+    },
+    {
+      "imageid": "6567.jpg",
+      "price_true": "784.0",
+      "price_pred": "776.3"
+    },
+    {
+      "imageid": "380.jpg",
+      "price_true": "799.0",
+      "price_pred": "913.3"
+    },
+    {
+      "imageid": "5788.jpg",
+      "price_true": "495.0",
+      "price_pred": "765.4"
+    },
+    {
+      "imageid": "5713.jpg",
+      "price_true": "440.0",
+      "price_pred": "377.1"
+    },
+    {
+      "imageid": "3880.jpg",
+      "price_true": "525.0",
+      "price_pred": "836.4"
+    },
+    {
+      "imageid": "6564.jpg",
+      "price_true": "1585.0",
+      "price_pred": "791.6"
+    },
+    {
+      "imageid": "1176.jpg",
+      "price_true": "845.0",
+      "price_pred": "829.6"
+    },
+    {
+      "imageid": "2372.jpg",
+      "price_true": "253.9",
+      "price_pred": "496.2"
+    },
+    {
+      "imageid": "3734.jpg",
+      "price_true": "525.0",
+      "price_pred": "650.6"
+    },
+    {
+      "imageid": "4846.jpg",
+      "price_true": "799.0",
+      "price_pred": "915.6"
+    },
+    {
+      "imageid": "6960.jpg",
+      "price_true": "275.0",
+      "price_pred": "629.3"
+    },
+    {
+      "imageid": "4682.jpg",
+      "price_true": "1204.99",
+      "price_pred": "713.6"
+    },
+    {
+      "imageid": "3240.jpg",
+      "price_true": "850.0",
+      "price_pred": "541.2"
+    },
+    {
+      "imageid": "1137.jpg",
+      "price_true": "599.0",
+      "price_pred": "596.0"
+    },
+    {
+      "imageid": "2034.jpg",
+      "price_true": "699.999",
+      "price_pred": "1109.4"
+    },
+    {
+      "imageid": "6343.jpg",
+      "price_true": "1195.0",
+      "price_pred": "629.8"
+    },
+    {
+      "imageid": "4823.jpg",
+      "price_true": "199.5",
+      "price_pred": "445.1"
+    },
+    {
+      "imageid": "1119.jpg",
+      "price_true": "899.9",
+      "price_pred": "1020.9"
+    },
+    {
+      "imageid": "2258.jpg",
+      "price_true": "965.0",
+      "price_pred": "748.8"
+    },
+    {
+      "imageid": "5490.jpg",
+      "price_true": "234.999",
+      "price_pred": "260.0"
+    },
+    {
+      "imageid": "7312.jpg",
+      "price_true": "950.0",
+      "price_pred": "927.1"
+    },
+    {
+      "imageid": "5440.jpg",
+      "price_true": "750.0",
+      "price_pred": "659.5"
+    },
+    {
+      "imageid": "2009.jpg",
+      "price_true": "424.888",
+      "price_pred": "523.0"
+    },
+    {
+      "imageid": "5015.jpg",
+      "price_true": "1298.0",
+      "price_pred": "1051.0"
+    },
+    {
+      "imageid": "5378.jpg",
+      "price_true": "915.0",
+      "price_pred": "858.9"
+    },
+    {
+      "imageid": "5213.jpg",
+      "price_true": "699.0",
+      "price_pred": "854.3"
+    },
+    {
+      "imageid": "6860.jpg",
+      "price_true": "629.0",
+      "price_pred": "972.8"
+    },
+    {
+      "imageid": "4075.jpg",
+      "price_true": "999.0",
+      "price_pred": "942.5"
+    },
+    {
+      "imageid": "5909.jpg",
+      "price_true": "679.9",
+      "price_pred": "636.4"
+    },
+    {
+      "imageid": "4912.jpg",
+      "price_true": "1195.0",
+      "price_pred": "1319.3"
+    },
+    {
+      "imageid": "197.jpg",
+      "price_true": "1850.0",
+      "price_pred": "716.2"
+    },
+    {
+      "imageid": "4781.jpg",
+      "price_true": "369.0",
+      "price_pred": "645.2"
+    },
+    {
+      "imageid": "3091.jpg",
+      "price_true": "260.0",
+      "price_pred": "621.2"
+    },
+    {
+      "imageid": "3630.jpg",
+      "price_true": "255.0",
+      "price_pred": "505.3"
+    },
+    {
+      "imageid": "4255.jpg",
+      "price_true": "675.0",
+      "price_pred": "837.5"
+    },
+    {
+      "imageid": "556.jpg",
+      "price_true": "819.0",
+      "price_pred": "986.1"
+    },
+    {
+      "imageid": "1929.jpg",
+      "price_true": "705.0",
+      "price_pred": "567.1"
+    },
+    {
+      "imageid": "3891.jpg",
+      "price_true": "899.0",
+      "price_pred": "1213.0"
+    },
+    {
+      "imageid": "5254.jpg",
+      "price_true": "974.9",
+      "price_pred": "590.4"
+    },
+    {
+      "imageid": "2725.jpg",
+      "price_true": "595.0",
+      "price_pred": "688.1"
+    },
+    {
+      "imageid": "5185.jpg",
+      "price_true": "245.0",
+      "price_pred": "535.0"
+    },
+    {
+      "imageid": "4675.jpg",
+      "price_true": "220.0",
+      "price_pred": "414.9"
+    },
+    {
+      "imageid": "7918.jpg",
+      "price_true": "265.0",
+      "price_pred": "443.0"
+    },
+    {
+      "imageid": "683.jpg",
+      "price_true": "1795.0",
+      "price_pred": "1327.7"
+    },
+    {
+      "imageid": "5999.jpg",
+      "price_true": "779.5",
+      "price_pred": "917.2"
+    },
+    {
+      "imageid": "4974.jpg",
+      "price_true": "449.0",
+      "price_pred": "467.8"
+    },
+    {
+      "imageid": "6187.jpg",
+      "price_true": "505.0",
+      "price_pred": "649.0"
+    },
+    {
+      "imageid": "4903.jpg",
+      "price_true": "699.999",
+      "price_pred": "835.4"
+    },
+    {
+      "imageid": "2054.jpg",
+      "price_true": "779.5",
+      "price_pred": "907.5"
+    },
+    {
+      "imageid": "4853.jpg",
+      "price_true": "959.0",
+      "price_pred": "1035.5"
+    },
+    {
+      "imageid": "3156.jpg",
+      "price_true": "420.0",
+      "price_pred": "728.0"
+    },
+    {
+      "imageid": "7785.jpg",
+      "price_true": "1535.0",
+      "price_pred": "1345.5"
+    },
+    {
+      "imageid": "6610.jpg",
+      "price_true": "444.999",
+      "price_pred": "413.0"
+    },
+    {
+      "imageid": "5894.jpg",
+      "price_true": "759.0",
+      "price_pred": "603.6"
+    },
+    {
+      "imageid": "6800.jpg",
+      "price_true": "375.0",
+      "price_pred": "589.3"
+    },
+    {
+      "imageid": "2789.jpg",
+      "price_true": "275.0",
+      "price_pred": "487.3"
+    },
+    {
+      "imageid": "953.jpg",
+      "price_true": "1299.0",
+      "price_pred": "684.5"
+    },
+    {
+      "imageid": "4049.jpg",
+      "price_true": "849.9",
+      "price_pred": "674.8"
+    },
+    {
+      "imageid": "1986.jpg",
+      "price_true": "619.0",
+      "price_pred": "847.9"
+    },
+    {
+      "imageid": "7811.jpg",
+      "price_true": "389.9",
+      "price_pred": "800.2"
+    },
+    {
+      "imageid": "1327.jpg",
+      "price_true": "898.95",
+      "price_pred": "1100.6"
+    },
+    {
+      "imageid": "7159.jpg",
+      "price_true": "713.99",
+      "price_pred": "1136.1"
+    },
+    {
+      "imageid": "7156.jpg",
+      "price_true": "1599.0",
+      "price_pred": "1088.8"
+    },
+    {
+      "imageid": "5966.jpg",
+      "price_true": "259.0",
+      "price_pred": "269.8"
+    },
+    {
+      "imageid": "4257.jpg",
+      "price_true": "645.0",
+      "price_pred": "871.2"
+    },
+    {
+      "imageid": "5239.jpg",
+      "price_true": "539.99",
+      "price_pred": "682.5"
+    },
+    {
+      "imageid": "7060.jpg",
+      "price_true": "585.0",
+      "price_pred": "607.2"
+    },
+    {
+      "imageid": "7187.jpg",
+      "price_true": "345.0",
+      "price_pred": "565.7"
+    },
+    {
+      "imageid": "5123.jpg",
+      "price_true": "1129.0",
+      "price_pred": "1263.5"
+    },
+    {
+      "imageid": "7664.jpg",
+      "price_true": "414.9",
+      "price_pred": "465.9"
+    },
+    {
+      "imageid": "4835.jpg",
+      "price_true": "299.0",
+      "price_pred": "590.3"
+    },
+    {
+      "imageid": "4536.jpg",
+      "price_true": "849.0",
+      "price_pred": "1028.7"
+    },
+    {
+      "imageid": "2341.jpg",
+      "price_true": "439.0",
+      "price_pred": "578.7"
+    },
+    {
+      "imageid": "218.jpg",
+      "price_true": "490.5",
+      "price_pred": "779.1"
+    },
+    {
+      "imageid": "5508.jpg",
+      "price_true": "295.0",
+      "price_pred": "552.0"
+    },
+    {
+      "imageid": "5265.jpg",
+      "price_true": "649.0",
+      "price_pred": "804.1"
+    },
+    {
+      "imageid": "3137.jpg",
+      "price_true": "874.999",
+      "price_pred": "978.9"
+    },
+    {
+      "imageid": "4554.jpg",
+      "price_true": "695.0",
+      "price_pred": "691.3"
+    },
+    {
+      "imageid": "6323.jpg",
+      "price_true": "350.0",
+      "price_pred": "541.2"
+    },
+    {
+      "imageid": "5900.jpg",
+      "price_true": "1899.0",
+      "price_pred": "1032.4"
+    },
+    {
+      "imageid": "5107.jpg",
+      "price_true": "699.0",
+      "price_pred": "758.6"
+    },
+    {
+      "imageid": "2766.jpg",
+      "price_true": "899.0",
+      "price_pred": "774.9"
+    },
+    {
+      "imageid": "5036.jpg",
+      "price_true": "239.9",
+      "price_pred": "419.3"
+    },
+    {
+      "imageid": "1723.jpg",
+      "price_true": "549.0",
+      "price_pred": "438.7"
+    },
+    {
+      "imageid": "2694.jpg",
+      "price_true": "199.0",
+      "price_pred": "492.8"
+    },
+    {
+      "imageid": "3191.jpg",
+      "price_true": "980.0",
+      "price_pred": "927.7"
+    },
+    {
+      "imageid": "2804.jpg",
+      "price_true": "299.0",
+      "price_pred": "408.1"
+    },
+    {
+      "imageid": "295.jpg",
+      "price_true": "385.0",
+      "price_pred": "803.6"
+    },
+    {
+      "imageid": "6078.jpg",
+      "price_true": "1475.0",
+      "price_pred": "1060.7"
+    },
+    {
+      "imageid": "6494.jpg",
+      "price_true": "555.0",
+      "price_pred": "537.6"
+    },
+    {
+      "imageid": "2980.jpg",
+      "price_true": "974.9",
+      "price_pred": "978.5"
+    },
+    {
+      "imageid": "5860.jpg",
+      "price_true": "900.0",
+      "price_pred": "923.4"
+    },
+    {
+      "imageid": "7653.jpg",
+      "price_true": "1125.0",
+      "price_pred": "555.8"
+    },
+    {
+      "imageid": "4363.jpg",
+      "price_true": "1695.0",
+      "price_pred": "1047.7"
+    },
+    {
+      "imageid": "848.jpg",
+      "price_true": "510.99",
+      "price_pred": "706.0"
+    },
+    {
+      "imageid": "3802.jpg",
+      "price_true": "709.9",
+      "price_pred": "585.3"
+    },
+    {
+      "imageid": "1813.jpg",
+      "price_true": "1038.0",
+      "price_pred": "862.1"
+    },
+    {
+      "imageid": "1700.jpg",
+      "price_true": "799.9",
+      "price_pred": "769.1"
+    },
+    {
+      "imageid": "82.jpg",
+      "price_true": "769.9",
+      "price_pred": "639.4"
+    },
+    {
+      "imageid": "4134.jpg",
+      "price_true": "459.0",
+      "price_pred": "860.8"
+    },
+    {
+      "imageid": "7311.jpg",
+      "price_true": "425.9",
+      "price_pred": "512.3"
+    },
+    {
+      "imageid": "309.jpg",
+      "price_true": "564.51",
+      "price_pred": "532.8"
+    },
+    {
+      "imageid": "5778.jpg",
+      "price_true": "885.0",
+      "price_pred": "906.4"
+    },
+    {
+      "imageid": "6465.jpg",
+      "price_true": "549.0",
+      "price_pred": "853.5"
+    },
+    {
+      "imageid": "7390.jpg",
+      "price_true": "729.0",
+      "price_pred": "962.3"
+    },
+    {
+      "imageid": "5016.jpg",
+      "price_true": "475.0",
+      "price_pred": "683.0"
+    },
+    {
+      "imageid": "6004.jpg",
+      "price_true": "399.9",
+      "price_pred": "784.1"
+    },
+    {
+      "imageid": "5464.jpg",
+      "price_true": "919.0",
+      "price_pred": "683.5"
+    },
+    {
+      "imageid": "212.jpg",
+      "price_true": "398.7",
+      "price_pred": "763.7"
+    },
+    {
+      "imageid": "1336.jpg",
+      "price_true": "899.0",
+      "price_pred": "1111.8"
+    },
+    {
+      "imageid": "5703.jpg",
+      "price_true": "650.0",
+      "price_pred": "648.2"
+    },
+    {
+      "imageid": "1158.jpg",
+      "price_true": "725.0",
+      "price_pred": "758.8"
+    },
+    {
+      "imageid": "3372.jpg",
+      "price_true": "299.0",
+      "price_pred": "320.8"
+    },
+    {
+      "imageid": "3969.jpg",
+      "price_true": "397.0",
+      "price_pred": "454.8"
+    },
+    {
+      "imageid": "1077.jpg",
+      "price_true": "1300.0",
+      "price_pred": "1386.8"
+    },
+    {
+      "imageid": "942.jpg",
+      "price_true": "200.0",
+      "price_pred": "551.8"
+    },
+    {
+      "imageid": "338.jpg",
+      "price_true": "275.0",
+      "price_pred": "681.9"
+    },
+    {
+      "imageid": "6198.jpg",
+      "price_true": "1075.0",
+      "price_pred": "877.7"
+    },
+    {
+      "imageid": "2064.jpg",
+      "price_true": "399.9",
+      "price_pred": "837.2"
+    },
+    {
+      "imageid": "4032.jpg",
+      "price_true": "599.9",
+      "price_pred": "928.0"
+    },
+    {
+      "imageid": "6983.jpg",
+      "price_true": "298.9",
+      "price_pred": "531.4"
+    },
+    {
+      "imageid": "6382.jpg",
+      "price_true": "340.0",
+      "price_pred": "496.6"
+    },
+    {
+      "imageid": "340.jpg",
+      "price_true": "389.9",
+      "price_pred": "526.1"
+    },
+    {
+      "imageid": "5826.jpg",
+      "price_true": "869.0",
+      "price_pred": "818.6"
+    },
+    {
+      "imageid": "5060.jpg",
+      "price_true": "299.0",
+      "price_pred": "476.9"
+    },
+    {
+      "imageid": "5602.jpg",
+      "price_true": "1100.0",
+      "price_pred": "804.7"
+    },
+    {
+      "imageid": "3119.jpg",
+      "price_true": "649.9",
+      "price_pred": "504.7"
+    },
+    {
+      "imageid": "6413.jpg",
+      "price_true": "1250.0",
+      "price_pred": "598.7"
+    },
+    {
+      "imageid": "512.jpg",
+      "price_true": "1995.0",
+      "price_pred": "1114.3"
+    },
+    {
+      "imageid": "910.jpg",
+      "price_true": "675.0",
+      "price_pred": "656.4"
+    },
+    {
+      "imageid": "130.jpg",
+      "price_true": "545.0",
+      "price_pred": "548.1"
+    },
+    {
+      "imageid": "4667.jpg",
+      "price_true": "768.0",
+      "price_pred": "961.0"
+    },
+    {
+      "imageid": "6067.jpg",
+      "price_true": "975.0",
+      "price_pred": "599.9"
+    },
+    {
+      "imageid": "1050.jpg",
+      "price_true": "649.9",
+      "price_pred": "465.3"
+    },
+    {
+      "imageid": "1682.jpg",
+      "price_true": "1099.0",
+      "price_pred": "675.0"
+    },
+    {
+      "imageid": "816.jpg",
+      "price_true": "718.0",
+      "price_pred": "832.9"
+    },
+    {
+      "imageid": "4676.jpg",
+      "price_true": "260.0",
+      "price_pred": "377.9"
+    },
+    {
+      "imageid": "7330.jpg",
+      "price_true": "435.0",
+      "price_pred": "383.8"
+    },
+    {
+      "imageid": "6835.jpg",
+      "price_true": "1595.0",
+      "price_pred": "915.6"
+    },
+    {
+      "imageid": "3646.jpg",
+      "price_true": "619.9",
+      "price_pred": "701.0"
+    },
+    {
+      "imageid": "2370.jpg",
+      "price_true": "409.9",
+      "price_pred": "537.9"
+    },
+    {
+      "imageid": "4608.jpg",
+      "price_true": "1250.0",
+      "price_pred": "976.0"
+    },
+    {
+      "imageid": "7500.jpg",
+      "price_true": "364.9",
+      "price_pred": "681.9"
+    },
+    {
+      "imageid": "4408.jpg",
+      "price_true": "576.1",
+      "price_pred": "684.0"
+    },
+    {
+      "imageid": "3334.jpg",
+      "price_true": "414.0",
+      "price_pred": "714.6"
+    },
+    {
+      "imageid": "4152.jpg",
+      "price_true": "235.0",
+      "price_pred": "509.8"
+    },
+    {
+      "imageid": "7877.jpg",
+      "price_true": "815.0",
+      "price_pred": "595.0"
+    },
+    {
+      "imageid": "7782.jpg",
+      "price_true": "679.0",
+      "price_pred": "625.0"
+    },
+    {
+      "imageid": "3415.jpg",
+      "price_true": "373.5",
+      "price_pred": "523.9"
+    },
+    {
+      "imageid": "377.jpg",
+      "price_true": "800.0",
+      "price_pred": "785.4"
+    },
+    {
+      "imageid": "541.jpg",
+      "price_true": "629.0",
+      "price_pred": "1053.1"
+    },
+    {
+      "imageid": "6868.jpg",
+      "price_true": "389.9",
+      "price_pred": "726.3"
+    },
+    {
+      "imageid": "4700.jpg",
+      "price_true": "325.0",
+      "price_pred": "557.1"
+    },
+    {
+      "imageid": "275.jpg",
+      "price_true": "477.0",
+      "price_pred": "459.9"
+    },
+    {
+      "imageid": "5454.jpg",
+      "price_true": "549.0",
+      "price_pred": "696.7"
+    },
+    {
+      "imageid": "2409.jpg",
+      "price_true": "1980.0",
+      "price_pred": "849.3"
+    },
+    {
+      "imageid": "7706.jpg",
+      "price_true": "529.9",
+      "price_pred": "1028.6"
+    },
+    {
+      "imageid": "638.jpg",
+      "price_true": "1499.9",
+      "price_pred": "1456.1"
+    },
+    {
+      "imageid": "751.jpg",
+      "price_true": "759.0",
+      "price_pred": "758.2"
+    },
+    {
+      "imageid": "4643.jpg",
+      "price_true": "610.0",
+      "price_pred": "765.2"
+    },
+    {
+      "imageid": "1707.jpg",
+      "price_true": "705.0",
+      "price_pred": "790.4"
+    },
+    {
+      "imageid": "1643.jpg",
+      "price_true": "429.9",
+      "price_pred": "601.0"
+    },
+    {
+      "imageid": "3998.jpg",
+      "price_true": "780.0",
+      "price_pred": "478.7"
+    },
+    {
+      "imageid": "3181.jpg",
+      "price_true": "949.999",
+      "price_pred": "863.9"
+    },
+    {
+      "imageid": "797.jpg",
+      "price_true": "825.0",
+      "price_pred": "640.0"
+    },
+    {
+      "imageid": "5393.jpg",
+      "price_true": "795.0",
+      "price_pred": "775.7"
+    },
+    {
+      "imageid": "2792.jpg",
+      "price_true": "710.0",
+      "price_pred": "768.1"
+    },
+    {
+      "imageid": "2811.jpg",
+      "price_true": "419.9",
+      "price_pred": "818.6"
+    },
+    {
+      "imageid": "7197.jpg",
+      "price_true": "897.0",
+      "price_pred": "1304.7"
+    },
+    {
+      "imageid": "1174.jpg",
+      "price_true": "635.0",
+      "price_pred": "927.4"
+    },
+    {
+      "imageid": "5035.jpg",
+      "price_true": "519.0",
+      "price_pred": "665.0"
+    },
+    {
+      "imageid": "2722.jpg",
+      "price_true": "699.999",
+      "price_pred": "916.4"
+    },
+    {
+      "imageid": "6972.jpg",
+      "price_true": "325.0",
+      "price_pred": "472.5"
+    },
+    {
+      "imageid": "4068.jpg",
+      "price_true": "570.0",
+      "price_pred": "748.8"
+    },
+    {
+      "imageid": "7362.jpg",
+      "price_true": "335.0",
+      "price_pred": "794.6"
+    },
+    {
+      "imageid": "6353.jpg",
+      "price_true": "799.9",
+      "price_pred": "394.8"
+    },
+    {
+      "imageid": "1871.jpg",
+      "price_true": "849.999",
+      "price_pred": "644.6"
+    },
+    {
+      "imageid": "1099.jpg",
+      "price_true": "540.0",
+      "price_pred": "720.5"
+    },
+    {
+      "imageid": "243.jpg",
+      "price_true": "711.9",
+      "price_pred": "392.9"
+    },
+    {
+      "imageid": "4836.jpg",
+      "price_true": "499.0",
+      "price_pred": "621.7"
+    },
+    {
+      "imageid": "6981.jpg",
+      "price_true": "290.0",
+      "price_pred": "561.2"
+    },
+    {
+      "imageid": "1492.jpg",
+      "price_true": "620.0",
+      "price_pred": "874.2"
+    },
+    {
+      "imageid": "2422.jpg",
+      "price_true": "545.0",
+      "price_pred": "664.1"
+    },
+    {
+      "imageid": "7233.jpg",
+      "price_true": "859.0",
+      "price_pred": "818.5"
+    },
+    {
+      "imageid": "3042.jpg",
+      "price_true": "565.9",
+      "price_pred": "621.8"
+    },
+    {
+      "imageid": "4386.jpg",
+      "price_true": "284.9",
+      "price_pred": "424.7"
+    },
+    {
+      "imageid": "554.jpg",
+      "price_true": "738.0",
+      "price_pred": "859.0"
+    },
+    {
+      "imageid": "1799.jpg",
+      "price_true": "965.0",
+      "price_pred": "1035.7"
+    },
+    {
+      "imageid": "4603.jpg",
+      "price_true": "750.0",
+      "price_pred": "634.1"
+    },
+    {
+      "imageid": "4290.jpg",
+      "price_true": "579.9",
+      "price_pred": "585.1"
+    },
+    {
+      "imageid": "1260.jpg",
+      "price_true": "1198.0",
+      "price_pred": "789.9"
+    },
+    {
+      "imageid": "3644.jpg",
+      "price_true": "799.0",
+      "price_pred": "483.2"
+    },
+    {
+      "imageid": "7815.jpg",
+      "price_true": "252.0",
+      "price_pred": "417.6"
+    },
+    {
+      "imageid": "2509.jpg",
+      "price_true": "460.0",
+      "price_pred": "845.9"
+    },
+    {
+      "imageid": "1706.jpg",
+      "price_true": "935.0",
+      "price_pred": "735.3"
+    },
+    {
+      "imageid": "6776.jpg",
+      "price_true": "580.0",
+      "price_pred": "558.0"
+    },
+    {
+      "imageid": "7569.jpg",
+      "price_true": "649.0",
+      "price_pred": "644.9"
+    },
+    {
+      "imageid": "4358.jpg",
+      "price_true": "499.0",
+      "price_pred": "522.4"
+    },
+    {
+      "imageid": "3178.jpg",
+      "price_true": "477.0",
+      "price_pred": "793.2"
+    },
+    {
+      "imageid": "2156.jpg",
+      "price_true": "324.999",
+      "price_pred": "660.8"
+    },
+    {
+      "imageid": "1617.jpg",
+      "price_true": "239.9",
+      "price_pred": "580.9"
+    },
+    {
+      "imageid": "5832.jpg",
+      "price_true": "869.0",
+      "price_pred": "941.2"
+    },
+    {
+      "imageid": "717.jpg",
+      "price_true": "1995.0",
+      "price_pred": "834.5"
+    },
+    {
+      "imageid": "3579.jpg",
+      "price_true": "454.9",
+      "price_pred": "667.1"
+    },
+    {
+      "imageid": "4928.jpg",
+      "price_true": "699.0",
+      "price_pred": "770.9"
+    },
+    {
+      "imageid": "4311.jpg",
+      "price_true": "849.9",
+      "price_pred": "1060.2"
+    },
+    {
+      "imageid": "4992.jpg",
+      "price_true": "939.9",
+      "price_pred": "813.4"
+    },
+    {
+      "imageid": "3859.jpg",
+      "price_true": "749.0",
+      "price_pred": "851.0"
+    },
+    {
+      "imageid": "5920.jpg",
+      "price_true": "1699.0",
+      "price_pred": "1199.7"
+    },
+    {
+      "imageid": "941.jpg",
+      "price_true": "497.0",
+      "price_pred": "599.3"
+    },
+    {
+      "imageid": "2511.jpg",
+      "price_true": "599.0",
+      "price_pred": "972.1"
+    },
+    {
+      "imageid": "5241.jpg",
+      "price_true": "649.0",
+      "price_pred": "689.3"
+    },
+    {
+      "imageid": "2695.jpg",
+      "price_true": "369.9",
+      "price_pred": "600.5"
+    },
+    {
+      "imageid": "7021.jpg",
+      "price_true": "539.9",
+      "price_pred": "571.3"
+    },
+    {
+      "imageid": "5525.jpg",
+      "price_true": "359.9",
+      "price_pred": "485.5"
+    },
+    {
+      "imageid": "4269.jpg",
+      "price_true": "1695.0",
+      "price_pred": "1635.2"
+    },
+    {
+      "imageid": "4382.jpg",
+      "price_true": "855.0",
+      "price_pred": "847.6"
+    },
+    {
+      "imageid": "6625.jpg",
+      "price_true": "650.0",
+      "price_pred": "450.9"
+    },
+    {
+      "imageid": "3455.jpg",
+      "price_true": "675.0",
+      "price_pred": "652.8"
+    },
+    {
+      "imageid": "3194.jpg",
+      "price_true": "675.0",
+      "price_pred": "1062.2"
+    },
+    {
+      "imageid": "2324.jpg",
+      "price_true": "1695.0",
+      "price_pred": "1010.7"
+    },
+    {
+      "imageid": "1977.jpg",
+      "price_true": "1995.0",
+      "price_pred": "545.9"
+    },
+    {
+      "imageid": "3709.jpg",
+      "price_true": "629.9",
+      "price_pred": "1235.8"
+    },
+    {
+      "imageid": "117.jpg",
+      "price_true": "533.0",
+      "price_pred": "528.5"
+    },
+    {
+      "imageid": "678.jpg",
+      "price_true": "1499.0",
+      "price_pred": "1173.1"
+    },
+    {
+      "imageid": "3952.jpg",
+      "price_true": "533.236",
+      "price_pred": "864.4"
+    },
+    {
+      "imageid": "3781.jpg",
+      "price_true": "369.9",
+      "price_pred": "397.1"
+    },
+    {
+      "imageid": "2241.jpg",
+      "price_true": "768.0",
+      "price_pred": "829.4"
+    },
+    {
+      "imageid": "2175.jpg",
+      "price_true": "494.7",
+      "price_pred": "626.0"
+    },
+    {
+      "imageid": "3639.jpg",
+      "price_true": "1599.0",
+      "price_pred": "1120.0"
+    },
+    {
+      "imageid": "5683.jpg",
+      "price_true": "899.9",
+      "price_pred": "1015.0"
+    },
+    {
+      "imageid": "6395.jpg",
+      "price_true": "575.9",
+      "price_pred": "636.1"
+    },
+    {
+      "imageid": "1006.jpg",
+      "price_true": "830.0",
+      "price_pred": "1034.4"
+    },
+    {
+      "imageid": "98.jpg",
+      "price_true": "588.0",
+      "price_pred": "473.1"
+    },
+    {
+      "imageid": "1196.jpg",
+      "price_true": "589.888",
+      "price_pred": "860.7"
+    },
+    {
+      "imageid": "1670.jpg",
+      "price_true": "826.875",
+      "price_pred": "723.3"
+    },
+    {
+      "imageid": "6712.jpg",
+      "price_true": "825.0",
+      "price_pred": "1102.4"
+    },
+    {
+      "imageid": "7462.jpg",
+      "price_true": "399.0",
+      "price_pred": "484.6"
+    },
+    {
+      "imageid": "811.jpg",
+      "price_true": "334.9",
+      "price_pred": "532.9"
+    },
+    {
+      "imageid": "7588.jpg",
+      "price_true": "449.0",
+      "price_pred": "298.6"
+    },
+    {
+      "imageid": "325.jpg",
+      "price_true": "729.0",
+      "price_pred": "828.7"
+    },
+    {
+      "imageid": "3812.jpg",
+      "price_true": "690.0",
+      "price_pred": "665.6"
+    },
+    {
+      "imageid": "747.jpg",
+      "price_true": "480.0",
+      "price_pred": "629.4"
+    },
+    {
+      "imageid": "4769.jpg",
+      "price_true": "425.0",
+      "price_pred": "644.0"
+    },
+    {
+      "imageid": "6077.jpg",
+      "price_true": "429.9",
+      "price_pred": "492.3"
+    },
+    {
+      "imageid": "1230.jpg",
+      "price_true": "579.999",
+      "price_pred": "510.0"
+    },
+    {
+      "imageid": "6786.jpg",
+      "price_true": "1890.0",
+      "price_pred": "954.9"
+    },
+    {
+      "imageid": "2570.jpg",
+      "price_true": "735.99",
+      "price_pred": "571.5"
+    },
+    {
+      "imageid": "5430.jpg",
+      "price_true": "365.0",
+      "price_pred": "602.1"
+    },
+    {
+      "imageid": "4947.jpg",
+      "price_true": "559.0",
+      "price_pred": "759.7"
+    },
+    {
+      "imageid": "2112.jpg",
+      "price_true": "759.0",
+      "price_pred": "723.9"
+    },
+    {
+      "imageid": "3785.jpg",
+      "price_true": "565.0",
+      "price_pred": "485.2"
+    },
+    {
+      "imageid": "6151.jpg",
+      "price_true": "589.9",
+      "price_pred": "498.7"
+    },
+    {
+      "imageid": "315.jpg",
+      "price_true": "355.0",
+      "price_pred": "850.2"
+    },
+    {
+      "imageid": "3768.jpg",
+      "price_true": "219.9",
+      "price_pred": "515.6"
+    },
+    {
+      "imageid": "1320.jpg",
+      "price_true": "299.0",
+      "price_pred": "510.5"
+    },
+    {
+      "imageid": "256.jpg",
+      "price_true": "299.999",
+      "price_pred": "511.2"
+    },
+    {
+      "imageid": "6949.jpg",
+      "price_true": "479.0",
+      "price_pred": "708.9"
+    },
+    {
+      "imageid": "3578.jpg",
+      "price_true": "350.0",
+      "price_pred": "560.3"
+    },
+    {
+      "imageid": "1996.jpg",
+      "price_true": "364.9",
+      "price_pred": "517.3"
+    },
+    {
+      "imageid": "3338.jpg",
+      "price_true": "469.8",
+      "price_pred": "478.9"
+    },
+    {
+      "imageid": "1950.jpg",
+      "price_true": "550.0",
+      "price_pred": "524.3"
+    },
+    {
+      "imageid": "1770.jpg",
+      "price_true": "599.0",
+      "price_pred": "600.8"
+    },
+    {
+      "imageid": "7737.jpg",
+      "price_true": "1999.0",
+      "price_pred": "700.2"
+    },
+    {
+      "imageid": "2362.jpg",
+      "price_true": "229.8",
+      "price_pred": "482.6"
+    },
+    {
+      "imageid": "1177.jpg",
+      "price_true": "655.0",
+      "price_pred": "593.5"
+    },
+    {
+      "imageid": "4250.jpg",
+      "price_true": "475.0",
+      "price_pred": "658.5"
+    },
+    {
+      "imageid": "7034.jpg",
+      "price_true": "439.95",
+      "price_pred": "574.0"
+    },
+    {
+      "imageid": "6439.jpg",
+      "price_true": "675.0",
+      "price_pred": "485.6"
+    },
+    {
+      "imageid": "4159.jpg",
+      "price_true": "549.999",
+      "price_pred": "508.1"
+    },
+    {
+      "imageid": "1202.jpg",
+      "price_true": "1950.0",
+      "price_pred": "869.9"
+    },
+    {
+      "imageid": "2693.jpg",
+      "price_true": "248.5",
+      "price_pred": "421.2"
+    },
+    {
+      "imageid": "156.jpg",
+      "price_true": "1999.9",
+      "price_pred": "1057.6"
+    },
+    {
+      "imageid": "675.jpg",
+      "price_true": "729.9",
+      "price_pred": "889.6"
+    },
+    {
+      "imageid": "1798.jpg",
+      "price_true": "1349.0",
+      "price_pred": "612.1"
+    },
+    {
+      "imageid": "4773.jpg",
+      "price_true": "649.9",
+      "price_pred": "625.0"
+    },
+    {
+      "imageid": "2830.jpg",
+      "price_true": "550.0",
+      "price_pred": "397.3"
+    },
+    {
+      "imageid": "1414.jpg",
+      "price_true": "825.0",
+      "price_pred": "948.9"
+    },
+    {
+      "imageid": "2634.jpg",
+      "price_true": "985.0",
+      "price_pred": "1010.3"
+    },
+    {
+      "imageid": "4232.jpg",
+      "price_true": "599.5",
+      "price_pred": "592.7"
+    },
+    {
+      "imageid": "2698.jpg",
+      "price_true": "1750.0",
+      "price_pred": "658.5"
+    },
+    {
+      "imageid": "1533.jpg",
+      "price_true": "1830.0",
+      "price_pred": "1017.2"
+    },
+    {
+      "imageid": "696.jpg",
+      "price_true": "1175.0",
+      "price_pred": "724.9"
+    },
+    {
+      "imageid": "434.jpg",
+      "price_true": "799.8",
+      "price_pred": "825.6"
+    },
+    {
+      "imageid": "4871.jpg",
+      "price_true": "888.0",
+      "price_pred": "537.5"
+    },
+    {
+      "imageid": "2043.jpg",
+      "price_true": "259.0",
+      "price_pred": "354.2"
+    },
+    {
+      "imageid": "895.jpg",
+      "price_true": "289.0",
+      "price_pred": "593.4"
+    },
+    {
+      "imageid": "6445.jpg",
+      "price_true": "639.9",
+      "price_pred": "603.0"
+    },
+    {
+      "imageid": "5161.jpg",
+      "price_true": "1075.0",
+      "price_pred": "1321.4"
+    },
+    {
+      "imageid": "838.jpg",
+      "price_true": "599.9",
+      "price_pred": "576.6"
+    },
+    {
+      "imageid": "3850.jpg",
+      "price_true": "1499.0",
+      "price_pred": "1247.0"
+    },
+    {
+      "imageid": "6202.jpg",
+      "price_true": "1495.0",
+      "price_pred": "686.2"
+    },
+    {
+      "imageid": "6457.jpg",
+      "price_true": "715.0",
+      "price_pred": "615.6"
+    },
+    {
+      "imageid": "391.jpg",
+      "price_true": "249.999",
+      "price_pred": "362.3"
+    },
+    {
+      "imageid": "5708.jpg",
+      "price_true": "615.0",
+      "price_pred": "675.4"
+    },
+    {
+      "imageid": "5473.jpg",
+      "price_true": "1199.0",
+      "price_pred": "664.4"
+    },
+    {
+      "imageid": "6416.jpg",
+      "price_true": "920.0",
+      "price_pred": "823.3"
+    },
+    {
+      "imageid": "830.jpg",
+      "price_true": "1329.9",
+      "price_pred": "1010.7"
+    },
+    {
+      "imageid": "5605.jpg",
+      "price_true": "1595.0",
+      "price_pred": "1050.4"
+    },
+    {
+      "imageid": "3896.jpg",
+      "price_true": "998.5",
+      "price_pred": "830.2"
+    },
+    {
+      "imageid": "3795.jpg",
+      "price_true": "749.0",
+      "price_pred": "814.9"
+    },
+    {
+      "imageid": "1361.jpg",
+      "price_true": "545.0",
+      "price_pred": "823.7"
+    },
+    {
+      "imageid": "1609.jpg",
+      "price_true": "265.0",
+      "price_pred": "504.6"
+    },
+    {
+      "imageid": "1839.jpg",
+      "price_true": "599.0",
+      "price_pred": "486.3"
+    },
+    {
+      "imageid": "213.jpg",
+      "price_true": "250.0",
+      "price_pred": "333.0"
+    },
+    {
+      "imageid": "1548.jpg",
+      "price_true": "459.9",
+      "price_pred": "605.8"
+    },
+    {
+      "imageid": "1914.jpg",
+      "price_true": "749.888",
+      "price_pred": "551.5"
+    },
+    {
+      "imageid": "7936.jpg",
+      "price_true": "219.9",
+      "price_pred": "365.2"
+    },
+    {
+      "imageid": "1874.jpg",
+      "price_true": "609.0",
+      "price_pred": "583.6"
+    },
+    {
+      "imageid": "5511.jpg",
+      "price_true": "220.0",
+      "price_pred": "459.0"
+    },
+    {
+      "imageid": "7158.jpg",
+      "price_true": "695.0",
+      "price_pred": "739.2"
+    },
+    {
+      "imageid": "3390.jpg",
+      "price_true": "875.0",
+      "price_pred": "833.3"
+    },
+    {
+      "imageid": "2225.jpg",
+      "price_true": "829.0",
+      "price_pred": "809.7"
+    },
+    {
+      "imageid": "7871.jpg",
+      "price_true": "549.0",
+      "price_pred": "835.4"
+    },
+    {
+      "imageid": "6627.jpg",
+      "price_true": "625.0",
+      "price_pred": "653.3"
+    },
+    {
+      "imageid": "6086.jpg",
+      "price_true": "315.0",
+      "price_pred": "561.2"
+    },
+    {
+      "imageid": "251.jpg",
+      "price_true": "525.0",
+      "price_pred": "584.8"
+    },
+    {
+      "imageid": "2300.jpg",
+      "price_true": "931.0",
+      "price_pred": "556.6"
+    },
+    {
+      "imageid": "7480.jpg",
+      "price_true": "919.0",
+      "price_pred": "833.6"
+    },
+    {
+      "imageid": "4885.jpg",
+      "price_true": "435.0",
+      "price_pred": "573.9"
+    },
+    {
+      "imageid": "5050.jpg",
+      "price_true": "369.9",
+      "price_pred": "540.5"
+    },
+    {
+      "imageid": "2856.jpg",
+      "price_true": "425.0",
+      "price_pred": "577.8"
+    },
+    {
+      "imageid": "5229.jpg",
+      "price_true": "550.0",
+      "price_pred": "546.5"
+    },
+    {
+      "imageid": "2748.jpg",
+      "price_true": "500.0",
+      "price_pred": "641.2"
+    },
+    {
+      "imageid": "800.jpg",
+      "price_true": "1275.0",
+      "price_pred": "937.1"
+    },
+    {
+      "imageid": "1490.jpg",
+      "price_true": "1078.0",
+      "price_pred": "1060.6"
+    },
+    {
+      "imageid": "4858.jpg",
+      "price_true": "895.0",
+      "price_pred": "953.5"
+    },
+    {
+      "imageid": "3760.jpg",
+      "price_true": "895.0",
+      "price_pred": "820.7"
+    },
+    {
+      "imageid": "7091.jpg",
+      "price_true": "775.0",
+      "price_pred": "1161.4"
+    },
+    {
+      "imageid": "5071.jpg",
+      "price_true": "1695.0",
+      "price_pred": "1230.4"
+    },
+    {
+      "imageid": "6974.jpg",
+      "price_true": "1600.0",
+      "price_pred": "687.2"
+    },
+    {
+      "imageid": "150.jpg",
+      "price_true": "1050.0",
+      "price_pred": "1148.6"
+    },
+    {
+      "imageid": "7849.jpg",
+      "price_true": "378.5",
+      "price_pred": "409.2"
+    },
+    {
+      "imageid": "5619.jpg",
+      "price_true": "664.0",
+      "price_pred": "728.6"
+    },
+    {
+      "imageid": "1571.jpg",
+      "price_true": "599.9",
+      "price_pred": "1065.6"
+    },
+    {
+      "imageid": "596.jpg",
+      "price_true": "299.0",
+      "price_pred": "582.2"
+    },
+    {
+      "imageid": "576.jpg",
+      "price_true": "759.9",
+      "price_pred": "599.5"
+    },
+    {
+      "imageid": "4759.jpg",
+      "price_true": "849.0",
+      "price_pred": "588.2"
+    },
+    {
+      "imageid": "4870.jpg",
+      "price_true": "1649.0",
+      "price_pred": "764.9"
+    },
+    {
+      "imageid": "6948.jpg",
+      "price_true": "937.9",
+      "price_pred": "786.8"
+    },
+    {
+      "imageid": "1604.jpg",
+      "price_true": "499.0",
+      "price_pred": "701.8"
+    },
+    {
+      "imageid": "1403.jpg",
+      "price_true": "579.9",
+      "price_pred": "665.4"
+    },
+    {
+      "imageid": "6844.jpg",
+      "price_true": "1521.967",
+      "price_pred": "435.2"
+    },
+    {
+      "imageid": "7315.jpg",
+      "price_true": "410.0",
+      "price_pred": "843.6"
+    },
+    {
+      "imageid": "4865.jpg",
+      "price_true": "1599.0",
+      "price_pred": "1229.2"
+    },
+    {
+      "imageid": "7681.jpg",
+      "price_true": "335.0",
+      "price_pred": "477.5"
+    },
+    {
+      "imageid": "1931.jpg",
+      "price_true": "265.0",
+      "price_pred": "632.3"
+    },
+    {
+      "imageid": "5264.jpg",
+      "price_true": "1339.0",
+      "price_pred": "972.9"
+    },
+    {
+      "imageid": "777.jpg",
+      "price_true": "402.49",
+      "price_pred": "634.0"
+    },
+    {
+      "imageid": "2613.jpg",
+      "price_true": "599.999",
+      "price_pred": "932.9"
+    },
+    {
+      "imageid": "4641.jpg",
+      "price_true": "559.0",
+      "price_pred": "507.9"
+    },
+    {
+      "imageid": "5531.jpg",
+      "price_true": "1499.0",
+      "price_pred": "748.5"
+    },
+    {
+      "imageid": "3839.jpg",
+      "price_true": "949.9",
+      "price_pred": "896.4"
+    },
+    {
+      "imageid": "6892.jpg",
+      "price_true": "430.0",
+      "price_pred": "737.9"
+    },
+    {
+      "imageid": "6240.jpg",
+      "price_true": "974.499",
+      "price_pred": "950.3"
+    },
+    {
+      "imageid": "2637.jpg",
+      "price_true": "495.0",
+      "price_pred": "501.4"
+    },
+    {
+      "imageid": "3660.jpg",
+      "price_true": "819.99",
+      "price_pred": "658.9"
+    },
+    {
+      "imageid": "400.jpg",
+      "price_true": "429.99",
+      "price_pred": "490.4"
+    },
+    {
+      "imageid": "6529.jpg",
+      "price_true": "578.0",
+      "price_pred": "734.3"
+    },
+    {
+      "imageid": "7844.jpg",
+      "price_true": "749.0",
+      "price_pred": "1052.2"
+    },
+    {
+      "imageid": "2173.jpg",
+      "price_true": "460.0",
+      "price_pred": "539.6"
+    },
+    {
+      "imageid": "281.jpg",
+      "price_true": "869.5",
+      "price_pred": "606.9"
+    },
+    {
+      "imageid": "3219.jpg",
+      "price_true": "575.0",
+      "price_pred": "745.3"
+    },
+    {
+      "imageid": "5544.jpg",
+      "price_true": "619.0",
+      "price_pred": "575.1"
+    },
+    {
+      "imageid": "4938.jpg",
+      "price_true": "425.0",
+      "price_pred": "778.0"
+    },
+    {
+      "imageid": "2952.jpg",
+      "price_true": "749.0",
+      "price_pred": "826.0"
+    },
+    {
+      "imageid": "5049.jpg",
+      "price_true": "459.0",
+      "price_pred": "743.3"
+    },
+    {
+      "imageid": "6120.jpg",
+      "price_true": "849.999",
+      "price_pred": "736.7"
+    },
+    {
+      "imageid": "4535.jpg",
+      "price_true": "665.0",
+      "price_pred": "688.5"
+    },
+    {
+      "imageid": "7619.jpg",
+      "price_true": "334.9",
+      "price_pred": "457.5"
+    },
+    {
+      "imageid": "1014.jpg",
+      "price_true": "824.9",
+      "price_pred": "666.6"
+    },
+    {
+      "imageid": "5781.jpg",
+      "price_true": "879.0",
+      "price_pred": "1193.0"
+    },
+    {
+      "imageid": "3395.jpg",
+      "price_true": "639.0",
+      "price_pred": "774.2"
+    },
+    {
+      "imageid": "2912.jpg",
+      "price_true": "649.0",
+      "price_pred": "524.1"
+    },
+    {
+      "imageid": "5296.jpg",
+      "price_true": "1100.0",
+      "price_pred": "799.0"
+    },
+    {
+      "imageid": "6916.jpg",
+      "price_true": "474.999",
+      "price_pred": "364.8"
+    },
+    {
+      "imageid": "5195.jpg",
+      "price_true": "335.0",
+      "price_pred": "650.9"
+    },
+    {
+      "imageid": "2228.jpg",
+      "price_true": "1199.0",
+      "price_pred": "801.0"
+    },
+    {
+      "imageid": "6734.jpg",
+      "price_true": "598.8",
+      "price_pred": "623.0"
+    },
+    {
+      "imageid": "845.jpg",
+      "price_true": "695.9",
+      "price_pred": "861.9"
+    },
+    {
+      "imageid": "3671.jpg",
+      "price_true": "514.999",
+      "price_pred": "671.5"
+    },
+    {
+      "imageid": "66.jpg",
+      "price_true": "340.0",
+      "price_pred": "581.7"
+    },
+    {
+      "imageid": "7564.jpg",
+      "price_true": "262.5",
+      "price_pred": "518.0"
+    },
+    {
+      "imageid": "4529.jpg",
+      "price_true": "1119.0",
+      "price_pred": "1077.9"
+    },
+    {
+      "imageid": "3613.jpg",
+      "price_true": "575.0",
+      "price_pred": "620.3"
+    },
+    {
+      "imageid": "2313.jpg",
+      "price_true": "489.0",
+      "price_pred": "635.7"
+    },
+    {
+      "imageid": "5674.jpg",
+      "price_true": "615.0",
+      "price_pred": "641.2"
+    },
+    {
+      "imageid": "2338.jpg",
+      "price_true": "1549.0",
+      "price_pred": "1090.8"
+    },
+    {
+      "imageid": "1037.jpg",
+      "price_true": "670.0",
+      "price_pred": "746.0"
+    },
+    {
+      "imageid": "450.jpg",
+      "price_true": "1499.0",
+      "price_pred": "1093.6"
+    },
+    {
+      "imageid": "1740.jpg",
+      "price_true": "624.999",
+      "price_pred": "510.6"
+    },
+    {
+      "imageid": "6528.jpg",
+      "price_true": "810.0",
+      "price_pred": "882.2"
+    },
+    {
+      "imageid": "4842.jpg",
+      "price_true": "473.5",
+      "price_pred": "415.4"
+    },
+    {
+      "imageid": "6462.jpg",
+      "price_true": "319.8",
+      "price_pred": "683.4"
+    },
+    {
+      "imageid": "6184.jpg",
+      "price_true": "899.0",
+      "price_pred": "671.5"
+    },
+    {
+      "imageid": "5998.jpg",
+      "price_true": "536.0",
+      "price_pred": "807.6"
+    },
+    {
+      "imageid": "4340.jpg",
+      "price_true": "296.0",
+      "price_pred": "705.8"
+    },
+    {
+      "imageid": "5159.jpg",
+      "price_true": "310.0",
+      "price_pred": "478.6"
+    },
+    {
+      "imageid": "3183.jpg",
+      "price_true": "1490.0",
+      "price_pred": "1074.4"
+    },
+    {
+      "imageid": "967.jpg",
+      "price_true": "1595.0",
+      "price_pred": "1110.4"
+    },
+    {
+      "imageid": "2567.jpg",
+      "price_true": "750.0",
+      "price_pred": "962.2"
+    },
+    {
+      "imageid": "4798.jpg",
+      "price_true": "649.0",
+      "price_pred": "540.7"
+    },
+    {
+      "imageid": "5822.jpg",
+      "price_true": "355.0",
+      "price_pred": "476.4"
+    },
+    {
+      "imageid": "103.jpg",
+      "price_true": "380.0",
+      "price_pred": "332.1"
+    },
+    {
+      "imageid": "854.jpg",
+      "price_true": "1190.0",
+      "price_pred": "918.0"
+    },
+    {
+      "imageid": "2768.jpg",
+      "price_true": "1710.888",
+      "price_pred": "906.1"
+    },
+    {
+      "imageid": "6368.jpg",
+      "price_true": "1385.0",
+      "price_pred": "1124.3"
+    },
+    {
+      "imageid": "5727.jpg",
+      "price_true": "525.0",
+      "price_pred": "438.3"
+    },
+    {
+      "imageid": "3982.jpg",
+      "price_true": "489.0",
+      "price_pred": "671.6"
+    },
+    {
+      "imageid": "674.jpg",
+      "price_true": "1199.0",
+      "price_pred": "952.3"
+    },
+    {
+      "imageid": "5415.jpg",
+      "price_true": "1150.0",
+      "price_pred": "660.0"
+    },
+    {
+      "imageid": "3306.jpg",
+      "price_true": "278.888",
+      "price_pred": "723.9"
+    },
+    {
+      "imageid": "3024.jpg",
+      "price_true": "753.0",
+      "price_pred": "671.0"
+    },
+    {
+      "imageid": "4929.jpg",
+      "price_true": "1700.0",
+      "price_pred": "856.4"
+    },
+    {
+      "imageid": "2347.jpg",
+      "price_true": "399.0",
+      "price_pred": "463.4"
+    },
+    {
+      "imageid": "4276.jpg",
+      "price_true": "695.0",
+      "price_pred": "635.5"
+    },
+    {
+      "imageid": "4.jpg",
+      "price_true": "650.0",
+      "price_pred": "535.5"
+    },
+    {
+      "imageid": "3255.jpg",
+      "price_true": "739.9",
+      "price_pred": "810.8"
+    },
+    {
+      "imageid": "2997.jpg",
+      "price_true": "382.0",
+      "price_pred": "598.9"
+    },
+    {
+      "imageid": "4398.jpg",
+      "price_true": "750.0",
+      "price_pred": "711.0"
+    },
+    {
+      "imageid": "6396.jpg",
+      "price_true": "347.5",
+      "price_pred": "547.2"
+    },
+    {
+      "imageid": "7977.jpg",
+      "price_true": "979.0",
+      "price_pred": "982.8"
+    },
+    {
+      "imageid": "7865.jpg",
+      "price_true": "224.9",
+      "price_pred": "413.2"
+    },
+    {
+      "imageid": "1185.jpg",
+      "price_true": "699.995",
+      "price_pred": "917.9"
+    },
+    {
+      "imageid": "6170.jpg",
+      "price_true": "299.9",
+      "price_pred": "772.1"
+    },
+    {
+      "imageid": "776.jpg",
+      "price_true": "339.0",
+      "price_pred": "543.4"
+    },
+    {
+      "imageid": "1653.jpg",
+      "price_true": "199.75",
+      "price_pred": "624.0"
+    },
+    {
+      "imageid": "4863.jpg",
+      "price_true": "560.0",
+      "price_pred": "542.6"
+    },
+    {
+      "imageid": "7654.jpg",
+      "price_true": "439.9",
+      "price_pred": "828.5"
+    },
+    {
+      "imageid": "624.jpg",
+      "price_true": "1699.0",
+      "price_pred": "575.8"
+    },
+    {
+      "imageid": "5935.jpg",
+      "price_true": "515.0",
+      "price_pred": "748.4"
+    },
+    {
+      "imageid": "520.jpg",
+      "price_true": "1499.995",
+      "price_pred": "746.7"
+    },
+    {
+      "imageid": "612.jpg",
+      "price_true": "419.999",
+      "price_pred": "923.7"
+    },
+    {
+      "imageid": "7344.jpg",
+      "price_true": "1250.0",
+      "price_pred": "1013.4"
+    },
+    {
+      "imageid": "3550.jpg",
+      "price_true": "347.0",
+      "price_pred": "437.0"
+    },
+    {
+      "imageid": "3462.jpg",
+      "price_true": "650.0",
+      "price_pred": "668.4"
+    },
+    {
+      "imageid": "7230.jpg",
+      "price_true": "289.0",
+      "price_pred": "684.6"
+    },
+    {
+      "imageid": "1840.jpg",
+      "price_true": "1065.0",
+      "price_pred": "624.7"
+    },
+    {
+      "imageid": "7773.jpg",
+      "price_true": "535.0",
+      "price_pred": "598.0"
+    },
+    {
+      "imageid": "3749.jpg",
+      "price_true": "695.0",
+      "price_pred": "699.7"
+    },
+    {
+      "imageid": "2194.jpg",
+      "price_true": "564.0",
+      "price_pred": "692.9"
+    },
+    {
+      "imageid": "4422.jpg",
+      "price_true": "430.0",
+      "price_pred": "556.7"
+    },
+    {
+      "imageid": "426.jpg",
+      "price_true": "399.999",
+      "price_pred": "300.7"
+    },
+    {
+      "imageid": "4077.jpg",
+      "price_true": "735.0",
+      "price_pred": "591.4"
+    },
+    {
+      "imageid": "4323.jpg",
+      "price_true": "589.0",
+      "price_pred": "631.4"
+    },
+    {
+      "imageid": "424.jpg",
+      "price_true": "319.0",
+      "price_pred": "534.5"
+    },
+    {
+      "imageid": "6483.jpg",
+      "price_true": "529.9",
+      "price_pred": "573.8"
+    },
+    {
+      "imageid": "3402.jpg",
+      "price_true": "1099.0",
+      "price_pred": "875.3"
+    },
+    {
+      "imageid": "7262.jpg",
+      "price_true": "1025.0",
+      "price_pred": "818.7"
+    },
+    {
+      "imageid": "2949.jpg",
+      "price_true": "799.9",
+      "price_pred": "1010.4"
+    },
+    {
+      "imageid": "5907.jpg",
+      "price_true": "849.0",
+      "price_pred": "716.9"
+    },
+    {
+      "imageid": "87.jpg",
+      "price_true": "329.9",
+      "price_pred": "385.2"
+    },
+    {
+      "imageid": "5665.jpg",
+      "price_true": "485.0",
+      "price_pred": "432.3"
+    },
+    {
+      "imageid": "6821.jpg",
+      "price_true": "250.0",
+      "price_pred": "397.4"
+    },
+    {
+      "imageid": "1074.jpg",
+      "price_true": "649.0",
+      "price_pred": "491.1"
+    },
+    {
+      "imageid": "6516.jpg",
+      "price_true": "254.9",
+      "price_pred": "197.0"
+    },
+    {
+      "imageid": "417.jpg",
+      "price_true": "788.888",
+      "price_pred": "662.7"
+    },
+    {
+      "imageid": "1253.jpg",
+      "price_true": "1145.0",
+      "price_pred": "844.5"
+    },
+    {
+      "imageid": "3241.jpg",
+      "price_true": "500.0",
+      "price_pred": "651.0"
+    },
+    {
+      "imageid": "4357.jpg",
+      "price_true": "769.0",
+      "price_pred": "854.9"
+    },
+    {
+      "imageid": "5260.jpg",
+      "price_true": "299.9",
+      "price_pred": "388.1"
+    },
+    {
+      "imageid": "3253.jpg",
+      "price_true": "849.0",
+      "price_pred": "824.6"
+    },
+    {
+      "imageid": "1817.jpg",
+      "price_true": "599.0",
+      "price_pred": "1103.4"
+    },
+    {
+      "imageid": "4999.jpg",
+      "price_true": "578.8",
+      "price_pred": "795.5"
+    },
+    {
+      "imageid": "3530.jpg",
+      "price_true": "549.9",
+      "price_pred": "783.5"
+    },
+    {
+      "imageid": "2107.jpg",
+      "price_true": "749.0",
+      "price_pred": "953.9"
+    },
+    {
+      "imageid": "4557.jpg",
+      "price_true": "989.8",
+      "price_pred": "659.6"
+    },
+    {
+      "imageid": "3202.jpg",
+      "price_true": "449.9",
+      "price_pred": "672.2"
+    },
+    {
+      "imageid": "1378.jpg",
+      "price_true": "745.0",
+      "price_pred": "1053.2"
+    },
+    {
+      "imageid": "1566.jpg",
+      "price_true": "1395.0",
+      "price_pred": "986.2"
+    },
+    {
+      "imageid": "5866.jpg",
+      "price_true": "795.0",
+      "price_pred": "818.7"
+    },
+    {
+      "imageid": "1936.jpg",
+      "price_true": "959.0",
+      "price_pred": "1103.0"
+    },
+    {
+      "imageid": "2590.jpg",
+      "price_true": "889.0",
+      "price_pred": "1028.8"
+    },
+    {
+      "imageid": "2389.jpg",
+      "price_true": "750.0",
+      "price_pred": "620.0"
+    },
+    {
+      "imageid": "4062.jpg",
+      "price_true": "625.0",
+      "price_pred": "948.2"
+    },
+    {
+      "imageid": "3947.jpg",
+      "price_true": "420.0",
+      "price_pred": "1026.7"
+    },
+    {
+      "imageid": "3681.jpg",
+      "price_true": "220.0",
+      "price_pred": "504.8"
+    },
+    {
+      "imageid": "5173.jpg",
+      "price_true": "1840.0",
+      "price_pred": "965.8"
+    },
+    {
+      "imageid": "4665.jpg",
+      "price_true": "295.0",
+      "price_pred": "342.4"
+    },
+    {
+      "imageid": "5465.jpg",
+      "price_true": "620.0",
+      "price_pred": "772.3"
+    },
+    {
+      "imageid": "5191.jpg",
+      "price_true": "309.999",
+      "price_pred": "641.5"
+    },
+    {
+      "imageid": "1123.jpg",
+      "price_true": "775.0",
+      "price_pred": "672.5"
+    },
+    {
+      "imageid": "7042.jpg",
+      "price_true": "1199.0",
+      "price_pred": "1614.6"
+    },
+    {
+      "imageid": "418.jpg",
+      "price_true": "319.0",
+      "price_pred": "535.3"
+    },
+    {
+      "imageid": "2413.jpg",
+      "price_true": "449.9",
+      "price_pred": "526.6"
+    },
+    {
+      "imageid": "1218.jpg",
+      "price_true": "251.0",
+      "price_pred": "586.7"
+    },
+    {
+      "imageid": "996.jpg",
+      "price_true": "419.0",
+      "price_pred": "660.4"
+    },
+    {
+      "imageid": "3836.jpg",
+      "price_true": "714.9",
+      "price_pred": "678.9"
+    },
+    {
+      "imageid": "5001.jpg",
+      "price_true": "724.9",
+      "price_pred": "721.8"
+    },
+    {
+      "imageid": "3609.jpg",
+      "price_true": "539.999",
+      "price_pred": "619.9"
+    },
+    {
+      "imageid": "1366.jpg",
+      "price_true": "1499.0",
+      "price_pred": "1025.4"
+    },
+    {
+      "imageid": "1416.jpg",
+      "price_true": "485.0",
+      "price_pred": "1054.5"
+    },
+    {
+      "imageid": "6876.jpg",
+      "price_true": "530.0",
+      "price_pred": "417.9"
+    },
+    {
+      "imageid": "6749.jpg",
+      "price_true": "910.0",
+      "price_pred": "609.8"
+    },
+    {
+      "imageid": "5830.jpg",
+      "price_true": "959.0",
+      "price_pred": "866.0"
+    },
+    {
+      "imageid": "2529.jpg",
+      "price_true": "750.0",
+      "price_pred": "646.4"
+    },
+    {
+      "imageid": "3477.jpg",
+      "price_true": "625.0",
+      "price_pred": "778.1"
+    },
+    {
+      "imageid": "1168.jpg",
+      "price_true": "849.9",
+      "price_pred": "558.2"
+    },
+    {
+      "imageid": "6922.jpg",
+      "price_true": "650.0",
+      "price_pred": "555.4"
+    },
+    {
+      "imageid": "5352.jpg",
+      "price_true": "949.0",
+      "price_pred": "1064.6"
+    },
+    {
+      "imageid": "652.jpg",
+      "price_true": "569.0",
+      "price_pred": "707.3"
+    },
+    {
+      "imageid": "3163.jpg",
+      "price_true": "1399.0",
+      "price_pred": "1061.8"
+    },
+    {
+      "imageid": "467.jpg",
+      "price_true": "718.888",
+      "price_pred": "645.2"
+    },
+    {
+      "imageid": "7720.jpg",
+      "price_true": "725.0",
+      "price_pred": "894.0"
+    },
+    {
+      "imageid": "1073.jpg",
+      "price_true": "799.0",
+      "price_pred": "616.7"
+    },
+    {
+      "imageid": "5794.jpg",
+      "price_true": "795.0",
+      "price_pred": "1082.5"
+    },
+    {
+      "imageid": "902.jpg",
+      "price_true": "765.0",
+      "price_pred": "682.1"
+    },
+    {
+      "imageid": "2053.jpg",
+      "price_true": "399.0",
+      "price_pred": "557.6"
+    },
+    {
+      "imageid": "741.jpg",
+      "price_true": "629.0",
+      "price_pred": "687.1"
+    },
+    {
+      "imageid": "354.jpg",
+      "price_true": "620.0",
+      "price_pred": "632.1"
+    },
+    {
+      "imageid": "4127.jpg",
+      "price_true": "695.0",
+      "price_pred": "718.8"
+    },
+    {
+      "imageid": "7453.jpg",
+      "price_true": "659.0",
+      "price_pred": "555.4"
+    },
+    {
+      "imageid": "859.jpg",
+      "price_true": "799.0",
+      "price_pred": "610.4"
+    },
+    {
+      "imageid": "6704.jpg",
+      "price_true": "574.9",
+      "price_pred": "651.3"
+    },
+    {
+      "imageid": "1190.jpg",
+      "price_true": "430.0",
+      "price_pred": "628.0"
+    },
+    {
+      "imageid": "5899.jpg",
+      "price_true": "1986.689",
+      "price_pred": "934.1"
+    },
+    {
+      "imageid": "1261.jpg",
+      "price_true": "449.0",
+      "price_pred": "538.1"
+    },
+    {
+      "imageid": "5097.jpg",
+      "price_true": "1699.0",
+      "price_pred": "1094.3"
+    },
+    {
+      "imageid": "4618.jpg",
+      "price_true": "365.0",
+      "price_pred": "427.4"
+    },
+    {
+      "imageid": "4035.jpg",
+      "price_true": "420.0",
+      "price_pred": "628.0"
+    },
+    {
+      "imageid": "5841.jpg",
+      "price_true": "675.0",
+      "price_pred": "625.5"
+    },
+    {
+      "imageid": "6925.jpg",
+      "price_true": "1849.0",
+      "price_pred": "1286.7"
+    },
+    {
+      "imageid": "3665.jpg",
+      "price_true": "730.0",
+      "price_pred": "717.7"
+    },
+    {
+      "imageid": "749.jpg",
+      "price_true": "635.0",
+      "price_pred": "593.5"
+    },
+    {
+      "imageid": "5459.jpg",
+      "price_true": "1088.0",
+      "price_pred": "1199.6"
+    },
+    {
+      "imageid": "3249.jpg",
+      "price_true": "218.0",
+      "price_pred": "766.0"
+    },
+    {
+      "imageid": "6092.jpg",
+      "price_true": "425.0",
+      "price_pred": "570.6"
+    },
+    {
+      "imageid": "2011.jpg",
+      "price_true": "326.76",
+      "price_pred": "483.2"
+    },
+    {
+      "imageid": "5358.jpg",
+      "price_true": "478.9",
+      "price_pred": "606.1"
+    },
+    {
+      "imageid": "4780.jpg",
+      "price_true": "599.99",
+      "price_pred": "740.3"
+    },
+    {
+      "imageid": "4315.jpg",
+      "price_true": "547.9",
+      "price_pred": "747.5"
+    },
+    {
+      "imageid": "1401.jpg",
+      "price_true": "685.0",
+      "price_pred": "581.2"
+    },
+    {
+      "imageid": "4459.jpg",
+      "price_true": "1925.0",
+      "price_pred": "1213.9"
+    },
+    {
+      "imageid": "4512.jpg",
+      "price_true": "459.0",
+      "price_pred": "743.7"
+    },
+    {
+      "imageid": "5877.jpg",
+      "price_true": "387.0",
+      "price_pred": "663.9"
+    },
+    {
+      "imageid": "4434.jpg",
+      "price_true": "585.0",
+      "price_pred": "638.9"
+    },
+    {
+      "imageid": "7980.jpg",
+      "price_true": "710.0",
+      "price_pred": "960.6"
+    },
+    {
+      "imageid": "531.jpg",
+      "price_true": "239.9",
+      "price_pred": "402.8"
+    },
+    {
+      "imageid": "6685.jpg",
+      "price_true": "899.0",
+      "price_pred": "691.5"
+    },
+    {
+      "imageid": "4598.jpg",
+      "price_true": "749.0",
+      "price_pred": "693.0"
+    },
+    {
+      "imageid": "7882.jpg",
+      "price_true": "774.5",
+      "price_pred": "917.2"
+    },
+    {
+      "imageid": "2760.jpg",
+      "price_true": "1298.0",
+      "price_pred": "1000.1"
+    },
+    {
+      "imageid": "2433.jpg",
+      "price_true": "1150.0",
+      "price_pred": "1178.0"
+    },
+    {
+      "imageid": "6509.jpg",
+      "price_true": "699.9",
+      "price_pred": "940.2"
+    },
+    {
+      "imageid": "7398.jpg",
+      "price_true": "1880.0",
+      "price_pred": "910.5"
+    },
+    {
+      "imageid": "6618.jpg",
+      "price_true": "699.9",
+      "price_pred": "592.3"
+    },
+    {
+      "imageid": "7729.jpg",
+      "price_true": "525.0",
+      "price_pred": "549.3"
+    },
+    {
+      "imageid": "3774.jpg",
+      "price_true": "495.0",
+      "price_pred": "521.6"
+    },
+    {
+      "imageid": "3595.jpg",
+      "price_true": "1299.0",
+      "price_pred": "736.6"
+    },
+    {
+      "imageid": "2523.jpg",
+      "price_true": "639.99",
+      "price_pred": "806.6"
+    },
+    {
+      "imageid": "2482.jpg",
+      "price_true": "609.0",
+      "price_pred": "750.9"
+    },
+    {
+      "imageid": "1916.jpg",
+      "price_true": "714.5",
+      "price_pred": "837.2"
+    },
+    {
+      "imageid": "2028.jpg",
+      "price_true": "1090.0",
+      "price_pred": "743.9"
+    },
+    {
+      "imageid": "7289.jpg",
+      "price_true": "939.9",
+      "price_pred": "448.2"
+    },
+    {
+      "imageid": "7361.jpg",
+      "price_true": "434.9",
+      "price_pred": "679.7"
+    },
+    {
+      "imageid": "4818.jpg",
+      "price_true": "455.0",
+      "price_pred": "579.7"
+    },
+    {
+      "imageid": "5970.jpg",
+      "price_true": "699.0",
+      "price_pred": "525.0"
+    },
+    {
+      "imageid": "2027.jpg",
+      "price_true": "284.999",
+      "price_pred": "389.0"
+    },
+    {
+      "imageid": "3783.jpg",
+      "price_true": "205.5",
+      "price_pred": "467.4"
+    },
+    {
+      "imageid": "1104.jpg",
+      "price_true": "375.0",
+      "price_pred": "577.0"
+    },
+    {
+      "imageid": "1938.jpg",
+      "price_true": "525.0",
+      "price_pred": "663.3"
+    },
+    {
+      "imageid": "5530.jpg",
+      "price_true": "599.9",
+      "price_pred": "846.9"
+    },
+    {
+      "imageid": "7040.jpg",
+      "price_true": "695.95",
+      "price_pred": "934.9"
+    },
+    {
+      "imageid": "71.jpg",
+      "price_true": "339.9",
+      "price_pred": "516.0"
+    },
+    {
+      "imageid": "6282.jpg",
+      "price_true": "252.9",
+      "price_pred": "427.4"
+    },
+    {
+      "imageid": "3426.jpg",
+      "price_true": "575.0",
+      "price_pred": "599.8"
+    },
+    {
+      "imageid": "4678.jpg",
+      "price_true": "589.0",
+      "price_pred": "916.0"
+    },
+    {
+      "imageid": "1129.jpg",
+      "price_true": "230.0",
+      "price_pred": "768.5"
+    },
+    {
+      "imageid": "4108.jpg",
+      "price_true": "489.191",
+      "price_pred": "748.2"
+    },
+    {
+      "imageid": "5184.jpg",
+      "price_true": "439.0",
+      "price_pred": "644.4"
+    },
+    {
+      "imageid": "6634.jpg",
+      "price_true": "410.0",
+      "price_pred": "537.0"
+    },
+    {
+      "imageid": "202.jpg",
+      "price_true": "265.0",
+      "price_pred": "430.5"
+    },
+    {
+      "imageid": "6228.jpg",
+      "price_true": "325.0",
+      "price_pred": "824.0"
+    },
+    {
+      "imageid": "6728.jpg",
+      "price_true": "699.999",
+      "price_pred": "586.3"
+    },
+    {
+      "imageid": "724.jpg",
+      "price_true": "685.0",
+      "price_pred": "865.1"
+    },
+    {
+      "imageid": "4423.jpg",
+      "price_true": "499.9",
+      "price_pred": "624.7"
+    },
+    {
+      "imageid": "1058.jpg",
+      "price_true": "305.0",
+      "price_pred": "510.5"
+    },
+    {
+      "imageid": "4005.jpg",
+      "price_true": "769.0",
+      "price_pred": "753.3"
+    },
+    {
+      "imageid": "5557.jpg",
+      "price_true": "485.0",
+      "price_pred": "685.9"
+    },
+    {
+      "imageid": "4707.jpg",
+      "price_true": "1400.0",
+      "price_pred": "1017.8"
+    },
+    {
+      "imageid": "5510.jpg",
+      "price_true": "285.0",
+      "price_pred": "313.1"
+    },
+    {
+      "imageid": "3354.jpg",
+      "price_true": "259.99",
+      "price_pred": "448.8"
+    },
+    {
+      "imageid": "1062.jpg",
+      "price_true": "289.0",
+      "price_pred": "514.3"
+    },
+    {
+      "imageid": "2122.jpg",
+      "price_true": "1899.0",
+      "price_pred": "912.4"
+    },
+    {
+      "imageid": "977.jpg",
+      "price_true": "719.0",
+      "price_pred": "644.3"
+    },
+    {
+      "imageid": "4563.jpg",
+      "price_true": "650.0",
+      "price_pred": "784.3"
+    },
+    {
+      "imageid": "4994.jpg",
+      "price_true": "949.0",
+      "price_pred": "621.4"
+    },
+    {
+      "imageid": "5075.jpg",
+      "price_true": "359.0",
+      "price_pred": "771.2"
+    },
+    {
+      "imageid": "5812.jpg",
+      "price_true": "239.0",
+      "price_pred": "465.3"
+    },
+    {
+      "imageid": "1283.jpg",
+      "price_true": "899.0",
+      "price_pred": "873.2"
+    },
+    {
+      "imageid": "530.jpg",
+      "price_true": "379.0",
+      "price_pred": "744.4"
+    },
+    {
+      "imageid": "3643.jpg",
+      "price_true": "1599.99",
+      "price_pred": "635.9"
+    },
+    {
+      "imageid": "3515.jpg",
+      "price_true": "499.0",
+      "price_pred": "551.0"
+    },
+    {
+      "imageid": "3951.jpg",
+      "price_true": "427.0",
+      "price_pred": "532.8"
+    },
+    {
+      "imageid": "2092.jpg",
+      "price_true": "339.9",
+      "price_pred": "547.3"
+    },
+    {
+      "imageid": "5554.jpg",
+      "price_true": "639.9",
+      "price_pred": "615.7"
+    },
+    {
+      "imageid": "1187.jpg",
+      "price_true": "1395.0",
+      "price_pred": "675.3"
+    },
+    {
+      "imageid": "5336.jpg",
+      "price_true": "399.9",
+      "price_pred": "594.9"
+    },
+    {
+      "imageid": "6533.jpg",
+      "price_true": "365.0",
+      "price_pred": "766.2"
+    },
+    {
+      "imageid": "3313.jpg",
+      "price_true": "785.0",
+      "price_pred": "854.1"
+    },
+    {
+      "imageid": "3992.jpg",
+      "price_true": "645.0",
+      "price_pred": "607.0"
+    },
+    {
+      "imageid": "3684.jpg",
+      "price_true": "550.865",
+      "price_pred": "521.1"
+    },
+    {
+      "imageid": "3737.jpg",
+      "price_true": "600.0",
+      "price_pred": "809.5"
+    },
+    {
+      "imageid": "7406.jpg",
+      "price_true": "992.0",
+      "price_pred": "608.3"
+    },
+    {
+      "imageid": "6582.jpg",
+      "price_true": "550.0",
+      "price_pred": "625.1"
+    },
+    {
+      "imageid": "1281.jpg",
+      "price_true": "389.9",
+      "price_pred": "578.3"
+    },
+    {
+      "imageid": "4305.jpg",
+      "price_true": "539.0",
+      "price_pred": "758.7"
+    },
+    {
+      "imageid": "199.jpg",
+      "price_true": "1149.0",
+      "price_pred": "1191.6"
+    },
+    {
+      "imageid": "4126.jpg",
+      "price_true": "780.0",
+      "price_pred": "673.5"
+    },
+    {
+      "imageid": "3893.jpg",
+      "price_true": "1400.0",
+      "price_pred": "1085.5"
+    },
+    {
+      "imageid": "1512.jpg",
+      "price_true": "265.0",
+      "price_pred": "519.3"
+    },
+    {
+      "imageid": "7154.jpg",
+      "price_true": "925.0",
+      "price_pred": "938.7"
+    },
+    {
+      "imageid": "1067.jpg",
+      "price_true": "589.9",
+      "price_pred": "786.9"
+    },
+    {
+      "imageid": "6490.jpg",
+      "price_true": "445.0",
+      "price_pred": "599.6"
+    },
+    {
+      "imageid": "3935.jpg",
+      "price_true": "769.0",
+      "price_pred": "953.1"
+    },
+    {
+      "imageid": "626.jpg",
+      "price_true": "369.9",
+      "price_pred": "669.9"
+    },
+    {
+      "imageid": "3115.jpg",
+      "price_true": "1199.0",
+      "price_pred": "1149.4"
+    },
+    {
+      "imageid": "3245.jpg",
+      "price_true": "355.0",
+      "price_pred": "557.4"
+    },
+    {
+      "imageid": "4611.jpg",
+      "price_true": "1700.0",
+      "price_pred": "1331.9"
+    },
+    {
+      "imageid": "6953.jpg",
+      "price_true": "809.0",
+      "price_pred": "775.7"
+    },
+    {
+      "imageid": "1513.jpg",
+      "price_true": "535.0",
+      "price_pred": "595.5"
+    },
+    {
+      "imageid": "7483.jpg",
+      "price_true": "234.9",
+      "price_pred": "545.7"
+    },
+    {
+      "imageid": "6945.jpg",
+      "price_true": "849.0",
+      "price_pred": "892.8"
+    },
+    {
+      "imageid": "3166.jpg",
+      "price_true": "1199.0",
+      "price_pred": "1168.5"
+    },
+    {
+      "imageid": "4314.jpg",
+      "price_true": "719.0",
+      "price_pred": "1140.5"
+    },
+    {
+      "imageid": "2234.jpg",
+      "price_true": "515.0",
+      "price_pred": "712.8"
+    },
+    {
+      "imageid": "5844.jpg",
+      "price_true": "899.9",
+      "price_pred": "683.6"
+    },
+    {
+      "imageid": "6217.jpg",
+      "price_true": "505.0",
+      "price_pred": "567.6"
+    },
+    {
+      "imageid": "22.jpg",
+      "price_true": "250.0",
+      "price_pred": "520.0"
+    },
+    {
+      "imageid": "7275.jpg",
+      "price_true": "849.0",
+      "price_pred": "565.6"
+    },
+    {
+      "imageid": "4689.jpg",
+      "price_true": "1095.0",
+      "price_pred": "987.7"
+    },
+    {
+      "imageid": "2817.jpg",
+      "price_true": "479.0",
+      "price_pred": "763.5"
+    },
+    {
+      "imageid": "6526.jpg",
+      "price_true": "759.0",
+      "price_pred": "849.3"
+    },
+    {
+      "imageid": "4590.jpg",
+      "price_true": "786.5",
+      "price_pred": "752.8"
+    },
+    {
+      "imageid": "7454.jpg",
+      "price_true": "365.0",
+      "price_pred": "646.3"
+    },
+    {
+      "imageid": "4025.jpg",
+      "price_true": "1395.0",
+      "price_pred": "795.6"
+    },
+    {
+      "imageid": "5257.jpg",
+      "price_true": "685.0",
+      "price_pred": "581.1"
+    },
+    {
+      "imageid": "4202.jpg",
+      "price_true": "629.0",
+      "price_pred": "984.5"
+    },
+    {
+      "imageid": "2697.jpg",
+      "price_true": "389.999",
+      "price_pred": "546.9"
+    },
+    {
+      "imageid": "6733.jpg",
+      "price_true": "250.0",
+      "price_pred": "807.9"
+    },
+    {
+      "imageid": "6885.jpg",
+      "price_true": "949.0",
+      "price_pred": "946.4"
+    },
+    {
+      "imageid": "4976.jpg",
+      "price_true": "1000.0",
+      "price_pred": "1149.4"
+    },
+    {
+      "imageid": "571.jpg",
+      "price_true": "359.9",
+      "price_pred": "419.2"
+    },
+    {
+      "imageid": "1708.jpg",
+      "price_true": "700.0",
+      "price_pred": "742.3"
+    },
+    {
+      "imageid": "784.jpg",
+      "price_true": "709.999",
+      "price_pred": "989.2"
+    },
+    {
+      "imageid": "885.jpg",
+      "price_true": "359.0",
+      "price_pred": "535.1"
+    },
+    {
+      "imageid": "1610.jpg",
+      "price_true": "630.0",
+      "price_pred": "803.9"
+    },
+    {
+      "imageid": "7117.jpg",
+      "price_true": "359.0",
+      "price_pred": "883.6"
+    },
+    {
+      "imageid": "4245.jpg",
+      "price_true": "439.0",
+      "price_pred": "813.8"
+    },
+    {
+      "imageid": "7399.jpg",
+      "price_true": "799.0",
+      "price_pred": "735.2"
+    },
+    {
+      "imageid": "7272.jpg",
+      "price_true": "285.9",
+      "price_pred": "745.7"
+    },
+    {
+      "imageid": "3050.jpg",
+      "price_true": "1575.0",
+      "price_pred": "724.5"
+    },
+    {
+      "imageid": "2097.jpg",
+      "price_true": "575.0",
+      "price_pred": "812.3"
+    },
+    {
+      "imageid": "3767.jpg",
+      "price_true": "739.0",
+      "price_pred": "898.2"
+    },
+    {
+      "imageid": "3603.jpg",
+      "price_true": "1795.0",
+      "price_pred": "1059.2"
+    },
+    {
+      "imageid": "6136.jpg",
+      "price_true": "635.0",
+      "price_pred": "510.5"
+    },
+    {
+      "imageid": "3329.jpg",
+      "price_true": "219.9",
+      "price_pred": "547.5"
+    },
+    {
+      "imageid": "336.jpg",
+      "price_true": "751.9",
+      "price_pred": "680.1"
+    },
+    {
+      "imageid": "7617.jpg",
+      "price_true": "239.9",
+      "price_pred": "445.4"
+    },
+    {
+      "imageid": "7487.jpg",
+      "price_true": "999.999",
+      "price_pred": "746.9"
+    },
+    {
+      "imageid": "1334.jpg",
+      "price_true": "1099.0",
+      "price_pred": "709.0"
+    },
+    {
+      "imageid": "900.jpg",
+      "price_true": "699.999",
+      "price_pred": "651.4"
+    },
+    {
+      "imageid": "4861.jpg",
+      "price_true": "665.0",
+      "price_pred": "648.0"
+    },
+    {
+      "imageid": "5193.jpg",
+      "price_true": "1049.0",
+      "price_pred": "831.1"
+    },
+    {
+      "imageid": "2423.jpg",
+      "price_true": "1550.0",
+      "price_pred": "1218.5"
+    },
+    {
+      "imageid": "4393.jpg",
+      "price_true": "1595.0",
+      "price_pred": "945.5"
+    },
+    {
+      "imageid": "265.jpg",
+      "price_true": "479.99",
+      "price_pred": "592.5"
+    },
+    {
+      "imageid": "3457.jpg",
+      "price_true": "679.0",
+      "price_pred": "818.5"
+    },
+    {
+      "imageid": "5005.jpg",
+      "price_true": "195.0",
+      "price_pred": "648.8"
+    },
+    {
+      "imageid": "3516.jpg",
+      "price_true": "524.9",
+      "price_pred": "650.6"
+    },
+    {
+      "imageid": "3975.jpg",
+      "price_true": "219.9",
+      "price_pred": "480.6"
+    },
+    {
+      "imageid": "5971.jpg",
+      "price_true": "645.0",
+      "price_pred": "638.8"
+    },
+    {
+      "imageid": "1833.jpg",
+      "price_true": "209.9",
+      "price_pred": "459.5"
+    },
+    {
+      "imageid": "3617.jpg",
+      "price_true": "589.0",
+      "price_pred": "634.9"
+    },
+    {
+      "imageid": "4141.jpg",
+      "price_true": "528.0",
+      "price_pred": "552.0"
+    },
+    {
+      "imageid": "2874.jpg",
+      "price_true": "615.0",
+      "price_pred": "1033.5"
+    },
+    {
+      "imageid": "5302.jpg",
+      "price_true": "400.0",
+      "price_pred": "784.5"
+    },
+    {
+      "imageid": "1576.jpg",
+      "price_true": "709.999",
+      "price_pred": "696.0"
+    },
+    {
+      "imageid": "3514.jpg",
+      "price_true": "619.9",
+      "price_pred": "603.9"
+    },
+    {
+      "imageid": "5033.jpg",
+      "price_true": "888.888",
+      "price_pred": "903.6"
+    },
+    {
+      "imageid": "2459.jpg",
+      "price_true": "230.0",
+      "price_pred": "339.7"
+    },
+    {
+      "imageid": "5286.jpg",
+      "price_true": "1799.999",
+      "price_pred": "1042.9"
+    },
+    {
+      "imageid": "7242.jpg",
+      "price_true": "463.0",
+      "price_pred": "517.3"
+    },
+    {
+      "imageid": "1920.jpg",
+      "price_true": "714.9",
+      "price_pred": "560.7"
+    },
+    {
+      "imageid": "6698.jpg",
+      "price_true": "519.9",
+      "price_pred": "577.4"
+    },
+    {
+      "imageid": "415.jpg",
+      "price_true": "731.414",
+      "price_pred": "748.9"
+    },
+    {
+      "imageid": "217.jpg",
+      "price_true": "478.0",
+      "price_pred": "712.1"
+    },
+    {
+      "imageid": "1399.jpg",
+      "price_true": "1749.0",
+      "price_pred": "1115.2"
+    },
+    {
+      "imageid": "2215.jpg",
+      "price_true": "400.0",
+      "price_pred": "373.7"
+    },
+    {
+      "imageid": "3725.jpg",
+      "price_true": "275.0",
+      "price_pred": "689.3"
+    },
+    {
+      "imageid": "862.jpg",
+      "price_true": "225.0",
+      "price_pred": "495.6"
+    },
+    {
+      "imageid": "1052.jpg",
+      "price_true": "1495.0",
+      "price_pred": "872.2"
+    },
+    {
+      "imageid": "2645.jpg",
+      "price_true": "949.999",
+      "price_pred": "930.1"
+    },
+    {
+      "imageid": "4655.jpg",
+      "price_true": "367.5",
+      "price_pred": "752.0"
+    },
+    {
+      "imageid": "918.jpg",
+      "price_true": "839.9",
+      "price_pred": "826.8"
+    },
+    {
+      "imageid": "5846.jpg",
+      "price_true": "845.0",
+      "price_pred": "503.5"
+    },
+    {
+      "imageid": "2461.jpg",
+      "price_true": "1745.9",
+      "price_pred": "1081.7"
+    },
+    {
+      "imageid": "160.jpg",
+      "price_true": "839.9",
+      "price_pred": "470.6"
+    },
+    {
+      "imageid": "346.jpg",
+      "price_true": "439.0",
+      "price_pred": "800.3"
+    },
+    {
+      "imageid": "2562.jpg",
+      "price_true": "945.0",
+      "price_pred": "913.3"
+    },
+    {
+      "imageid": "4349.jpg",
+      "price_true": "615.0",
+      "price_pred": "732.9"
+    },
+    {
+      "imageid": "1369.jpg",
+      "price_true": "525.0",
+      "price_pred": "645.6"
+    },
+    {
+      "imageid": "3433.jpg",
+      "price_true": "699.9",
+      "price_pred": "788.6"
+    },
+    {
+      "imageid": "5977.jpg",
+      "price_true": "424.99",
+      "price_pred": "412.7"
+    },
+    {
+      "imageid": "5112.jpg",
+      "price_true": "350.0",
+      "price_pred": "721.4"
+    },
+    {
+      "imageid": "1504.jpg",
+      "price_true": "669.0",
+      "price_pred": "559.5"
+    },
+    {
+      "imageid": "4988.jpg",
+      "price_true": "430.0",
+      "price_pred": "405.0"
+    },
+    {
+      "imageid": "2617.jpg",
+      "price_true": "879.0",
+      "price_pred": "738.5"
+    },
+    {
+      "imageid": "2271.jpg",
+      "price_true": "499.0",
+      "price_pred": "519.4"
+    },
+    {
+      "imageid": "331.jpg",
+      "price_true": "499.0",
+      "price_pred": "451.0"
+    },
+    {
+      "imageid": "7477.jpg",
+      "price_true": "925.0",
+      "price_pred": "1327.1"
+    },
+    {
+      "imageid": "2559.jpg",
+      "price_true": "1299.9",
+      "price_pred": "1117.4"
+    },
+    {
+      "imageid": "7597.jpg",
+      "price_true": "329.99",
+      "price_pred": "604.6"
+    },
+    {
+      "imageid": "4286.jpg",
+      "price_true": "899.0",
+      "price_pred": "965.2"
+    },
+    {
+      "imageid": "4388.jpg",
+      "price_true": "645.0",
+      "price_pred": "841.0"
+    },
+    {
+      "imageid": "7097.jpg",
+      "price_true": "1750.0",
+      "price_pred": "958.3"
+    },
+    {
+      "imageid": "7447.jpg",
+      "price_true": "419.0",
+      "price_pred": "750.5"
+    },
+    {
+      "imageid": "1652.jpg",
+      "price_true": "465.0",
+      "price_pred": "762.7"
+    },
+    {
+      "imageid": "1010.jpg",
+      "price_true": "899.0",
+      "price_pred": "766.7"
+    },
+    {
+      "imageid": "4167.jpg",
+      "price_true": "749.9",
+      "price_pred": "1094.6"
+    },
+    {
+      "imageid": "803.jpg",
+      "price_true": "449.999",
+      "price_pred": "857.3"
+    },
+    {
+      "imageid": "1998.jpg",
+      "price_true": "748.0",
+      "price_pred": "693.6"
+    },
+    {
+      "imageid": "5889.jpg",
+      "price_true": "999.0",
+      "price_pred": "720.0"
+    },
+    {
+      "imageid": "7602.jpg",
+      "price_true": "299.99",
+      "price_pred": "427.6"
+    }
+  ],
+  "summary": {
+    "PASS": 25,
+    "FAIL": 0,
+    "PENDING": 4
+  },
+  "status": "PROVISIONAL_REVIEW_REQUIRED"
+}

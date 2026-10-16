@@ -248,6 +248,27 @@ Observations:
 - Not every subset helps: E2+E4 is 0.66% *worse* than E3 alone, because E4
   is the weakest of the three and its errors are not different enough to
   compensate. Adding E2 to E3+E4 still helps, so all three are used.
+- **A fourth, decorrelated model was tested and rejected.** The v3 frozen
+  ConvNeXt predictions differ in architecture as well as training, so they
+  were the most promising candidate for adding error diversity. Averaging
+  them in does not pay:
+
+  | Ensemble | Val MSE | vs E2+E3+E4 |
+  |---|---|---|
+  | E2+E3+E4 | 95,850.6 | — |
+  | + v3 @320 | 95,538.9 | +0.33% |
+  | + v3 @224 | 96,065.8 | −0.22% |
+  | + both v3 columns | 96,547.8 | −0.73% |
+
+  The best case is +0.33%, which is inside noise, and adding both columns is
+  clearly worse. The reason is that v3's validation MSE is 109,155 (frozen
+  features, no fine-tuning) against 99,051 for E3, so it is not a peer of the
+  models it would join: averaging in a substantially weaker model loses more
+  through dilution than it gains through diversity. Diversity only helps
+  between models of comparable accuracy. This does not change the selection,
+  and it was the last ensemble variant tried. Reproduce with the
+  `val_predictions_*.csv` and `v3_val_predictions.csv` files under
+  `outputs/predictions/`.
 
 ### Phase 3 final state
 
