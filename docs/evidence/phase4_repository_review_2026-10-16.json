@@ -1,0 +1,60 @@
+{
+  "prepared_utc": "2026-10-16T06:46:09.520846+00:00",
+  "review_date": "2026-10-16",
+  "repository": "mingyang-sun1/computer-vision-final-assignment",
+  "reference_branch": "main",
+  "reference_commit": "90959c41384c7bd3c8c5a48147e8272246071bbe",
+  "branch_names_observed": [
+    "main"
+  ],
+  "open_prs_observed": 0,
+  "latest_commit_description": "Merge pull request #3: phase3 augmentation done",
+  "latest_commit_utc": "2026-10-14T10:04:29Z",
+  "remote_writes_performed": false,
+  "source_read_method": "Connected GitHub fetch/fetch_file at pinned commit; not an assumed local clone.",
+  "current_readme_blob": "373444f138852046b3e8335a70eb5be0373292fa",
+  "current_experiments_blob": "c617874feb72e710fd83d3baf0cf3d408ade2f78",
+  "replacement_source_text_identity_checked_locally": true,
+  "phase4_placeholder_present_before_patch": true,
+  "known_phase3_e3_evidence_file_present": true,
+  "current_prediction_tree": "bd7d4b102f7408c3f3165c580dc0f81062f51c1f",
+  "pinned_inputs": {
+    "data/splits/train_split.csv": "05851b5173130d45b78f1057ec7f0e78cf827a06",
+    "data/splits/val_split.csv": "54c0018bb7fbb08c59dd26c511928836e5ea46ba",
+    "outputs/predictions/val_predictions_E2_finetune.csv": "6ed8deb3847516e33345eab6ef40646142c06986",
+    "outputs/predictions/val_predictions_E3_320px.csv": "1b838b037d504375033644ee0a84c6760dd41f24",
+    "outputs/predictions/val_predictions_E4_augment.csv": "6260839aede5cc7e59de6de6179782582fdd5a7a",
+    "outputs/predictions/submission_phase2_ridge.csv": "856a86573a39ee4c6e24b55dc046632420906f3d",
+    "outputs/predictions/submission_phase3_E2_finetune.csv": "dcaefb73744451a25bd5cdcbb45548407352de87",
+    "outputs/predictions/submission_phase3_E3_320px.csv": "4c12698c2793f198e7d95a80de541cea28d3d58a",
+    "outputs/predictions/submission_phase3_E4_augment.csv": "e9cab1f3d75311c50b69462268a41caca25fcee7",
+    "outputs/predictions/submission_ensemble.csv": "bceaab97bb957dade32f85e16d55daf3e20192c5",
+    "outputs/predictions/v3_val_predictions.csv": "edfa94a798d953803000b07334a8525b36c47090",
+    "src/ensemble.py": "618a36b99eb2487fda30bd19a707cc21ccc2b5b9"
+  },
+  "completed_in_this_preparation": [
+    "live remote source review",
+    "historical arithmetic and document correction",
+    "complete replacement documentation",
+    "new checker implementation and 43 synthetic tests"
+  ],
+  "not_executed": [
+    "full-CSV repository recalculation",
+    "new model training",
+    "checkpoint loading",
+    "new Kaggle verification",
+    "Phase 2/3 regression suites",
+    "joint A/B approval"
+  ],
+  "runtime_transfer_limit": "Direct git clone/archive transfer failed. Connected source reading succeeded, but complete CSVs were not copied to the runtime. No successful full-data audit is claimed.",
+  "artifact_handoff": "E2/E4 original receipt is already documented in Phase3_MemberB_Artifact_Update.md.",
+  "sources": {
+    "main": "https://api.github.com/repos/mingyang-sun1/computer-vision-final-assignment/branches/main",
+    "branches": "https://api.github.com/repos/mingyang-sun1/computer-vision-final-assignment/branches?per_page=100",
+    "open_prs": "https://api.github.com/repos/mingyang-sun1/computer-vision-final-assignment/pulls?state=open&per_page=100",
+    "README": "https://github.com/mingyang-sun1/computer-vision-final-assignment/blob/90959c41384c7bd3c8c5a48147e8272246071bbe/README.md",
+    "experiments": "https://github.com/mingyang-sun1/computer-vision-final-assignment/blob/90959c41384c7bd3c8c5a48147e8272246071bbe/docs/experiments.md",
+    "ensemble": "https://github.com/mingyang-sun1/computer-vision-final-assignment/blob/90959c41384c7bd3c8c5a48147e8272246071bbe/src/ensemble.py",
+    "phase3_handoff": "https://github.com/mingyang-sun1/computer-vision-final-assignment/blob/90959c41384c7bd3c8c5a48147e8272246071bbe/docs/Phase3_MemberB_Artifact_Update.md"
+  }
+}

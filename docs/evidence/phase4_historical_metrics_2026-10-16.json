@@ -1,0 +1,127 @@
+{
+  "prepared_utc": "2026-10-16T06:46:09.520846+00:00",
+  "reference_commit": "90959c41384c7bd3c8c5a48147e8272246071bbe",
+  "source_path": "docs/experiments.md",
+  "source_git_blob_sha1": "c617874feb72e710fd83d3baf0cf3d408ade2f78",
+  "rows": [
+    {
+      "id": "B0",
+      "configuration": "Training-mean predictor",
+      "reported_validation_mse": 154431.7,
+      "reported_validation_mae": 295.9,
+      "reported_validation_r2": -0.0,
+      "role": "Numerical reference",
+      "evidence_type": "reported_historical_metric",
+      "recomputed_in_this_session": false
+    },
+    {
+      "id": "B1",
+      "configuration": "Frozen ResNet-50 + Ridge, 224px",
+      "reported_validation_mse": 114853.7,
+      "reported_validation_mae": 249.0,
+      "reported_validation_r2": 0.256,
+      "role": "Visual baseline",
+      "evidence_type": "reported_historical_metric",
+      "recomputed_in_this_session": false
+    },
+    {
+      "id": "B2",
+      "configuration": "Frozen ResNet-50 + MLP, 224px",
+      "reported_validation_mse": 133378.6,
+      "reported_validation_mae": 270.8,
+      "reported_validation_r2": 0.136,
+      "role": "Alternative head",
+      "evidence_type": "reported_historical_metric",
+      "recomputed_in_this_session": false
+    },
+    {
+      "id": "E1-R320",
+      "configuration": "Frozen ResNet-50 + Ridge, 320px",
+      "reported_validation_mse": 111822.5,
+      "reported_validation_mae": 246.2,
+      "reported_validation_r2": 0.276,
+      "role": "Resolution comparison",
+      "evidence_type": "reported_historical_metric",
+      "recomputed_in_this_session": false
+    },
+    {
+      "id": "E1-R400",
+      "configuration": "Frozen ResNet-50 + Ridge, 400px",
+      "reported_validation_mse": 112219.7,
+      "reported_validation_mae": 242.0,
+      "reported_validation_r2": 0.273,
+      "role": "Resolution comparison",
+      "evidence_type": "reported_historical_metric",
+      "recomputed_in_this_session": false
+    },
+    {
+      "id": "E1-M320",
+      "configuration": "Frozen ResNet-50 + MLP, 320px",
+      "reported_validation_mse": 133046.0,
+      "reported_validation_mae": 267.4,
+      "reported_validation_r2": 0.138,
+      "role": "Resolution comparison",
+      "evidence_type": "reported_historical_metric",
+      "recomputed_in_this_session": false
+    },
+    {
+      "id": "E1-M400",
+      "configuration": "Frozen ResNet-50 + MLP, 400px",
+      "reported_validation_mse": 126795.1,
+      "reported_validation_mae": 265.8,
+      "reported_validation_r2": 0.179,
+      "role": "Resolution comparison",
+      "evidence_type": "reported_historical_metric",
+      "recomputed_in_this_session": false
+    },
+    {
+      "id": "E2",
+      "configuration": "Partial fine-tuning, 224px",
+      "reported_validation_mse": 102745.7,
+      "reported_validation_mae": 235.7,
+      "reported_validation_r2": 0.335,
+      "role": "No-augmentation core run",
+      "evidence_type": "reported_historical_metric",
+      "recomputed_in_this_session": false
+    },
+    {
+      "id": "E3",
+      "configuration": "Partial fine-tuning, 320px",
+      "reported_validation_mse": 99051.0,
+      "reported_validation_mae": 229.8,
+      "reported_validation_r2": 0.359,
+      "role": "Best reported single core run",
+      "evidence_type": "reported_historical_metric",
+      "recomputed_in_this_session": false
+    },
+    {
+      "id": "E4",
+      "configuration": "Partial fine-tuning, 224px + augmentation",
+      "reported_validation_mse": 108784.5,
+      "reported_validation_mae": 246.3,
+      "reported_validation_r2": 0.296,
+      "role": "Augmentation comparison",
+      "evidence_type": "reported_historical_metric",
+      "recomputed_in_this_session": false
+    },
+    {
+      "id": "E5",
+      "configuration": "Equal mean of E2 + E3 + E4",
+      "reported_validation_mse": 95850.6,
+      "reported_validation_mae": null,
+      "reported_validation_r2": 0.379,
+      "role": "Recommended existing ensemble",
+      "evidence_type": "reported_historical_metric",
+      "recomputed_in_this_session": false
+    }
+  ],
+  "metric_precision": "Historical table precision is preserved; no extra precision is invented.",
+  "derived_from_reported_values": {
+    "E5_mse_reduction_vs_B1_percent": 16.54548351511531,
+    "E5_mse_reduction_vs_E3_percent": 3.2310627858375907,
+    "E4_mse_increase_vs_E2_percent": 5.877423580743524,
+    "reported_kaggle_minus_validation_E5": 1108.37999999999,
+    "reported_kaggle_above_validation_E5_percent": 1.156362088500229
+  },
+  "kaggle_score_independently_verified": false
+}

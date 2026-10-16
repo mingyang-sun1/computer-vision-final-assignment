@@ -1,0 +1,54 @@
+Phase 4 checker test execution
+UTC: 2026-10-16T06:48:11.185654+00:00
+Python: 3.13.5
+Command: python -m unittest discover -s tests -p "test_verify_phase4_selection.py" -v
+Scope: 43 synthetic-fixture unit tests. No complete repository CSV run, model loading, training, or Kaggle access.
+
+test_better_unidentified_v3_blocks_recommendation (test_verify_phase4_selection.Phase4Tests.test_better_unidentified_v3_blocks_recommendation) ... ok
+test_constant_labels_rejected (test_verify_phase4_selection.Phase4Tests.test_constant_labels_rejected) ... ok
+test_crlf_lf_same_identity (test_verify_phase4_selection.Phase4Tests.test_crlf_lf_same_identity) ... ok
+test_duplicate_header (test_verify_phase4_selection.Phase4Tests.test_duplicate_header) ... ok
+test_duplicate_validation_id (test_verify_phase4_selection.Phase4Tests.test_duplicate_validation_id) ... ok
+test_existing_complete_outputs_are_not_overwritten (test_verify_phase4_selection.Phase4Tests.test_existing_complete_outputs_are_not_overwritten) ... ok
+test_extra_validation_id (test_verify_phase4_selection.Phase4Tests.test_extra_validation_id) ... ok
+test_failed_audit_has_no_success_chart (test_verify_phase4_selection.Phase4Tests.test_failed_audit_has_no_success_chart) ... ok
+test_historical_references_not_marked_recomputed (test_verify_phase4_selection.Phase4Tests.test_historical_references_not_marked_recomputed) ... ok
+test_huge_numeric_value_fails_cleanly (test_verify_phase4_selection.Phase4Tests.test_huge_numeric_value_fails_cleanly) ... ok
+test_identity_drift_fails (test_verify_phase4_selection.Phase4Tests.test_identity_drift_fails) ... ok
+test_incorrect_label (test_verify_phase4_selection.Phase4Tests.test_incorrect_label) ... ok
+test_infinite_prediction (test_verify_phase4_selection.Phase4Tests.test_infinite_prediction) ... ok
+test_manifest_with_labels_rejected (test_verify_phase4_selection.Phase4Tests.test_manifest_with_labels_rejected) ... ok
+test_metrics_known (test_verify_phase4_selection.Phase4Tests.test_metrics_known) ... ok
+test_missing_explicit_manifest_fails (test_verify_phase4_selection.Phase4Tests.test_missing_explicit_manifest_fails) ... ok
+test_missing_file_fails_before_selection (test_verify_phase4_selection.Phase4Tests.test_missing_file_fails_before_selection) ... ok
+test_missing_validation_id (test_verify_phase4_selection.Phase4Tests.test_missing_validation_id) ... ok
+test_nan_prediction (test_verify_phase4_selection.Phase4Tests.test_nan_prediction) ... ok
+test_no_automatic_approval_or_date (test_verify_phase4_selection.Phase4Tests.test_no_automatic_approval_or_date) ... ok
+test_non_grid_prediction (test_verify_phase4_selection.Phase4Tests.test_non_grid_prediction) ... ok
+test_nonfinite_metrics_rejected (test_verify_phase4_selection.Phase4Tests.test_nonfinite_metrics_rejected) ... ok
+test_original_logs_only_inventory (test_verify_phase4_selection.Phase4Tests.test_original_logs_only_inventory) ... ok
+test_out_of_range (test_verify_phase4_selection.Phase4Tests.test_out_of_range) ... ok
+test_output_folder_is_new (test_verify_phase4_selection.Phase4Tests.test_output_folder_is_new) ... ok
+test_output_outside_evidence_rejected (test_verify_phase4_selection.Phase4Tests.test_output_outside_evidence_rejected) ... ok
+test_padded_identifier (test_verify_phase4_selection.Phase4Tests.test_padded_identifier) ... ok
+test_pairwise_counts_cover_validation_population (test_verify_phase4_selection.Phase4Tests.test_pairwise_counts_cover_validation_population) ... ok
+test_reference_numbers_not_used_as_test_labels (test_verify_phase4_selection.Phase4Tests.test_reference_numbers_not_used_as_test_labels) ... ok
+test_reordered_test_fails_existing_pipeline_contract (test_verify_phase4_selection.Phase4Tests.test_reordered_test_fails_existing_pipeline_contract) ... ok
+test_reordered_validation_is_aligned_by_id (test_verify_phase4_selection.Phase4Tests.test_reordered_validation_is_aligned_by_id) ... ok
+test_rounding_policy (test_verify_phase4_selection.Phase4Tests.test_rounding_policy) ... ok
+test_source_bytes_unchanged (test_verify_phase4_selection.Phase4Tests.test_source_bytes_unchanged) ... ok
+test_split_overlap (test_verify_phase4_selection.Phase4Tests.test_split_overlap) ... ok
+test_submission_nonfinite (test_verify_phase4_selection.Phase4Tests.test_submission_nonfinite) ... ok
+test_success_is_provisional (test_verify_phase4_selection.Phase4Tests.test_success_is_provisional) ... ok
+test_supplied_manifest_matches (test_verify_phase4_selection.Phase4Tests.test_supplied_manifest_matches) ... ok
+test_three_component_mean_only (test_verify_phase4_selection.Phase4Tests.test_three_component_mean_only) ... ok
+test_v3_columns_not_ignored (test_verify_phase4_selection.Phase4Tests.test_v3_columns_not_ignored) ... ok
+test_wrong_ensemble_arithmetic (test_verify_phase4_selection.Phase4Tests.test_wrong_ensemble_arithmetic) ... ok
+test_wrong_manifest_order_fails (test_verify_phase4_selection.Phase4Tests.test_wrong_manifest_order_fails) ... ok
+test_wrong_train_count (test_verify_phase4_selection.Phase4Tests.test_wrong_train_count) ... ok
+test_zero_label (test_verify_phase4_selection.Phase4Tests.test_zero_label) ... ok
+
+----------------------------------------------------------------------
+Ran 43 tests in 0.255s
+
+OK

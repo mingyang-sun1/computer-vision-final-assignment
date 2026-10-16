@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 466" role="img">
+<title>Phase 4 validation MSE from pinned CSVs</title>
+<g font-family="sans-serif" font-size="16">
+<text x="24" y="28" font-size="21">Phase 4 — executed CSV validation comparison</text>
+<text x="24" y="53" font-size="13">Lower is better. Stored predictions only; no new training or test-set selection.</text>
+<text x="12" y="100">E2_finetune</text>
+<rect x="245" y="83" width="409.17" height="24"/>
+<text x="664.17" y="100">102,746.2</text>
+<text x="12" y="148">E3_320px</text>
+<rect x="245" y="131" width="394.46" height="24"/>
+<text x="649.46" y="148">99,051.2</text>
+<text x="12" y="196">E4_augment</text>
+<rect x="245" y="179" width="433.22" height="24"/>
+<text x="688.22" y="196">108,784.2</text>
+<text x="12" y="244">B0_mean</text>
+<rect x="245" y="227" width="615.00" height="24"/>
+<text x="870.00" y="244">154,431.7</text>
+<text x="12" y="292">E5_mean_export_1dp</text>
+<rect x="245" y="275" width="381.72" height="24"/>
+<text x="636.72" y="292">95,852.0</text>
+<text x="12" y="340">V3_stored_224</text>
+<rect x="245" y="323" width="438.11" height="24"/>
+<text x="693.11" y="340">110,013.0</text>
+<text x="12" y="388">V3_stored_320</text>
+<rect x="245" y="371" width="434.69" height="24"/>
+<text x="689.69" y="388">109,155.4</text>
+<text x="245" y="448" font-size="13">MSE in squared (USD 1,000) units; zero-length bars represent zero MSE.</text>
+</g></svg>
