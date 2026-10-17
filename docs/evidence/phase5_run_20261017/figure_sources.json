@@ -1,0 +1,27 @@
+{
+  "analysis_source": "phase5_run_20261017",
+  "images_read": false,
+  "source_files": [
+    {
+      "name": "summary.json",
+      "sha256": "36a20b17e5d822329b4dda1311c7a2f682c36f057b51b826f0400f41e06453a1"
+    },
+    {
+      "name": "price_buckets.csv",
+      "sha256": "75ed9843cee6329649e52a363afbe685d87233eb1d05e0026c36aaf94d51dbdb"
+    },
+    {
+      "name": "per_image_errors.csv",
+      "sha256": "71f1a830ef7126d952d32067a410e5053f9232ab0b42a53b7cb4b62eb1e0b720"
+    }
+  ],
+  "figures": [
+    "phase5_price_buckets",
+    "phase5_prediction_diagnostics"
+  ],
+  "formats": [
+    "svg",
+    "pdf",
+    "png"
+  ]
+}

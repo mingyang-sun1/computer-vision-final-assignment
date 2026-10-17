@@ -299,8 +299,11 @@ limitations, remaining checks, and Member A/B review. The
 labelled as reported evidence.
 
 **Evidence status:** source review, historical comparison, and the Member A
-selection write-up are prepared. A fresh full-CSV audit has not been run in
-the preparation environment. Run the new checker on the local repository:
+selection write-up are prepared. Member B completed the real CSV audit on
+16 October 2026: **25 PASS / 0 FAIL / 4 PENDING**, recorded in
+`docs/evidence/phase4_run_20261016T124243_097811Z/`. Its pending items and
+actual member review records are explained in `Phase4_Model_Selection.md`.
+To reproduce the numerical checks:
 
 ```powershell
 py -3 -m unittest discover -s tests -p "test_verify_phase4_selection.py" -v
@@ -314,25 +317,68 @@ and checks the stored 3,000-row ensemble arithmetic. It writes a **new**
 training data, original predictions, checkpoints, or existing evidence.
 A numerical candidate is not automatically an approved team decision.
 
-**Handoff:** confirm the audit result and model choice with Member B, record
-the actual review date, and retain the exact evidence directory for Phase 5.
-E3's existing error analysis is a single-model reference; the selected
-ensemble needs its own error analysis if it remains the final model. Reuse
-`validation_ensemble.csv` from the new audit rather than relabelling E3's
-results as ensemble results. Model loading and full reproducibility remain
+**Handoff:** Member B's audit names the E5 `validation_ensemble.csv` in that
+evidence directory for Phase 5. The new Member A analysis below uses that
+exact file. E3's existing analysis remains a single-model reference, and
+actual team approval stays in the Phase 4 selection record. Model loading
+and full reproducibility remain
 Phase 7 work; the E2/E4 artifact handoff already recorded in Phase 3 is not
 reopened simply because large files are excluded from GitHub.
 
 ## Phase 5 — error analysis
 
-The existing analysis below is for **E3, the best documented single core
+### E5 ensemble — Member A, executed 17 October 2026
+
+The current main snapshot `ae748264` contains the merged Phase 4 evidence.
+The new CSV-only analysis uses its **one-decimal E5 validation export**,
+checks all source identities and true labels, and confirms each prediction
+against the equal mean of E2/E3/E4. No model was retrained or loaded.
+
+| Metric | E5 | E3 reference, recomputed from its CSV |
+|---|---:|---:|
+| Validation MSE | 95,852.002676 | 99,051.197058 |
+| MAE | 226.423020 | 229.764228 |
+| Mean signed bias | +6.912374 | +11.429074 |
+| Highest-decile MSE | 509,349.703033 | 488,255.361991 |
+| Highest-decile share of total SSE | 53.14% | 49.29% |
+
+E5 improves overall MSE by **3.23%**, while highest-decile MSE becomes
+**4.32% worse**. Absolute error falls on 515 images and rises on 485.
+The overall gain must therefore be reported together with the remaining
+price-dependent errors. A near-zero overall bias does not remove those errors.
+
+The lowest 30% of prices have mean bias +222.03 and contribute 21.19% of
+total squared error. The middle 50% have bias +46.27 and contribute 16.81%.
+The ninth decile contributes 8.86%; the highest decile contributes 53.14%
+and has bias −648.48. All price/error values use USD 1,000; MSE uses its
+squared unit. These figures use the existing export precision and a single
+fixed split, not independent test labels or new full-precision predictions.
+
+[The full Phase 5 report](Phase5_Error_Analysis.md) contains interpretation,
+the deterministic nine-example selection, limitations and future-work
+proposals. [Executed evidence](evidence/phase5_run_20261017/analysis.md)
+contains exact numerical tables and source identities. The original photos
+require local rendering and visual review; no image-specific cause is
+asserted from numerical errors alone.
+
+```powershell
+py -3 -m unittest discover -s tests -p "test_analyze_phase5_errors.py" -v
+py -3 tools/analyze_phase5_errors.py --repo-root .
+```
+
+### Historical E3 reference
+
+The historical analysis below is for **E3, the best documented single core
 model**, not the selected ensemble. It is retained as historical Phase 5
-reference evidence; it must not be relabelled as E5 analysis. Reproduce with
-`python -m src.error_analysis --tag E3_320px`. Raw output in
+reference evidence; it must not be relabelled as E5 analysis. The legacy
+entry point is `python -m src.error_analysis --tag E3_320px`; it reruns
+inference and replaces that run's prediction CSV. Use a separate reproduction
+copy when running it, so the pinned Phase 4/5 source CSVs remain available.
+Historical raw output is in
 `outputs/logs/error_analysis_E3_320px.json`; the per-image predictions are in
 `outputs/predictions/val_predictions_E3_320px.csv`, sorted by absolute error.
 
-### The model regresses to the mean
+### Historical E3 predictions across price groups
 
 Predictions bucketed by the true price, 1000 validation images:
 
@@ -349,31 +395,30 @@ Predictions bucketed by the true price, 1000 validation images:
 | 941–1300 | 100 | 1089.7 | 927.1 | 89,477 | **−162.6** |
 | 1300+ | 100 | 1634.1 | 1015.7 | **488,256** | **−618.4** |
 
-The cheapest houses are over-predicted by 200-odd and the most expensive are
-under-predicted by 600-odd, while the middle of the distribution is nearly
-unbiased. Predictions are pulled towards the centre — the model has learned
-a safe middle value rather than the concept of "expensive". The worst single
-prediction is a house that sold for 1995 predicted at 542.
+The cheapest groups are overestimated and the most expensive group is
+underestimated. Only the three groups approximately 640–941 have small
+signed biases in this historical table: the 480–560 and 560–640 groups
+still have biases +119.7 and +125.6. The worst historical single prediction
+is a house with true price 1995 and predicted price approximately 542.
 
-This is what MSE on a right-skewed target does: the loss punishes large
-deviations quadratically, so the optimal response to uncertainty is to stay
-near the mean. The price distribution has skew 1.26, so the effect is
-strong.
+The group means show a narrower range of predictions than true prices.
+This is consistent with central-price predictions under uncertainty, but
+the observed pattern alone cannot establish whether the cause is missing
+visual information, representation limits, fitting choices or the objective.
 
 ### Almost half the error comes from the top decile of prices
 
 | True price | share of total squared error |
 |---|---|
 | bottom 3 deciles (< 480) | 21.2% |
-| middle 4 deciles (480–941) | 20.5% |
+| middle 5 deciles (approximately 480–941) | 20.5% |
 | top decile (1300+) | **49.3%** |
 | top 2 deciles (941+) | **58.3%** |
 
 The most expensive tenth of houses accounts for **just under half** of the
-total squared error, and the top fifth for well over half. The model's
-performance in the middle of the distribution is almost irrelevant to the
-score. Any improvement has to come from the expensive tail, which is
-precisely where the model has nothing to say.
+historical E3 squared error, and the top fifth for well over half. This
+makes the expensive tail a useful target for further investigation, while
+errors in the other groups also contribute to the required overall metric.
 
 ### Overfitting
 
@@ -385,22 +430,30 @@ From the recorded training history of E3 (best epoch 10 of 14):
 | validation loss at best epoch | 0.6309 |
 | ratio (train / validation) | **0.108** |
 
-Training error is about one ninth of validation error — the model is
-memorising the training set. The validation curve also oscillated between
-0.6309 and 0.7666 across epochs, which is the noise that makes best-epoch
-selection optimistic (see the note above).
+The recorded training loss is about one ninth of the validation loss. This
+gap suggests a need to investigate generalisation and the comparability of
+training/evaluation conditions; it does not alone prove memorisation. The
+validation loss ranged from 0.6309 to 0.7666. Selecting the best epoch on
+the same validation set can make the selected score optimistic, but the
+size of that effect is not measured here. This is E3 history, not an E5
+training curve.
 
 Residuals overall: mean +11.4, standard deviation 314.5, range −1452.9 to
 +768.6. Just under 40% of predictions are below the true price.
 
 ### What this implies for the report's future-work section
 
-The error analysis points at the objective, not the architecture, as the
-main thing to change:
+The historical analysis suggests hypotheses for controlled comparisons,
+not a demonstrated preference for changing the objective over the architecture:
 
-- predict the logarithm of the price, which compresses the right tail the
-  squared loss is so sensitive to;
-- use quantile or ordinal regression instead of plain MSE, so the model is
-  not rewarded for retreating to the mean;
-- weight expensive samples more heavily in the loss;
-- two-stage prediction: classify a price band first, then regress within it.
+- compare predicting log price with the existing target, while evaluating
+  both in original price units;
+- compare other training objectives or price-band approaches, recognising
+  that their optimisation goals may differ from the required MSE;
+- evaluate a specified sampling or weighting policy and report its impact
+  on every price group;
+- compare a revised visual representation where image inspection suggests
+  missing spatial information.
+
+None of these alternatives was validated by this Phase 5 analysis, and none
+is guaranteed to improve original-unit MSE.
