@@ -57,13 +57,13 @@ ABSTRACT = (
     "fine-tuned runs. The final model reaches 96 959 on the test set, 15.1% "
     "below the reference. Our principal finding is negative and, we argue, "
     "more useful than a further accuracy gain: an error analysis shows that "
-    "just under half the total squared error comes from the most expensive "
-    "tenth of houses, where the model systematically under-predicts, and that "
-    "this is a property of the squared-error objective applied to a "
-    "right-skewed target rather than of the architecture. Several plausible "
-    "improvements, including higher input resolution, a stronger backbone and "
-    "an aspect-ratio correction, were tested and did not help; we report them "
-    "alongside the ones that did."
+    "53% of the total squared error comes from the most expensive tenth of "
+    "houses, which the ensemble under-predicts by around 650, while the "
+    "cheapest three tenths are over-predicted by around 220. It also shows "
+    "that ensembling improved the overall score while making that expensive "
+    "decile worse. Several plausible improvements, including higher input "
+    "resolution, a stronger backbone and an aspect-ratio correction, were "
+    "tested and did not help; we report them alongside the ones that did."
 )
 
 KEYWORDS = (
@@ -101,10 +101,9 @@ BODY: list[tuple[str, str]] = [
     ("B", "an ensemble that improves on the best single model by 4.6% on the "
           "test set, and the observation that this is the one change whose "
           "test score beat its validation estimate;"),
-    ("B", "an error analysis that localises just under half of the total "
-          "squared error in the most expensive tenth of houses, and traces it "
-          "to the interaction between the MSE objective and a right-skewed "
-          "target; and"),
+    ("B", "an error analysis that localises 53% of the total squared error "
+          "in the most expensive tenth of houses, and shows that ensembling "
+          "improves the overall score while making that decile worse; and"),
     ("B", "a set of honest negative results -- higher resolution, a stronger "
           "backbone, an aspect-ratio correction, and augmentation at a fixed "
           "epoch budget -- each of which we measured rather than assumed."),
@@ -197,8 +196,10 @@ BODY: list[tuple[str, str]] = [
           "uncertain it minimises expected loss by predicting near the "
           "conditional mean. With a target of skewness 1.26, this pulls "
           "expensive houses downwards and cheap houses upwards. This is not a "
-          "failure of fitting but the objective behaving as intended -- which "
-          "is exactly why changing the architecture alone cannot fix it."),
+          "failure of fitting but the objective behaving as intended. Limited "
+          "information in the photographs could produce a similar pattern, so "
+          "we treat this as the explanation most consistent with our results "
+          "rather than as the sole cause."),
     ("H2", "Why clipping, and why ensembling"),
     ("P", "A linear head extrapolates: on the test set, eight of 3000 "
           "predictions fell below the lowest price present in training. Since "
@@ -208,12 +209,14 @@ BODY: list[tuple[str, str]] = [
           "2 MSE) and larger for the MLP (about 680), which matches the "
           "intuition that the model with more freedom extrapolates further."),
     ("P", "Averaging the three fine-tuned runs reduces the variance "
-          "component of the error while preserving the shared signal. We "
-          "report the resulting behaviour, unusual among our experiments, in "
-          "the results section: because averaging reduces variance, and a "
-          "1000-image validation split is precisely what estimates variance "
-          "poorly, the ensemble's test score came in better than its "
-          "validation score suggested."),
+          "component of the error while preserving the shared signal. Its "
+          "effect is not uniform across the price range: it improves overall "
+          "error by 3.2% relative to the best single model but makes the most "
+          "expensive decile 4.3% worse, as the error analysis reports. The "
+          "absolute Kaggle error is also 1.2% above the validation estimate, "
+          "so the test score is not evidence that the ensemble generalises "
+          "better than validation suggested; only the comparison against the "
+          "single model favours it."),
 
     ("H1", "Data"),
     ("P", "[Section to be completed by Member A.]"),
@@ -223,8 +226,45 @@ BODY: list[tuple[str, str]] = [
     ("P", "[Section to be completed by Member A. See docs/experiments.md for "
           "the comparison table and figures.]"),
     ("H1", "Error Analysis"),
-    ("P", "[Section to be completed by Member A. Per-price-bucket errors and "
-          "example images.]"),
+    ("P", "We analysed the equal-weight E2/E3/E4 ensemble on the fixed "
+          "1,000-image validation split. Predictions were matched by image "
+          "identifier and retained at the stored one-decimal export "
+          "precision. The ensemble achieved MSE 95,852.00, RMSE 309.60 and "
+          "MAE 226.42, where prices and absolute errors are in USD 1,000. "
+          "MSE was 3.23% lower than the best single model, E3, but absolute "
+          "error improved on only 515 of the 1,000 images."),
+    ("T", [
+        ["True-price group", "n", "Mean signed error", "Share of squared error"],
+        ["Lowest 30%", "300", "+222.03", "21.19%"],
+        ["Middle 50%", "500", "+46.27", "16.81%"],
+        ["Ninth decile", "100", "−179.81", "8.86%"],
+        ["Highest 10%", "100", "−648.48", "53.14%"],
+    ]),
+    ("P", "Grouping images by true-price decile reveals systematic errors "
+          "hidden by the small overall signed bias of +6.91. The "
+          "lowest-price 30% were over-estimated by 222.03 on average. The "
+          "highest-price 10% were under-estimated by 648.48 and contributed "
+          "53.14% of total squared error. Their MSE was 509,349.70, 4.32% "
+          "higher than E3 on the same images. Thus averaging improved overall "
+          "performance while making the expensive tail less accurate. The "
+          "lowest group MAE, 115.56, occurred between true prices of 639.45 "
+          "and 718.93."),
+    ("P", "We selected three examples each with the smallest absolute "
+          "errors, the largest over-estimates and the largest "
+          "under-estimates. 751.jpg was predicted at 758.2 against a true "
+          "price of 759.0; 3947.jpg was over-estimated by 606.7 and 1977.jpg "
+          "under-estimated by 1,449.1. These deliberately selected examples "
+          "illustrate extremes and are not representative estimates of "
+          "average performance."),
+    ("P", "The group means show predictions concentrated near central "
+          "prices. This may reflect limited information in exterior "
+          "photographs, representation limits or fitting choices; the "
+          "analysis does not establish a unique cause. Potential "
+          "improvements include controlled comparisons of target "
+          "transformations, sampling policies and spatial representations, "
+          "evaluated using original-unit MSE. These findings are descriptive "
+          "results from one validation split already used for model "
+          "development, not independent evidence of generalisation."),
 
     ("H1", "Conclusion"),
     ("P", "We predicted house sale prices from exterior photographs and "
@@ -242,13 +282,15 @@ BODY: list[tuple[str, str]] = [
           "would have produced a weaker account of why the final model "
           "works."),
     ("P", "The error analysis points to the clearest direction for future "
-          "work, and it is not an architectural one. Just under half the "
-          "total squared error comes from the most expensive tenth of houses, "
-          "which the model systematically under-predicts by around 600 on "
-          "average; the cheapest three deciles are over-predicted by a "
-          "similar margin in the opposite direction. This is the signature of "
-          "squared-error optimisation on a right-skewed target, so the "
-          "natural next steps change the objective rather than the network: "
+          "work, and it is not an architectural one. 53% of the total squared "
+          "error comes from the most expensive tenth of houses, which the "
+          "ensemble under-predicts by 648 on average, while the cheapest "
+          "three tenths are over-predicted by 222. Ensembling improved the "
+          "overall score while making that decile worse, which suggests that "
+          "further gains need to target the tail rather than add capacity. "
+          "The pattern is consistent with squared-error optimisation on a "
+          "right-skewed target, so the natural next steps change the "
+          "objective rather than the network: "
           "predicting the logarithm of price, which compresses the tail the "
           "squared loss is most sensitive to; quantile or ordinal regression, "
           "which does not reward retreating to the mean; or weighting "
@@ -318,6 +360,52 @@ def para(
     return f"<w:p>{ppr}{body}</w:p>"
 
 
+def table(rows: list[list[str]]) -> str:
+    """A compact table sized to the column, with hairline rules.
+
+    The template defines no general-purpose table style (only header/caption
+    styles for its own examples), so borders and widths are set explicitly
+    rather than relying on a style that may not exist. Row 0 is the header and
+    is bold.
+    """
+    ncols = max(len(r) for r in rows)
+    width = 4800 // ncols  # twips; the two-column text area is ~243pt wide
+    borders = (
+        "<w:tblBorders>"
+        + "".join(
+            f'<w:{edge} w:val="single" w:sz="4" w:space="0" w:color="000000"/>'
+            for edge in ("top", "left", "bottom", "right", "insideH", "insideV")
+        )
+        + "</w:tblBorders>"
+    )
+    out = [
+        "<w:tbl><w:tblPr>"
+        '<w:tblW w:w="5000" w:type="pct"/>'
+        + borders
+        + '<w:tblLayout w:type="fixed"/>'
+        "</w:tblPr><w:tblGrid>"
+        + "".join(f'<w:gridCol w:w="{width}"/>' for _ in range(ncols))
+        + "</w:tblGrid>"
+    ]
+    for i, row in enumerate(rows):
+        cells = list(row) + [""] * (ncols - len(row))
+        out.append("<w:tr>")
+        for cell in cells:
+            bold = "<w:b/>" if i == 0 else ""
+            out.append(
+                f'<w:tc><w:tcPr><w:tcW w:w="{width}" w:type="dxa"/></w:tcPr>'
+                f'<w:p><w:pPr><w:pStyle w:val="BodyText"/>'
+                f'<w:spacing w:before="0" w:after="0"/><w:jc w:val="left"/></w:pPr>'
+                f'<w:r><w:rPr>{bold}<w:sz w:val="16"/><w:szCs w:val="16"/></w:rPr>'
+                f'<w:t xml:space="preserve">{esc(cell)}</w:t></w:r></w:p></w:tc>'
+            )
+        out.append("</w:tr>")
+    out.append("</w:tbl>")
+    # Word needs a paragraph after a table so the following one is not merged.
+    out.append('<w:p><w:pPr><w:spacing w:before="0" w:after="0"/></w:pPr></w:p>')
+    return "".join(out)
+
+
 def build_body(root_attrs: str, title_sectpr: str, body_sectpr: str) -> str:
     out: list[str] = []
 
@@ -345,7 +433,10 @@ def build_body(root_attrs: str, title_sectpr: str, body_sectpr: str) -> str:
     out.append(para("Keywords", KEYWORDS))
 
     for style, text in BODY:
-        out.append(para(STYLE_FOR[style], text))
+        if style == "T":
+            out.append(table(text))
+        else:
+            out.append(para(STYLE_FOR[style], text))
 
     for ref in REFERENCES:
         out.append(para("references", ref))
