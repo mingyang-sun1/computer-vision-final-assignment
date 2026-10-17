@@ -54,9 +54,52 @@ py -3 tools/verify_phase4_selection.py --repo-root .
 The checker uses Python 3.10+ and the standard library only. It needs the
 committed split/prediction CSVs, not images, GPU packages, or checkpoints.
 Outputs go into a **new** `docs/evidence/phase4_run_<timestamp>/` folder.
-Historical scores and newly computed CSV scores remain separate. A fresh
-full-CSV run is still required on the local repository; synthetic tests
-are not a substitute for that run. No existing submission is overwritten.
+Historical scores and newly computed CSV scores remain separate. Member B
+completed the full CSV audit on 16 October 2026; its committed evidence is in
+`docs/evidence/phase4_run_20261016T124243_097811Z/`. The exported one-decimal
+ensemble has validation MSE **95,852.00**; the unrounded mean of the stored
+component exports has MSE **95,850.62**. These are precision variants of the
+stored predictions, not new training runs. See the selection record for the
+remaining review and reproducibility items. No existing submission is overwritten.
+
+## Phase 5 — Member A error analysis
+
+The ensemble analysis is complete for the **1,000 committed validation
+predictions**. See [Phase 5 results and interpretation](docs/Phase5_Error_Analysis.md),
+[executed numerical evidence](docs/evidence/phase5_run_20261017/analysis.md), and
+[the concise report section](docs/report/Phase5_Error_Analysis_Section.md).
+
+```powershell
+py -3 -m unittest discover -s tests -p "test_analyze_phase5_errors.py" -v
+py -3 tools/analyze_phase5_errors.py --repo-root .
+```
+
+Python 3.10+ and its standard library are sufficient for the numerical
+analysis. The command uses the existing E5 CSV, validates its IDs and labels
+against the saved split, verifies the E2/E3/E4 mean, and writes a new evidence
+directory. It does not need TensorFlow, model files, a GPU or the raw images.
+
+The package also contains two numerical figures. To regenerate them from
+the committed Phase 5 evidence, using a new output directory:
+
+```powershell
+py -3 -m pip install matplotlib pillow
+py -3 tools/plot_phase5_errors.py --analysis-dir docs/evidence/phase5_run_20261017 --output-dir outputs/phase5_figures
+```
+
+Nine example IDs are selected deterministically: three closest predictions,
+three largest overestimates and three largest underestimates. The original
+photos were not available in the preparation environment, so image-specific
+observations are still to be reviewed. Generate the photo panel locally with:
+
+```powershell
+py -3 tools/plot_phase5_errors.py --analysis-dir docs/evidence/phase5_run_20261017 --examples-only --image-root "$env:CV_DATA_ROOT\train"
+```
+
+Set `CV_DATA_ROOT` to the course dataset folder first. Photo panels and
+`visual_review.csv` go to the ignored `outputs/phase5_examples/` directory.
+The panel is intended for the written report; course images stay out of the
+code submission. An existing output directory is never silently replaced.
 
 ## Environment
 
@@ -141,7 +184,9 @@ src/train_v2.py              v2 — ConvNeXt backbone (did not help; see below)
 src/exp_frozen_backbone.py   v3 — frozen ResNet-50 vs ConvNeXt comparison
 src/ensemble.py              the final model
 src/predict.py               Kaggle-format submission generation
-src/error_analysis.py        error analysis by price bucket, overfitting measures
+src/error_analysis.py        historical single-run inference and training-gap analysis
+tools/analyze_phase5_errors.py audited E5 validation errors, price buckets and examples
+tools/plot_phase5_errors.py  numerical plots and optional local photo panels
 src/metrics.py               MSE / MAE / R2
 data/splits/                 the committed split — do not regenerate
 docs/experiments.md          full experiment log with results and analysis
@@ -189,22 +234,30 @@ test).
 
 ## Error analysis
 
-On the best single model (E3), bucketing validation predictions by true
-price:
+The **E5 ensemble**, using its exported one-decimal predictions, has MSE
+**95,852.00**, MAE **226.42** and mean signed error **+6.91**. Prices, MAE
+and signed errors are in USD 1,000; MSE is in squared USD-1,000 units.
 
-| True price | bias (pred − true) | share of total squared error |
-|---|---|---|
-| bottom 3 deciles (< 480) | +186 to +227 | 21.2% |
-| middle 4 deciles (480–941) | −22 to +26 | 20.5% |
-| top decile (1300+) | **−618** | **49.3%** |
+| True-price group | Images | Mean bias (pred − true) | Share of total squared error |
+|---|---:|---:|---:|
+| Lowest 30%, below 479.997 | 300 | +222.03 | 21.19% |
+| Middle 50%, 479.997 to below 940.92 | 500 | +46.27 | 16.81% |
+| Ninth decile, 940.92 to below 1299.91 | 100 | −179.81 | 8.86% |
+| Highest 10%, 1299.91 and above | 100 | **−648.48** | **53.14%** |
 
-The model over-predicts cheap houses and badly under-predicts expensive
-ones — the behaviour MSE induces on a right-skewed target, where the optimal
-response to uncertainty is to stay near the mean. **Just under half the
-total error comes from the most expensive tenth of houses**, so performance
-in the middle of the distribution is nearly irrelevant to the score. The
-report's future-work section follows from this: the objective, not the
-architecture, is the thing to change.
+The small overall bias hides opposite errors at the two ends of the price
+range. The ensemble improves overall MSE by **3.23%** relative to E3's
+recomputed CSV score, but **increases highest-decile MSE by 4.32%**. It
+therefore does not improve every price group. The lowest deciles remain
+overestimated and the highest decile remains substantially underestimated.
+
+![E5 error analysis by true-price decile](docs/figures/phase5_price_buckets.svg)
+
+These are descriptive results from one validation split. They do not isolate
+the cause of the errors or establish that changing the objective is better
+than changing the representation. The [full Phase 5 analysis](docs/Phase5_Error_Analysis.md)
+includes exact bin boundaries, examples, limitations and testable future-work
+suggestions. Historical E3 results remain labelled E3 in the experiment log.
 
 Selecting checkpoints and model configurations on a validation set can
 make the selected validation score optimistic; a difference between one

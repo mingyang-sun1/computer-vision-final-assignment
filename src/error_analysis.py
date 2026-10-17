@@ -1,7 +1,11 @@
-"""Phase 5: error analysis.
+"""Historical single-model error analysis.
 
-    python -m src.error_analysis                      # the selected model (E3)
+    python -m src.error_analysis                      # the E3 single-model reference
     python -m src.error_analysis --tag E2_finetune
+
+For Member A's E5 ensemble analysis of stored validation predictions, use
+``python tools/analyze_phase5_errors.py --repo-root .`` instead. This legacy
+command loads a model and can replace its per-image validation export.
 
 Runs a trained model over the validation split and records where it does
 well and where it fails. The report's error analysis section is built from
@@ -9,11 +13,12 @@ the files this writes.
 
 Three things are measured, which answer different questions:
 
-1. **How much of the error is overfitting.** The training history recorded
+1. **The recorded training/validation loss gap.** The training history recorded
    by each fine-tuning run already contains the train and validation loss
    per epoch, so the gap is read from there rather than recomputed. A large
-   and widening gap between the two curves is the signature of a model
-   memorising the training set.
+   and widening gap can suggest overfitting, but does not by itself measure
+   how much error it causes or prove memorisation. Training and evaluation
+   conditions also need to be considered.
 
 2. **Where the errors are, as a function of price.** Predictions are
    bucketed by the true price and the error summarised per bucket. A model
@@ -150,7 +155,7 @@ def main() -> None:
         print(f"  epochs run          {of['epochs_run']}, best at {of['best_epoch']}")
         print(f"  train loss @ best   {of['train_loss_at_best']:.4f}")
         print(f"  val   loss @ best   {of['val_loss_at_best']:.4f}")
-        print(f"  ratio (train/val)   {of['gap_ratio_at_best']:.3f}   <- far below 1 means memorising")
+        print(f"  ratio (train/val)   {of['gap_ratio_at_best']:.3f}   <- descriptive gap, not proof of memorisation")
         print(f"  val loss min / max  {of['val_loss_min']:.4f} / {of['val_loss_max']:.4f}")
 
     # --- error by price ----------------------------------------------------
