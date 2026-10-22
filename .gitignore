@@ -31,3 +31,6 @@ __pycache__/
 .ipynb_checkpoints/
 .venv/
 venv/
+
+# Submission bundle built from the repository; not tracked.
+COMP90086_Final_Project_Code_*.zip
